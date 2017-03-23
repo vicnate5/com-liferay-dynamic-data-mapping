@@ -62,6 +62,11 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true)
 public class DDMFormValidatorImpl implements DDMFormValidator {
 
+	// todo check outputdtaproviderinstnaceOutuyt
+	// todo check dataproviderinstanceId
+	// selct e text autocomplete
+	// validar regras
+
 	@Override
 	public void validate(DDMForm ddmForm) throws DDMFormValidationException {
 		validateDDMFormLocales(ddmForm);

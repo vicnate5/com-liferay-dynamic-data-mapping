@@ -21,6 +21,7 @@ import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderOutputParam
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderParameterSettings;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderRequest;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponse;
+import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponse.DDMDataProviderResponseTuple;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderTracker;
 import com.liferay.dynamic.data.mapping.io.DDMFormValuesJSONDeserializer;
 import com.liferay.dynamic.data.mapping.model.DDMDataProviderInstance;
@@ -36,7 +37,6 @@ import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -71,10 +71,11 @@ public class DDMDataProviderInstanceOutputParametersDataProvider
 		long dataProviderInstanceId = GetterUtil.getLong(
 			ddmDataProviderRequest.getParameter("dataProviderInstanceId"));
 
-		List<Map<Object, Object>> data = new ArrayList<>();
+		DDMDataProviderResponse ddmDataProviderResponse =
+			new DDMDataProviderResponse();
 
 		if (dataProviderInstanceId == 0) {
-			return new DDMDataProviderResponse(data);
+			return new DDMDataProviderResponse();
 		}
 
 		try {
@@ -87,9 +88,12 @@ public class DDMDataProviderInstanceOutputParametersDataProvider
 					ddmDataProviderOutputParametersSetting :
 						ddmDataProviderOutputParametersSettings) {
 
-				data.add(
-					createDDMDataProviderOutputParameterMap(
-						ddmDataProviderOutputParametersSetting));
+				ddmDataProviderResponse.add(
+					DDMDataProviderResponseTuple.of(
+						ddmDataProviderOutputParametersSetting.
+							outputParameterName(),
+						createDDMDataProviderOutputParameterMap(
+							ddmDataProviderOutputParametersSetting)));
 			}
 		}
 		catch (Exception e) {
@@ -101,7 +105,7 @@ public class DDMDataProviderInstanceOutputParametersDataProvider
 				e);
 		}
 
-		return new DDMDataProviderResponse(data);
+		return ddmDataProviderResponse;
 	}
 
 	@Override

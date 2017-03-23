@@ -14,19 +14,21 @@
 
 package com.liferay.dynamic.data.mapping.data.provider.internal.rest;
 
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProvider;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderContext;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderException;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderOutputParametersSettings;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderRequest;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponse;
+import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponse.DDMDataProviderResponseTuple;
 import com.liferay.portal.kernel.cache.MultiVMPool;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
@@ -38,11 +40,8 @@ import com.liferay.portal.kernel.util.Validator;
 import java.io.Serializable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import jodd.http.HttpRequest;
@@ -69,16 +68,11 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 			DDMDataProviderResponse ddmDataProviderResponse = doGetData(
 				ddmDataProviderRequest);
 
-			List<KeyValuePair> results = new ArrayList<>();
+			DDMDataProviderResponseTuple ddmDataProviderResponseTuple =
+				ddmDataProviderResponse.get("Default-Output");
 
-			for (Map<Object, Object> map : ddmDataProviderResponse.getData()) {
-				for (Entry<Object, Object> entry : map.entrySet()) {
-					results.add(
-						new KeyValuePair(
-							String.valueOf(entry.getKey()),
-							String.valueOf(entry.getValue())));
-				}
-			}
+			List<KeyValuePair> results =
+				ddmDataProviderResponseTuple.getValue();
 
 			return results;
 		}
@@ -106,42 +100,85 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 	}
 
 	protected DDMDataProviderResponse createDDMDataProviderResponse(
-		JSONArray jsonArray, DDMDataProviderRequest ddmDataProviderRequest,
-		DDMRESTDataProviderSettings ddmRESTDataProviderSettings) {
+		String responseBody, DDMDataProviderRequest ddmDataProviderRequest) {
+
+		DDMDataProviderResponse ddmDataProviderResponse =
+			new DDMDataProviderResponse();
 
 		DDMDataProviderContext ddmDataProviderContext =
 			ddmDataProviderRequest.getDDMDataProviderContext();
 
-		List<Map<Object, Object>> data = new ArrayList<>();
+		DDMRESTDataProviderSettings ddmRESTDataProviderSettings =
+			ddmDataProviderContext.getSettingsInstance(
+				DDMRESTDataProviderSettings.class);
 
-		Set<String> outputParameterPaths = getOutputParameterPaths(
-			ddmDataProviderContext);
+		DDMDataProviderOutputParametersSettings[] outputParameterSettingsArray =
+			ddmRESTDataProviderSettings.outputParameters();
 
-		for (int i = 0; i < jsonArray.length(); i++) {
-			JSONObject jsonObject = jsonArray.getJSONObject(i);
+		if ((outputParameterSettingsArray == null) ||
+			(outputParameterSettingsArray.length == 0)) {
 
-			Map<Object, Object> map = new HashMap<>();
+			return ddmDataProviderResponse;
+		}
 
-			data.add(map);
+		DocumentContext documentContext = JsonPath.parse(responseBody);
 
-			for (String path : outputParameterPaths) {
-				map.put(path, jsonObject.get(path));
+		for (DDMDataProviderOutputParametersSettings outputParameterSettings :
+				outputParameterSettingsArray) {
+
+			String name = outputParameterSettings.outputParameterName();
+			String type = outputParameterSettings.outputParameterType();
+			String path = outputParameterSettings.outputParameterPath();
+
+			if (type.equals("[\text\"]") || type.equals("[\number\"]")) {
+				String value = documentContext.read(path);
+
+				ddmDataProviderResponse.add(
+					DDMDataProviderResponseTuple.of(name, value));
+			}
+			else if (type.equals("[\"list\"]")) {
+				String[] paths = StringUtil.split(
+					outputParameterSettings.outputParameterPath(),
+					CharPool.SEMICOLON);
+
+				String normalizedValuePath = normalizePath(paths[0]);
+
+				String normalizedKeyPath = normalizedValuePath;
+
+				List<String> values = documentContext.read(normalizedValuePath);
+
+				List<String> keys = new ArrayList<>(values);
+
+				if (paths.length >= 2) {
+					normalizedKeyPath = normalizePath(paths[1]);
+
+					keys = documentContext.read(normalizedKeyPath);
+				}
+
+				List<KeyValuePair> value = new ArrayList<>();
+
+				for (int i = 0; i < values.size(); i++) {
+					value.add(new KeyValuePair(keys.get(i), values.get(i)));
+				}
+
+				if (ddmRESTDataProviderSettings.pagination()) {
+					int start = Integer.valueOf(
+						ddmDataProviderRequest.getParameter("paginationStart"));
+
+					int end = Integer.valueOf(
+						ddmDataProviderRequest.getParameter("paginationEnd"));
+
+					if (value.size() > (end - start)) {
+						value = ListUtil.subList(value, start, end);
+					}
+				}
+
+				ddmDataProviderResponse.add(
+					DDMDataProviderResponseTuple.of(name, value));
 			}
 		}
 
-		if (ddmRESTDataProviderSettings.pagination()) {
-			int start = Integer.valueOf(
-				ddmDataProviderRequest.getParameter("paginationStart"));
-
-			int end = Integer.valueOf(
-				ddmDataProviderRequest.getParameter("paginationEnd"));
-
-			if (data.size() > (end - start)) {
-				data = ListUtil.subList(data, start, end);
-			}
-		}
-
-		return new DDMDataProviderResponse(data);
+		return ddmDataProviderResponse;
 	}
 
 	protected DDMDataProviderResponse doGetData(
@@ -180,11 +217,9 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 
 		HttpResponse httpResponse = httpRequest.send();
 
-		JSONArray jsonArray = getValue(httpResponse.body());
-
 		DDMDataProviderResponse ddmDataProviderResponse =
 			createDDMDataProviderResponse(
-				jsonArray, ddmDataProviderRequest, ddmRESTDataProviderSettings);
+				httpResponse.body(), ddmDataProviderRequest);
 
 		if (ddmRESTDataProviderSettings.cacheable()) {
 			_portalCache.put(
@@ -223,24 +258,12 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 		return outputParameterPaths;
 	}
 
-	protected JSONArray getValue(String valueString) throws JSONException {
-		try {
-			return _jsonFactory.createJSONArray(valueString);
+	protected String normalizePath(String path) {
+		if (path.startsWith(".")) {
+			return path;
 		}
-		catch (JSONException jsone) {
 
-			// LPS-52675
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(jsone, jsone);
-			}
-
-			JSONArray jsonArray = _jsonFactory.createJSONArray();
-
-			jsonArray.put(_jsonFactory.createJSONObject(valueString));
-
-			return jsonArray;
-		}
+		return ".".concat(path);
 	}
 
 	@Reference(unbind = "-")
