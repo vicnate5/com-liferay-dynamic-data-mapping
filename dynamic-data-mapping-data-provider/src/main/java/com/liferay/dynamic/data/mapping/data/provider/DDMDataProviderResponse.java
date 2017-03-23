@@ -55,6 +55,12 @@ public class DDMDataProviderResponse {
 			return new DDMDataProviderResponseTuple(name, value);
 		}
 
+		public static DDMDataProviderResponseTuple of(
+			String name, String type, Object value) {
+
+			return new DDMDataProviderResponseTuple(name, type, value);
+		}
+
 		public String getName() {
 			return _name;
 		}
@@ -70,6 +76,14 @@ public class DDMDataProviderResponse {
 		private DDMDataProviderResponseTuple(String name, Object value) {
 			_name = name;
 			_type = null;
+			_value = value;
+		}
+
+		private DDMDataProviderResponseTuple(
+			String name, String type, Object value) {
+
+			_name = name;
+			_type = type;
 			_value = value;
 		}
 

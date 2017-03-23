@@ -134,7 +134,7 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 				String value = documentContext.read(path);
 
 				ddmDataProviderResponse.add(
-					DDMDataProviderResponseTuple.of(name, value));
+					DDMDataProviderResponseTuple.of(name, "text", value));
 			}
 			else if (type.equals("[\"list\"]")) {
 				String[] paths = StringUtil.split(
@@ -174,7 +174,7 @@ public class DDMRESTDataProvider implements DDMDataProvider {
 				}
 
 				ddmDataProviderResponse.add(
-					DDMDataProviderResponseTuple.of(name, value));
+					DDMDataProviderResponseTuple.of(name, "list", value));
 			}
 		}
 

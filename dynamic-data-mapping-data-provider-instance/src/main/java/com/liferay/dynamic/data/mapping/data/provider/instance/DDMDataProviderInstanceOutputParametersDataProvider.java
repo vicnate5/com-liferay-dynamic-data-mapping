@@ -37,10 +37,10 @@ import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -78,6 +78,8 @@ public class DDMDataProviderInstanceOutputParametersDataProvider
 			return new DDMDataProviderResponse();
 		}
 
+		List<KeyValuePair> data = new ArrayList<>();
+
 		try {
 			DDMDataProviderOutputParametersSettings[]
 				ddmDataProviderOutputParametersSettings =
@@ -88,12 +90,18 @@ public class DDMDataProviderInstanceOutputParametersDataProvider
 					ddmDataProviderOutputParametersSetting :
 						ddmDataProviderOutputParametersSettings) {
 
-				ddmDataProviderResponse.add(
-					DDMDataProviderResponseTuple.of(
+				if (Objects.equals(
 						ddmDataProviderOutputParametersSetting.
-							outputParameterName(),
-						createDDMDataProviderOutputParameterMap(
-							ddmDataProviderOutputParametersSetting)));
+							outputParameterType(),
+						"[\"list\"]")) {
+
+					data.add(
+						new KeyValuePair(
+							ddmDataProviderOutputParametersSetting.
+								outputParameterName(),
+							ddmDataProviderOutputParametersSetting.
+								outputParameterName()));
+				}
 			}
 		}
 		catch (Exception e) {
@@ -105,31 +113,16 @@ public class DDMDataProviderInstanceOutputParametersDataProvider
 				e);
 		}
 
+		ddmDataProviderResponse.add(
+			DDMDataProviderResponseTuple.of(
+				"outputParameterNames", "list", data));
+
 		return ddmDataProviderResponse;
 	}
 
 	@Override
 	public Class<?> getSettings() {
 		throw new UnsupportedOperationException();
-	}
-
-	protected Map<Object, Object> createDDMDataProviderOutputParameterMap(
-		DDMDataProviderOutputParametersSettings
-			ddmDataProviderOutputParametersSetting) {
-
-		Map<Object, Object> map = new HashMap<>();
-
-		map.put(
-			"outputParameterName",
-			ddmDataProviderOutputParametersSetting.outputParameterName());
-		map.put(
-			"outputParameterPath",
-			ddmDataProviderOutputParametersSetting.outputParameterPath());
-		map.put(
-			"outputParameterType",
-			ddmDataProviderOutputParametersSetting.outputParameterType());
-
-		return map;
 	}
 
 	protected DDMFormValues getDataProviderInstanceFormValues(
