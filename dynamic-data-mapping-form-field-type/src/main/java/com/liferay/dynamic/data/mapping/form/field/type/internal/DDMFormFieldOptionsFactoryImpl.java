@@ -113,7 +113,8 @@ public class DDMFormFieldOptionsFactoryImpl
 				ddmDataProviderInvoker.invoke(ddmDataProviderRequest);
 
 			String ddmDataProviderInstanceOutput = GetterUtil.getString(
-				ddmFormField.getProperty("ddmDataProviderInstanceOutput"));
+				ddmFormField.getProperty("ddmDataProviderInstanceOutput"),
+				"Default-Output");
 
 			DDMDataProviderResponseTuple dataProviderResponseTuple =
 				ddmDataProviderResponse.get(ddmDataProviderInstanceOutput);
