@@ -249,10 +249,10 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 	}
 
 	protected void setUpDDMFormFieldOptionsFactory(
-		DDMFormField ddmFormField, 
-		DDMFormFieldRenderingContext ddmFormFieldRenderingContext) 
-			throws Exception {
-		
+			DDMFormField ddmFormField,
+			DDMFormFieldRenderingContext ddmFormFieldRenderingContext)
+		throws Exception {
+
 		field(
 			SelectDDMFormFieldTemplateContextContributor.class,
 			"ddmFormFieldOptionsFactory"
@@ -260,7 +260,7 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 			_selectDDMFormFieldTemplateContextContributor,
 			_ddmFormFieldOptionsFactory
 		);
-		
+
 		DDMFormFieldOptions ddmFormFieldOptions = createDDMFormFieldOptions();
 
 		when(
