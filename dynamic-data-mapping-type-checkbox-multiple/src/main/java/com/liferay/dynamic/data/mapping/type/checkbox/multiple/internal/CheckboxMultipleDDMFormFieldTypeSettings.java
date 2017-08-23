@@ -23,6 +23,7 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutRow;
 import com.liferay.dynamic.data.mapping.form.field.type.DefaultDDMFormFieldTypeSettings;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
+import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 
 /**
  * @author Dylan Rebelak
@@ -78,6 +79,17 @@ public interface CheckboxMultipleDDMFormFieldTypeSettings
 		type = "options"
 	)
 	public DDMFormFieldOptions options();
+
+	@DDMFormField(
+		label = "%predefined-value",
+		properties = {
+			"placeholder=%enter-a-default-value",
+			"tooltip=%enter-a-default-value-that-is-submitted-if-no-other-value-is-entered"
+		},
+		type = "checkbox_multiple"
+	)
+	@Override
+	public LocalizedValue predefinedValue();
 
 	@DDMFormField(visibilityExpression = "FALSE")
 	@Override
