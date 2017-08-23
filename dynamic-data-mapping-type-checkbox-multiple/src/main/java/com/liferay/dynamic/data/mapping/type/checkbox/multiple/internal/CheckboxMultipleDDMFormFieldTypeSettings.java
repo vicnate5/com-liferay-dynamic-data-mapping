@@ -20,15 +20,27 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormLayout;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutColumn;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutPage;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutRow;
+import com.liferay.dynamic.data.mapping.annotations.DDMFormRule;
 import com.liferay.dynamic.data.mapping.form.field.type.DefaultDDMFormFieldTypeSettings;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
-import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 
 /**
  * @author Dylan Rebelak
  */
-@DDMForm
+@DDMForm(
+	rules = {
+		@DDMFormRule(
+			actions = {
+				"setOptions('predefinedValue', getValue('options'))",
+				"setRequired('options', true)",
+				"setVisible('repeatable', false)",
+				"setVisible('validation', false)"
+			},
+			condition = "TRUE"
+		)
+	}
+)
 @DDMFormLayout(
 	paginationMode = com.liferay.dynamic.data.mapping.model.DDMFormLayout.TABBED_MODE,
 	value = {
@@ -75,15 +87,14 @@ public interface CheckboxMultipleDDMFormFieldTypeSettings
 	public boolean inline();
 
 	@DDMFormField(
-		dataType = "ddm-options", label = "%options", required = true,
-		type = "options"
+		dataType = "ddm-options", label = "%options", type = "options"
 	)
 	public DDMFormFieldOptions options();
 
 	@DDMFormField(
 		label = "%predefined-value",
 		properties = {
-			"placeholder=%enter-a-default-value",
+			"inline=true", "placeholder=%enter-a-default-value",
 			"tooltip=%enter-a-default-value-that-is-submitted-if-no-other-value-is-entered"
 		},
 		type = "checkbox_multiple"
@@ -91,18 +102,10 @@ public interface CheckboxMultipleDDMFormFieldTypeSettings
 	@Override
 	public LocalizedValue predefinedValue();
 
-	@DDMFormField(visibilityExpression = "FALSE")
-	@Override
-	public boolean repeatable();
-
 	@DDMFormField(
 		dataType = "boolean", label = "%show-as-a-switcher",
 		properties = {"showAsSwitcher=true"}, type = "checkbox"
 	)
 	public boolean showAsSwitcher();
-
-	@DDMFormField(visibilityExpression = "FALSE")
-	@Override
-	public DDMFormFieldValidation validation();
 
 }
