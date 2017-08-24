@@ -97,11 +97,18 @@ public class SelectDDMFormFieldTemplateContextContributor
 
 		parameters.put("strings", stringsMap);
 
-		parameters.put(
-			"value",
-			getValue(
+		List<String> value = getValue(
+			GetterUtil.getString(
+				ddmFormFieldRenderingContext.getValue(), "[]"));
+
+		if (value.isEmpty()) {
+			value = getValue(
 				GetterUtil.getString(
-					ddmFormFieldRenderingContext.getValue(), "[]")));
+					ddmFormFieldRenderingContext.getProperty("predefinedValue"),
+					"[]"));
+		}
+
+		parameters.put("value", value);
 
 		return parameters;
 	}
