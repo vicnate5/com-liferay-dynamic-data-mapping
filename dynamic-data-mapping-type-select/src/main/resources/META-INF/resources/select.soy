@@ -114,10 +114,11 @@
 {template .select_label}
 	{@param? label: string}
 	{@param name: string}
+	{@param? readOnly: bool}
 	{@param? required: bool}
 	{@param? tip: string}
 
-	<label class="control-label" for="{$name}">
+	<label class="control-label{$readOnly ? ' disabled' : ''}" for="{$name}">
 		{$label}
 
 		{if $required}
