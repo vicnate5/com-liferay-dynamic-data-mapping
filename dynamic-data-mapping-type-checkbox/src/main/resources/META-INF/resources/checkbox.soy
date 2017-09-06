@@ -24,12 +24,12 @@
 	<div class="form-group{$visible ? '' : ' hide'} liferay-ddm-form-field-checkbox" data-fieldname="{$name}">
 		{if $showAsSwitcher}
 			<label aria-checked="{$value ? 'true' : 'false'}" for="{$name}" role="checkbox">
-				<input class="toggle-switch" 
+				<input class="toggle-switch"
 					{if $value}checked{/if}
 					{if $readOnly}disabled{/if}
-					id="{$name}" 
-					name="{$name}" 
-					type="checkbox" 
+					id="{$name}"
+					name="{$name}"
+					type="checkbox"
 					value="true" />
 
 				<span aria-hidden="true" class="toggle-switch-bar">
@@ -55,10 +55,10 @@
 				{/if}
 
 				<input {if $value}checked{/if}
-					{if $readOnly}disabled{/if} 
-					id="{$name}" 
-					name="{$name}" 
-					type="checkbox" 
+					{if $readOnly}disabled{/if}
+					id="{$name}"
+					name="{$name}"
+					type="checkbox"
 					value="true" />{if $showLabel} {$label}{/if}
 
 				{if $showLabel}
