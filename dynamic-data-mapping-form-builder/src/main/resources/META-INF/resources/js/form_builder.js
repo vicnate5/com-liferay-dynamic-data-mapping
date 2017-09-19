@@ -107,8 +107,6 @@ AUI.add(
 
 						var boundingBox = instance.get('boundingBox');
 
-						instance._createFieldSettingsPanel();
-
 						instance._eventHandlers = [
 							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_FIELD, instance),
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
@@ -408,6 +406,7 @@ AUI.add(
 						var instance = this;
 
 						instance._fieldToolbar.destroy();
+						instance.getFieldSettingsPanel();
 						instance._renderFields();
 						instance._renderPages();
 						instance._renderRequiredFieldsWarning();
