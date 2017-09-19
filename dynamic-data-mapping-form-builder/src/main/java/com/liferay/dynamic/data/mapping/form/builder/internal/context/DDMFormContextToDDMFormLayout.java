@@ -14,6 +14,8 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.context;
 
+import com.liferay.dynamic.data.mapping.form.builder.context.DDMFormContextDeserializer;
+import com.liferay.dynamic.data.mapping.form.builder.context.DDMFormContextDeserializerRequest;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayout;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutColumn;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutPage;
@@ -24,6 +26,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,15 +41,37 @@ import org.osgi.service.component.annotations.Reference;
  * @author Marcellus Tavares
  */
 @Component(
-	immediate = true, service = DDLFormBuilderContextToDDMFormLayout.class
+	immediate = true,
+	property = {
+		"dynamic.data.mapping.form.builder.context.deserializer.type=formLayout"
+	},
+	service = DDMFormContextDeserializer.class
 )
-public class DDLFormBuilderContextToDDMFormLayout {
+public class DDMFormContextToDDMFormLayout
+	implements DDMFormContextDeserializer<DDMFormLayout> {
 
-	public DDMFormLayout deserialize(String serializedFormBuilderContext)
+	@Override
+	public DDMFormLayout deserialize(
+			DDMFormContextDeserializerRequest ddmFormContextDeserializerRequest)
+		throws PortalException {
+
+		String serializedFormContext =
+			ddmFormContextDeserializerRequest.getProperty(
+				"serializedFormContext");
+
+		if (Validator.isNull(serializedFormContext)) {
+			throw new IllegalStateException(
+				"serializedFormContext property is required");
+		}
+
+		return deserialize(serializedFormContext);
+	}
+
+	protected DDMFormLayout deserialize(String serializedFormContext)
 		throws PortalException {
 
 		JSONObject jsonObject = jsonFactory.createJSONObject(
-			serializedFormBuilderContext);
+			serializedFormContext);
 
 		DDMFormLayout ddmFormLayout = new DDMFormLayout();
 

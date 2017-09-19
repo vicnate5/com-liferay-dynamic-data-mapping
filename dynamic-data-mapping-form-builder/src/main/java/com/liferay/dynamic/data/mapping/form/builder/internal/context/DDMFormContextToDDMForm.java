@@ -14,16 +14,17 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.context;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDLFormRuleDeserializer;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDLFormRuleToDDMFormRuleConverter;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRule;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleSerializerContext;
-import com.liferay.dynamic.data.mapping.form.builder.util.DDMFormTemplateContextVisitor;
+import com.liferay.dynamic.data.mapping.form.builder.context.DDMFormContextDeserializer;
+import com.liferay.dynamic.data.mapping.form.builder.context.DDMFormContextDeserializerRequest;
+import com.liferay.dynamic.data.mapping.form.builder.context.DDMFormContextVisitor;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDMFormRuleConverter;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDMFormRuleDeserializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleSerializerContext;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
-import com.liferay.dynamic.data.mapping.model.DDMFormRule;
 import com.liferay.dynamic.data.mapping.model.DDMFormSuccessPageSettings;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -50,28 +51,31 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true, service = DDLFormBuilderContextToDDMForm.class)
-public class DDLFormBuilderContextToDDMForm {
+@Component(
+	immediate = true,
+	property = {
+		"dynamic.data.mapping.form.builder.context.deserializer.type=form"
+	},
+	service = DDMFormContextDeserializer.class
+)
+public class DDMFormContextToDDMForm
+	implements DDMFormContextDeserializer<DDMForm> {
 
-	public DDMForm deserialize(String serializedFormBuilderContext)
+	@Override
+	public DDMForm deserialize(
+			DDMFormContextDeserializerRequest ddmFormContextDeserializerRequest)
 		throws PortalException {
 
-		DDMForm ddmForm = new DDMForm();
+		String serializedFormContext =
+			ddmFormContextDeserializerRequest.getProperty(
+				"serializedFormContext");
 
-		JSONObject jsonObject = jsonFactory.createJSONObject(
-			serializedFormBuilderContext);
+		if (Validator.isNull(serializedFormContext)) {
+			throw new IllegalStateException(
+				"serializedFormContext property is required");
+		}
 
-		setDDMFormAvailableLocales(
-			jsonObject.getJSONArray("availableLanguageIds"), ddmForm);
-		setDDMFormDefaultLocale(
-			jsonObject.getString("defaultLanguageId"), ddmForm);
-		setDDMFormFields(jsonObject.getJSONArray("pages"), ddmForm);
-		setDDMFormRules(jsonObject.getJSONArray("rules"), ddmForm);
-
-		setDDMFormSuccessPageSettings(
-			jsonObject.getJSONObject("successPageSettings"), ddmForm);
-
-		return ddmForm;
+		return deserialize(serializedFormContext);
 	}
 
 	protected LocalizedValue createLocalizedValue(
@@ -90,6 +94,27 @@ public class DDLFormBuilderContextToDDMForm {
 		}
 
 		return localizedValue;
+	}
+
+	protected DDMForm deserialize(String serializedFormContext)
+		throws PortalException {
+
+		DDMForm ddmForm = new DDMForm();
+
+		JSONObject jsonObject = jsonFactory.createJSONObject(
+			serializedFormContext);
+
+		setDDMFormAvailableLocales(
+			jsonObject.getJSONArray("availableLanguageIds"), ddmForm);
+		setDDMFormDefaultLocale(
+			jsonObject.getString("defaultLanguageId"), ddmForm);
+		setDDMFormFields(jsonObject.getJSONArray("pages"), ddmForm);
+		setDDMFormRules(jsonObject.getJSONArray("rules"), ddmForm);
+
+		setDDMFormSuccessPageSettings(
+			jsonObject.getJSONObject("successPageSettings"), ddmForm);
+
+		return ddmForm;
 	}
 
 	protected Set<Locale> getAvailableLocales(JSONArray jsonArray) {
@@ -202,20 +227,21 @@ public class DDLFormBuilderContextToDDMForm {
 		return ddmFormFieldValidation;
 	}
 
-	protected List<DDMFormRule> getDDMFormRules(
-			DDLFormRuleSerializerContext ddlFormRuleSerializerContext,
-			JSONArray jsonArray)
+	protected List<com.liferay.dynamic.data.mapping.model.DDMFormRule>
+			getDDMFormRules(
+				DDMFormRuleSerializerContext ddmFormRuleSerializerContext,
+				JSONArray jsonArray)
 		throws PortalException {
 
 		if ((jsonArray == null) || (jsonArray.length() == 0)) {
 			return Collections.emptyList();
 		}
 
-		List<DDLFormRule> ddlFormRules = ddlFormRuleDeserializer.deserialize(
+		List<DDMFormRule> ddmFormRules = ddmFormRuleDeserializer.deserialize(
 			jsonArray.toString());
 
-		return ddlFormRulesToDDMFormRulesConverter.convert(
-			ddlFormRules, ddlFormRuleSerializerContext);
+		return ddmFormRuleConverter.convert(
+			ddmFormRules, ddmFormRuleSerializerContext);
 	}
 
 	protected LocalizedValue getLocalizedValue(
@@ -257,8 +283,8 @@ public class DDLFormBuilderContextToDDMForm {
 	}
 
 	protected void setDDMFormFields(JSONArray jsonArray, DDMForm ddmForm) {
-		DDMFormTemplateContextVisitor ddmFormTemplateContextVisitor =
-			new DDMFormTemplateContextVisitor(jsonArray);
+		DDMFormContextVisitor ddmFormTemplateContextVisitor =
+			new DDMFormContextVisitor(jsonArray);
 
 		ddmFormTemplateContextVisitor.onVisitField(
 			new Consumer<JSONObject>() {
@@ -285,8 +311,8 @@ public class DDLFormBuilderContextToDDMForm {
 	protected void setDDMFormFieldSettings(
 		JSONObject jsonObject, DDMForm ddmForm, DDMFormField ddmFormField) {
 
-		DDMFormTemplateContextVisitor ddmFormTemplateContextVisitor =
-			new DDMFormTemplateContextVisitor(jsonObject.getJSONArray("pages"));
+		DDMFormContextVisitor ddmFormTemplateContextVisitor =
+			new DDMFormContextVisitor(jsonObject.getJSONArray("pages"));
 
 		ddmFormTemplateContextVisitor.onVisitField(
 			new Consumer<JSONObject>() {
@@ -340,13 +366,13 @@ public class DDLFormBuilderContextToDDMForm {
 	protected void setDDMFormRules(JSONArray jsonArray, DDMForm ddmForm)
 		throws PortalException {
 
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext =
-			new DDLFormRuleSerializerContext();
+		DDMFormRuleSerializerContext ddmFormRuleSerializerContext =
+			new DDMFormRuleSerializerContext();
 
-		ddlFormRuleSerializerContext.addAttribute("form", ddmForm);
+		ddmFormRuleSerializerContext.addAttribute("form", ddmForm);
 
-		List<DDMFormRule> ddmFormRules = getDDMFormRules(
-			ddlFormRuleSerializerContext, jsonArray);
+		List<com.liferay.dynamic.data.mapping.model.DDMFormRule> ddmFormRules =
+			getDDMFormRules(ddmFormRuleSerializerContext, jsonArray);
 
 		ddmForm.setDDMFormRules(ddmFormRules);
 	}
@@ -373,16 +399,15 @@ public class DDLFormBuilderContextToDDMForm {
 	}
 
 	@Reference
-	protected DDLFormRuleDeserializer ddlFormRuleDeserializer;
+	protected DDMFormRuleConverter ddmFormRuleConverter;
 
 	@Reference
-	protected DDLFormRuleToDDMFormRuleConverter
-		ddlFormRulesToDDMFormRulesConverter;
+	protected DDMFormRuleDeserializer ddmFormRuleDeserializer;
 
 	@Reference
 	protected JSONFactory jsonFactory;
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		DDLFormBuilderContextToDDMForm.class);
+		DDMFormContextToDDMForm.class);
 
 }

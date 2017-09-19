@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.dynamic.data.mapping.form.builder.util;
+package com.liferay.dynamic.data.mapping.form.builder.context;
 
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -22,9 +22,9 @@ import java.util.function.Consumer;
 /**
  * @author Marcellus Tavares
  */
-public class DDMFormTemplateContextVisitor {
+public class DDMFormContextVisitor {
 
-	public DDMFormTemplateContextVisitor(JSONArray pagesJSONArray) {
+	public DDMFormContextVisitor(JSONArray pagesJSONArray) {
 		_pagesJSONArray = pagesJSONArray;
 	}
 
