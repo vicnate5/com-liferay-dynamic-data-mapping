@@ -15,3 +15,45 @@
 --%>
 
 <%@ include file="/form_builder/init.jsp" %>
+
+<aui:script>
+	Liferay.namespace('DDM').Settings = {
+		evaluatorURL: '<%= evaluatorURL %>',
+		functionsMetadata: <%= functionsMetadata %>,
+		getDataProviderInstancesURL: '<%= dataProviderInstancesURL %>',
+		getDataProviderParametersSettingsURL: '<%= dataProviderInstanceParameterSettingsURL %>',
+		getFieldTypeSettingFormContextURL: '<%= fieldSettingsDDMFormContextURL %>',
+		getFunctionsURL: '<%= functionsURL %>',
+		getRolesURL: '<%= rolesURL %>',
+		portletNamespace: '<%= refererPortletNamespace %>'
+	}
+</aui:script>
+
+<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-rule-builder">
+
+	Liferay.component(
+		'<%= refererPortletNamespace %>formBuilder',
+		function() {
+			return new Liferay.DDM.FormBuilder(
+				{
+					context: <%= formBuilderContext %>,
+					defaultLanguageId: '<%= defaultLanguageId %>',
+					editingLanguageId: '<%= editingLanguageId %>'
+				}
+			);
+		}
+	);
+
+	Liferay.component(
+		'<%= refererPortletNamespace %>ruleBuilder',
+		function() {
+			return new Liferay.DDM.FormBuilderRuleBuilder(
+				{
+					formBuilder: Liferay.component('<%= refererPortletNamespace %>formBuilder'),
+					rules: <%= serializedDDMFormRules %>,
+					visible: false
+				}
+			);
+		}
+	);
+</aui:script>
