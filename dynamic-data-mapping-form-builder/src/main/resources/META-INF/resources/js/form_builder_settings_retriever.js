@@ -41,13 +41,15 @@ AUI.add(
 								}
 								else {
 									var payload = {
+										bcp47LanguageId: themeDisplay.getBCP47LanguageId(),
+										portletNamespace: Settings.portletNamespace,
 										type: type
 									};
 
 									A.io.request(
 										Settings.getFieldTypeSettingFormContextURL,
 										{
-											data: Liferay.Util.ns(Settings.portletNamespace, payload),
+											data: payload,
 											dataType: 'JSON',
 											method: 'GET',
 											on: {

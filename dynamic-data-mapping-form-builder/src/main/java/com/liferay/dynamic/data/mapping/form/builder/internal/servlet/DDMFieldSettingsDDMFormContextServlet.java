@@ -31,11 +31,10 @@ import com.liferay.portal.kernel.json.JSONSerializer;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
@@ -70,13 +69,15 @@ public class DDMFieldSettingsDDMFormContextServlet extends HttpServlet {
 		HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
+			String bcp47LanguageId = ParamUtil.getString(
+				request, "bcp47LanguageId");
+			String portletNamespace = ParamUtil.getString(
+				request, "portletNamespace");
+			String type = ParamUtil.getString(request, "type");
 
-			Locale locale = themeDisplay.getLocale();
-			long[] groupIds = _portal.getCurrentAndAncestorSiteGroupIds(
-				themeDisplay.getScopeGroupId());
+			Locale locale = Locale.forLanguageTag(bcp47LanguageId);
 
+			LocaleThreadLocal.setThemeDisplayLocale(locale);
 
 			Class<?> ddmFormFieldTypeSettings = getDDMFormFieldTypeSettings(
 				type);

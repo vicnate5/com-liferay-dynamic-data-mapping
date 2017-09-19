@@ -305,12 +305,9 @@ AUI.add(
 					_getDataProviderPayload: function(ddmDataProviderInstanceId) {
 						var instance = this;
 
-						var payload = Liferay.Util.ns(
-							Settings.portletNamespace,
-							{
-								ddmDataProviderInstanceId: ddmDataProviderInstanceId
-							}
-						);
+						var payload = {
+							ddmDataProviderInstanceId: ddmDataProviderInstanceId
+						};
 
 						return payload;
 					},

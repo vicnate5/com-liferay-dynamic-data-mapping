@@ -20,11 +20,10 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
@@ -96,13 +95,14 @@ public class DDMFormFunctionsServlet extends HttpServlet {
 			HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
+		String bcp47LanguageId = ParamUtil.getString(
+			request, "bcp47LanguageId");
 
 		Set<Map.Entry<String, DDMExpressionFunction>> entries =
 			_ddmExpressionFunctions.entrySet();
 
-		JSONArray jsonArray = toJSONArray(entries, themeDisplay.getLocale());
+		JSONArray jsonArray = toJSONArray(
+			entries, Locale.forLanguageTag(bcp47LanguageId));
 
 		ServletResponseUtil.write(response, jsonArray.toJSONString());
 	}

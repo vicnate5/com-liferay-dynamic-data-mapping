@@ -250,9 +250,15 @@ AUI.add(
 					_fillDataProviders: function() {
 						var instance = this;
 
+						var payload = {
+							bcp47LanguageId: themeDisplay.getBCP47LanguageId(),
+							scopeGroupId: themeDisplay.getScopeGroupId()
+						};
+
 						A.io.request(
 							Settings.getDataProviderInstancesURL,
 							{
+								data: payload,
 								method: 'GET',
 								on: {
 									success: function(event, id, xhr) {
@@ -386,10 +392,16 @@ AUI.add(
 
 						var roles = instance.get('roles');
 
+						var payload = {
+							bcp47LanguageId: themeDisplay.getBCP47LanguageId(),
+							scopeGroupId: themeDisplay.getScopeGroupId()
+						};
+
 						if (!roles.length) {
 							A.io.request(
 								Settings.getRolesURL,
 								{
+									data: payload,
 									method: 'GET',
 									on: {
 										success: function(event, id, xhr) {

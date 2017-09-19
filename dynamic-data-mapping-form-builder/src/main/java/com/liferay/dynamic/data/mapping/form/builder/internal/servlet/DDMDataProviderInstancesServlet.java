@@ -25,11 +25,9 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
@@ -85,12 +83,15 @@ public class DDMDataProviderInstancesServlet extends HttpServlet {
 		HttpServletRequest request) {
 
 		try {
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
+			String bcp47LanguageId = ParamUtil.getString(
+				request, "bcp47LanguageId");
 
-			Locale locale = themeDisplay.getLocale();
+			Locale locale = Locale.forLanguageTag(bcp47LanguageId);
+
+			long scopeGroupId = ParamUtil.getLong(request, "scopeGroupId");
+
 			long[] groupIds = _portal.getCurrentAndAncestorSiteGroupIds(
-				themeDisplay.getScopeGroupId());
+				scopeGroupId);
 
 			int start = ParamUtil.getInteger(
 				request, "start", QueryUtil.ALL_POS);

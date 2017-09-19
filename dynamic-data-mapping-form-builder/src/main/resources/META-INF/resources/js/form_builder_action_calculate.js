@@ -69,9 +69,14 @@ AUI.add(
 
 						calculateContainer.setHTML(instance._getRuleContainerTemplate());
 
+						var payload = {
+							bcp47LanguageId: themeDisplay.getBCP47LanguageId()
+						};
+
 						A.io.request(
 							Settings.getFunctionsURL,
 							{
+								data: payload,
 								method: 'GET',
 								on: {
 									success: function(event, id, xhr) {

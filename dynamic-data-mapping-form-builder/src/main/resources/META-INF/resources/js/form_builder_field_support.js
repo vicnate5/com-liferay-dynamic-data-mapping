@@ -83,7 +83,6 @@ AUI.add(
 						editMode: builder.isEditMode() || instance.isPersisted(),
 						evaluatorURL: Settings.evaluatorURL,
 						field: instance,
-						portletNamespace: Settings.portletNamespace,
 						templateNamespace: 'ddm.settings_form'
 					}
 				);
