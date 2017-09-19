@@ -806,7 +806,7 @@ AUI.add(
 					_valueVisitor: function() {
 						var instance = this;
 
-						return new Liferay.DDM.LayoutVisitor(
+						return new Liferay.DDM.FormBuilderLayoutVisitor(
 							{
 								pages: instance.get('layouts')
 							}

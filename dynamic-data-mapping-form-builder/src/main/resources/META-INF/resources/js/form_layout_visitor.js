@@ -3,7 +3,7 @@ AUI.add(
 	function(A) {
 		var EMPTY_FN = A.Lang.emptyFn;
 
-		var LayoutVisitor = A.Component.create(
+		var FormBuilderLayoutVisitor = A.Component.create(
 			{
 				ATTRS: {
 					columnHandler: {
@@ -108,7 +108,7 @@ AUI.add(
 			}
 		);
 
-		Liferay.namespace('DDM').LayoutVisitor = LayoutVisitor;
+		Liferay.namespace('DDM').FormBuilderLayoutVisitor = FormBuilderLayoutVisitor;
 	},
 	'',
 	{
