@@ -48,6 +48,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddm-form-builder-field-support', 'liferay-ddm-form-builder-layout-visitor', 'liferay-ddm-form-renderer-util']
+		requires: ['liferay-ddm-form-builder-field-support', 'liferay-ddm-form-renderer-layout-visitor', 'liferay-ddm-form-renderer-util']
 	}
 );

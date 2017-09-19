@@ -231,6 +231,7 @@
 							path: 'form_builder_util.js',
 							requires: [
 								'liferay-ddm-form-builder-field-support',
+								'liferay-ddm-form-renderer-layout-visitor',
 								'liferay-ddm-form-renderer-util'
 							]
 						},
