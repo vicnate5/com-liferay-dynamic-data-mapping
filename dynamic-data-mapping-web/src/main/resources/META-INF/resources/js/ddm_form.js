@@ -741,7 +741,7 @@ AUI.add(
 							if (Lang.isObject(tipsMap)) {
 								var tip = tipsMap[instance.get('displayLocale')] || tipsMap[defaultLocale];
 
-								tipNode.attr('title', A.Escape.html(tip));
+								tipNode.attr('title', tip);
 							}
 
 							labelNode.append(tipNode);
