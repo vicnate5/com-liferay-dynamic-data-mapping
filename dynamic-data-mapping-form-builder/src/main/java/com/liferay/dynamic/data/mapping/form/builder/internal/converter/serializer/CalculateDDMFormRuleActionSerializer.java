@@ -14,7 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.CalculateDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.CalculateDDMFormRuleAction;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.portal.kernel.util.CharPool;
@@ -28,26 +28,26 @@ import java.util.stream.Stream;
 /**
  * @author Leonardo Barros
  */
-public class CalculateDDLFormRuleActionSerializer
-	implements DDLFormRuleActionSerializer {
+public class CalculateDDMFormRuleActionSerializer
+	implements DDMFormRuleActionSerializer {
 
-	public CalculateDDLFormRuleActionSerializer(
-		CalculateDDLFormRuleAction calculateDDLFormRuleAction) {
+	public CalculateDDMFormRuleActionSerializer(
+		CalculateDDMFormRuleAction calculateDDMFormRuleAction) {
 
-		_calculateDDLFormRuleAction = calculateDDLFormRuleAction;
+		_calculateDDMFormRuleAction = calculateDDMFormRuleAction;
 	}
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddmFormRuleSerializerContext) {
 
-		DDMForm ddmForm = ddlFormRuleSerializerContext.getAttribute("form");
+		DDMForm ddmForm = ddmFormRuleSerializerContext.getAttribute("form");
 
 		Map<String, DDMFormField> ddmFormFieldMap = ddmForm.getDDMFormFieldsMap(
 			true);
 
 		String expression = removeBrackets(
-			_calculateDDLFormRuleAction.getExpression());
+			_calculateDDMFormRuleAction.getExpression());
 
 		Stream<String> ddmFormFieldStream = ddmFormFieldMap.keySet().stream();
 
@@ -102,7 +102,7 @@ public class CalculateDDLFormRuleActionSerializer
 
 		return String.format(
 			_functionCallBinaryExpressionFormat, "calculate",
-			_calculateDDLFormRuleAction.getTarget(), newExpression);
+			_calculateDDMFormRuleAction.getTarget(), newExpression);
 	}
 
 	protected boolean matchAnyField(
@@ -138,6 +138,6 @@ public class CalculateDDLFormRuleActionSerializer
 		"%s('%s', %s)";
 	private static final String _functionCallUnaryExpressionFormat = "%s('%s')";
 
-	private final CalculateDDLFormRuleAction _calculateDDLFormRuleAction;
+	private final CalculateDDMFormRuleAction _calculateDDMFormRuleAction;
 
 }

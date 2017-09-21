@@ -22,12 +22,12 @@ import java.util.Objects;
 /**
  * @author Marcellus Tavares
  */
-public class DDLFormRuleCondition {
+public class DDMFormRuleCondition {
 
-	public DDLFormRuleCondition() {
+	public DDMFormRuleCondition() {
 	}
 
-	public DDLFormRuleCondition(String operator, List<Operand> operands) {
+	public DDMFormRuleCondition(String operator, List<Operand> operands) {
 		_operator = operator;
 		_operands = operands;
 	}
@@ -38,14 +38,14 @@ public class DDLFormRuleCondition {
 			return true;
 		}
 
-		if (!(obj instanceof DDLFormRuleCondition)) {
+		if (!(obj instanceof DDMFormRuleCondition)) {
 			return false;
 		}
 
-		DDLFormRuleCondition ddlFormRuleCondition = (DDLFormRuleCondition)obj;
+		DDMFormRuleCondition ddmFormRuleCondition = (DDMFormRuleCondition)obj;
 
-		if (Objects.equals(_operands, ddlFormRuleCondition._operands) &&
-			Objects.equals(_operator, ddlFormRuleCondition._operator)) {
+		if (Objects.equals(_operands, ddmFormRuleCondition._operands) &&
+			Objects.equals(_operator, ddmFormRuleCondition._operator)) {
 
 			return true;
 		}

@@ -14,10 +14,10 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.AutoFillDDLFormRuleActionSerializer;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleActionSerializer;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleSerializerContext;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.AutoFillDDMFormRuleActionSerializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleActionSerializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleSerializerContext;
 import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.HashUtil;
 
@@ -28,12 +28,12 @@ import java.util.Objects;
 /**
  * @author Rafael Praxedes
  */
-public class AutoFillDDLFormRuleAction implements DDLFormRuleAction {
+public class AutoFillDDMFormRuleAction implements DDMFormRuleAction {
 
-	public AutoFillDDLFormRuleAction() {
+	public AutoFillDDMFormRuleAction() {
 	}
 
-	public AutoFillDDLFormRuleAction(
+	public AutoFillDDMFormRuleAction(
 		String ddmDataProviderInstanceUUID, Map<String, String> inputMapper,
 		Map<String, String> outputMapper) {
 
@@ -48,20 +48,20 @@ public class AutoFillDDLFormRuleAction implements DDLFormRuleAction {
 			return true;
 		}
 
-		if (!(obj instanceof AutoFillDDLFormRuleAction)) {
+		if (!(obj instanceof AutoFillDDMFormRuleAction)) {
 			return false;
 		}
 
-		AutoFillDDLFormRuleAction autoFillDDLFormRuleAction =
-			(AutoFillDDLFormRuleAction)obj;
+		AutoFillDDMFormRuleAction autoFillDDMFormRuleAction =
+			(AutoFillDDMFormRuleAction)obj;
 
 		if (Objects.equals(
 				_ddmDataProviderInstanceUUID,
-				autoFillDDLFormRuleAction._ddmDataProviderInstanceUUID) &&
+				autoFillDDMFormRuleAction._ddmDataProviderInstanceUUID) &&
 			Objects.equals(
-				_inputMapper, autoFillDDLFormRuleAction._inputMapper) &&
+				_inputMapper, autoFillDDMFormRuleAction._inputMapper) &&
 			Objects.equals(
-				_outputMapper, autoFillDDLFormRuleAction._outputMapper)) {
+				_outputMapper, autoFillDDMFormRuleAction._outputMapper)) {
 
 			return true;
 		}
@@ -100,13 +100,13 @@ public class AutoFillDDLFormRuleAction implements DDLFormRuleAction {
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddmFormRuleSerializerContext) {
 
-		DDLFormRuleActionSerializer ddlFormRuleActionSerializer =
-			new AutoFillDDLFormRuleActionSerializer(this);
+		DDMFormRuleActionSerializer ddmFormRuleActionSerializer =
+			new AutoFillDDMFormRuleActionSerializer(this);
 
-		return ddlFormRuleActionSerializer.serialize(
-			ddlFormRuleSerializerContext);
+		return ddmFormRuleActionSerializer.serialize(
+			ddmFormRuleSerializerContext);
 	}
 
 	public void setDDMDataProviderInstanceUUID(

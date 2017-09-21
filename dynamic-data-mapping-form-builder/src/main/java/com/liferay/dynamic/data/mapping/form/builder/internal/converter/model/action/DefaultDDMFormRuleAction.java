@@ -14,10 +14,10 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleActionSerializer;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleSerializerContext;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DefaultDDLFormRuleActionSerializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleActionSerializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleSerializerContext;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DefaultDDMFormRuleActionSerializer;
 import com.liferay.portal.kernel.util.HashUtil;
 
 import java.util.Objects;
@@ -25,12 +25,12 @@ import java.util.Objects;
 /**
  * @author Rafael Praxedes
  */
-public class DefaultDDLFormRuleAction implements DDLFormRuleAction {
+public class DefaultDDMFormRuleAction implements DDMFormRuleAction {
 
-	public DefaultDDLFormRuleAction() {
+	public DefaultDDMFormRuleAction() {
 	}
 
-	public DefaultDDLFormRuleAction(String action, String target) {
+	public DefaultDDMFormRuleAction(String action, String target) {
 		_action = action;
 		_target = target;
 	}
@@ -41,15 +41,15 @@ public class DefaultDDLFormRuleAction implements DDLFormRuleAction {
 			return true;
 		}
 
-		if (!(obj instanceof DefaultDDLFormRuleAction)) {
+		if (!(obj instanceof DefaultDDMFormRuleAction)) {
 			return false;
 		}
 
-		DefaultDDLFormRuleAction ddlFormRuleAction =
-			(DefaultDDLFormRuleAction)obj;
+		DefaultDDMFormRuleAction ddmFormRuleAction =
+			(DefaultDDMFormRuleAction)obj;
 
-		if (Objects.equals(_action, ddlFormRuleAction._action) &&
-			Objects.equals(_target, ddlFormRuleAction._target)) {
+		if (Objects.equals(_action, ddmFormRuleAction._action) &&
+			Objects.equals(_target, ddmFormRuleAction._target)) {
 
 			return true;
 		}
@@ -75,13 +75,13 @@ public class DefaultDDLFormRuleAction implements DDLFormRuleAction {
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddmFormRuleSerializerContext) {
 
-		DDLFormRuleActionSerializer ddlFormRuleActionSerializer =
-			new DefaultDDLFormRuleActionSerializer(this);
+		DDMFormRuleActionSerializer ddmFormRuleActionSerializer =
+			new DefaultDDMFormRuleActionSerializer(this);
 
-		return ddlFormRuleActionSerializer.serialize(
-			ddlFormRuleSerializerContext);
+		return ddmFormRuleActionSerializer.serialize(
+			ddmFormRuleSerializerContext);
 	}
 
 	public void setAction(String action) {

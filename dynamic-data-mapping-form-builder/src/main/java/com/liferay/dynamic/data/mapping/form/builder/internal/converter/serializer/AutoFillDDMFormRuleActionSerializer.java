@@ -14,7 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.AutoFillDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.AutoFillDDMFormRuleAction;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -27,27 +27,27 @@ import java.util.Map.Entry;
 /**
  * @author Leonardo Barros
  */
-public class AutoFillDDLFormRuleActionSerializer
-	implements DDLFormRuleActionSerializer {
+public class AutoFillDDMFormRuleActionSerializer
+	implements DDMFormRuleActionSerializer {
 
-	public AutoFillDDLFormRuleActionSerializer(
-		AutoFillDDLFormRuleAction autoFillDDLFormRuleAction) {
+	public AutoFillDDMFormRuleActionSerializer(
+		AutoFillDDMFormRuleAction autoFillDDMFormRuleAction) {
 
-		_autoFillDDLFormRuleAction = autoFillDDLFormRuleAction;
+		_autoFillDDMFormRuleAction = autoFillDDMFormRuleAction;
 	}
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddmFormRuleSerializerContext) {
 
 		return String.format(
 			_functionCallTernaryExpressionFormat, "call",
 			StringUtil.quote(
-				_autoFillDDLFormRuleAction.getDDMDataProviderInstanceUUID()),
+				_autoFillDDMFormRuleAction.getDDMDataProviderInstanceUUID()),
 			convertAutoFillInputParameters(
-				_autoFillDDLFormRuleAction.getInputParametersMapper()),
+				_autoFillDDMFormRuleAction.getInputParametersMapper()),
 			convertAutoFillOutputParameters(
-				_autoFillDDLFormRuleAction.getOutputParametersMapper()));
+				_autoFillDDMFormRuleAction.getOutputParametersMapper()));
 	}
 
 	protected String convertAutoFillInputParameters(
@@ -101,6 +101,6 @@ public class AutoFillDDLFormRuleActionSerializer
 	private static final String _functionCallTernaryExpressionFormat =
 		"%s(%s, %s, %s)";
 
-	private final AutoFillDDLFormRuleAction _autoFillDDLFormRuleAction;
+	private final AutoFillDDMFormRuleAction _autoFillDDMFormRuleAction;
 
 }

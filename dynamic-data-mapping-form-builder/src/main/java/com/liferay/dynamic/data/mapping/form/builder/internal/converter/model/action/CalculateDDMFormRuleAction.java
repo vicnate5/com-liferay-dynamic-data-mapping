@@ -14,9 +14,9 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.CalculateDDLFormRuleActionSerializer;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleActionSerializer;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleSerializerContext;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.CalculateDDMFormRuleActionSerializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleActionSerializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleSerializerContext;
 import com.liferay.portal.kernel.util.HashUtil;
 
 import java.util.Objects;
@@ -24,12 +24,12 @@ import java.util.Objects;
 /**
  * @author Leonardo Barros
  */
-public class CalculateDDLFormRuleAction extends DefaultDDLFormRuleAction {
+public class CalculateDDMFormRuleAction extends DefaultDDMFormRuleAction {
 
-	public CalculateDDLFormRuleAction() {
+	public CalculateDDMFormRuleAction() {
 	}
 
-	public CalculateDDLFormRuleAction(String target, String expression) {
+	public CalculateDDMFormRuleAction(String target, String expression) {
 		super("calculate", target);
 
 		_expression = expression;
@@ -41,16 +41,16 @@ public class CalculateDDLFormRuleAction extends DefaultDDLFormRuleAction {
 			return true;
 		}
 
-		if (!(obj instanceof CalculateDDLFormRuleAction)) {
+		if (!(obj instanceof CalculateDDMFormRuleAction)) {
 			return false;
 		}
 
-		CalculateDDLFormRuleAction calculateDDLFormRuleAction =
-			(CalculateDDLFormRuleAction)obj;
+		CalculateDDMFormRuleAction calculateDDMFormRuleAction =
+			(CalculateDDMFormRuleAction)obj;
 
 		if (super.equals(obj) &&
 			Objects.equals(
-				_expression, calculateDDLFormRuleAction._expression)) {
+				_expression, calculateDDMFormRuleAction._expression)) {
 
 			return true;
 		}
@@ -71,13 +71,13 @@ public class CalculateDDLFormRuleAction extends DefaultDDLFormRuleAction {
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddmFormRuleSerializerContext) {
 
-		DDLFormRuleActionSerializer ddlFormRuleActionSerializer =
-			new CalculateDDLFormRuleActionSerializer(this);
+		DDMFormRuleActionSerializer ddmFormRuleActionSerializer =
+			new CalculateDDMFormRuleActionSerializer(this);
 
-		return ddlFormRuleActionSerializer.serialize(
-			ddlFormRuleSerializerContext);
+		return ddmFormRuleActionSerializer.serialize(
+			ddmFormRuleSerializerContext);
 	}
 
 	public void setExpression(String expression) {

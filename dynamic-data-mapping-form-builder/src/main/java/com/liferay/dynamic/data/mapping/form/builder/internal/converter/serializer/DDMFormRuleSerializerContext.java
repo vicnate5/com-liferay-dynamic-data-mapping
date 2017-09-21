@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Rafael Praxedes
  */
-public class DDLFormRuleSerializerContext {
+public class DDMFormRuleSerializerContext {
 
 	public void addAttribute(String key, Object value) {
 		_serializerContext.put(key, value);

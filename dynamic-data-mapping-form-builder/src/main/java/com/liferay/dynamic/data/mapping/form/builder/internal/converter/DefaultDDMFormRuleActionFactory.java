@@ -15,24 +15,24 @@
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter;
 
 import com.liferay.dynamic.data.mapping.expression.model.Expression;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDMFormRuleToDDLFormRuleConverter.ActionExpressionVisitor;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.JumpToPageDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.DefaultDDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.visitor.ActionExpressionVisitor;
 
 import java.util.List;
 
 /**
  * @author Leonardo Barros
  */
-public class JumpToPageDDLFormRuleActionFactory {
+public class DefaultDDMFormRuleActionFactory {
 
-	public static DDLFormRuleAction create(
-		List<Expression> expressions, ActionExpressionVisitor visitor) {
+	public static DDMFormRuleAction create(
+		String action, List<Expression> expressions,
+		ActionExpressionVisitor visitor) {
 
-		String source = visitor.doVisit(expressions.get(0));
-		String target = visitor.doVisit(expressions.get(1));
+		String target = visitor.doVisit(expressions.get(0));
 
-		return new JumpToPageDDLFormRuleAction(source, target);
+		return new DefaultDDMFormRuleAction(action, target);
 	}
 
 }

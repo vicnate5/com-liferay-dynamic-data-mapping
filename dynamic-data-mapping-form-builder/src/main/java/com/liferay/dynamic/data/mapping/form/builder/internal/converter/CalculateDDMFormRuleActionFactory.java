@@ -15,9 +15,9 @@
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter;
 
 import com.liferay.dynamic.data.mapping.expression.model.Expression;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDMFormRuleToDDLFormRuleConverter.ActionExpressionVisitor;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.CalculateDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.CalculateDDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.visitor.ActionExpressionVisitor;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -26,9 +26,9 @@ import java.util.List;
 /**
  * @author Leonardo Barros
  */
-public class CalculateDDLFormRuleActionFactory {
+public class CalculateDDMFormRuleActionFactory {
 
-	public static DDLFormRuleAction create(
+	public static DDMFormRuleAction create(
 		List<Expression> expressions,
 		ActionExpressionVisitor actionExpressionVisitor) {
 
@@ -44,7 +44,7 @@ public class CalculateDDLFormRuleActionFactory {
 		expressionString = StringUtil.removeChar(
 			expressionString, CharPool.SPACE);
 
-		return new CalculateDDLFormRuleAction(target, expressionString);
+		return new CalculateDDMFormRuleAction(target, expressionString);
 	}
 
 }

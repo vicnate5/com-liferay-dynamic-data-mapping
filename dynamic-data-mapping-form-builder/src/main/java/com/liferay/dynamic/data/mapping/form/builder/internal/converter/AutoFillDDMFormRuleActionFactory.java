@@ -15,9 +15,9 @@
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter;
 
 import com.liferay.dynamic.data.mapping.expression.model.Expression;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDMFormRuleToDDLFormRuleConverter.ActionExpressionVisitor;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.AutoFillDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.AutoFillDDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.visitor.ActionExpressionVisitor;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -29,9 +29,9 @@ import java.util.Map;
 /**
  * @author Leonardo Barros
  */
-public class AutoFillDDLFormRuleActionFactory {
+public class AutoFillDDMFormRuleActionFactory {
 
-	public static DDLFormRuleAction create(
+	public static DDMFormRuleAction create(
 		List<Expression> expressions, ActionExpressionVisitor visitor) {
 
 		String ddmDataProviderInstanceUUID = visitor.doVisit(
@@ -39,7 +39,7 @@ public class AutoFillDDLFormRuleActionFactory {
 		String paramsExpression = visitor.doVisit(expressions.get(1));
 		String resultMapExpression = visitor.doVisit(expressions.get(2));
 
-		return new AutoFillDDLFormRuleAction(
+		return new AutoFillDDMFormRuleAction(
 			ddmDataProviderInstanceUUID,
 			createAutoFillInputParameters(paramsExpression),
 			createAutoFillOutputParameters(resultMapExpression));

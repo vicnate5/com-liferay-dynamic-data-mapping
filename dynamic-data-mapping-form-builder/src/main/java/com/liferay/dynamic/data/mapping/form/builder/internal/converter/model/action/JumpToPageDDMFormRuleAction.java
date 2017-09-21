@@ -14,9 +14,9 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleActionSerializer;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleSerializerContext;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.JumpToPageDDLFormRuleActionSerializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleActionSerializer;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleSerializerContext;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.JumpToPageDDMFormRuleActionSerializer;
 import com.liferay.portal.kernel.util.HashUtil;
 
 import java.util.Objects;
@@ -24,12 +24,12 @@ import java.util.Objects;
 /**
  * @author Leonardo Barros
  */
-public class JumpToPageDDLFormRuleAction extends DefaultDDLFormRuleAction {
+public class JumpToPageDDMFormRuleAction extends DefaultDDMFormRuleAction {
 
-	public JumpToPageDDLFormRuleAction() {
+	public JumpToPageDDMFormRuleAction() {
 	}
 
-	public JumpToPageDDLFormRuleAction(String source, String target) {
+	public JumpToPageDDMFormRuleAction(String source, String target) {
 		super("jump-to-page", target);
 
 		_source = source;
@@ -41,15 +41,15 @@ public class JumpToPageDDLFormRuleAction extends DefaultDDLFormRuleAction {
 			return true;
 		}
 
-		if (!(obj instanceof JumpToPageDDLFormRuleAction)) {
+		if (!(obj instanceof JumpToPageDDMFormRuleAction)) {
 			return false;
 		}
 
-		JumpToPageDDLFormRuleAction ddlFormRuleAction =
-			(JumpToPageDDLFormRuleAction)obj;
+		JumpToPageDDMFormRuleAction ddmFormRuleAction =
+			(JumpToPageDDMFormRuleAction)obj;
 
 		if (super.equals(obj) &&
-			Objects.equals(_source, ddlFormRuleAction._source)) {
+			Objects.equals(_source, ddmFormRuleAction._source)) {
 
 			return true;
 		}
@@ -70,13 +70,13 @@ public class JumpToPageDDLFormRuleAction extends DefaultDDLFormRuleAction {
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddmFormRuleSerializerContext) {
 
-		DDLFormRuleActionSerializer ddlFormRuleActionSerializer =
-			new JumpToPageDDLFormRuleActionSerializer(this);
+		DDMFormRuleActionSerializer ddmFormRuleActionSerializer =
+			new JumpToPageDDMFormRuleActionSerializer(this);
 
-		return ddlFormRuleActionSerializer.serialize(
-			ddlFormRuleSerializerContext);
+		return ddmFormRuleActionSerializer.serialize(
+			ddmFormRuleSerializerContext);
 	}
 
 	public void setSource(String source) {

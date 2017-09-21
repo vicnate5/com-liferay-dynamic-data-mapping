@@ -12,14 +12,15 @@
  * details.
  */
 
-package com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer;
+package com.liferay.dynamic.data.mapping.form.builder.internal.converter.model;
+
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleActionSerializer;
 
 /**
- * @author Leonardo Barros
+ * @author Marcellus Tavares
  */
-public interface DDLFormRuleActionSerializer {
+public interface DDMFormRuleAction extends DDMFormRuleActionSerializer {
 
-	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext);
+	public String getAction();
 
 }
