@@ -24,7 +24,7 @@ import javax.servlet.jsp.PageContext;
  * @author Rafael Praxedes
  * @generated
  */
-public abstract class BaseFormBuilderTag extends com.liferay.taglib.util.IncludeTag {
+public abstract class BaseDDMFormBuilderTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	public int doStartTag() throws JspException {
@@ -94,19 +94,19 @@ public abstract class BaseFormBuilderTag extends com.liferay.taglib.util.Include
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
-		request.setAttribute("liferay-form:form-builder:ddmStructureId", _ddmStructureId);
-		request.setAttribute("liferay-form:form-builder:defaultLanguageId", _defaultLanguageId);
-		request.setAttribute("liferay-form:form-builder:editingLanguageId", _editingLanguageId);
-		request.setAttribute("liferay-form:form-builder:refererPortletNamespace", _refererPortletNamespace);
+		request.setAttribute("liferay-form:ddm-form-builder:ddmStructureId", _ddmStructureId);
+		request.setAttribute("liferay-form:ddm-form-builder:defaultLanguageId", _defaultLanguageId);
+		request.setAttribute("liferay-form:ddm-form-builder:editingLanguageId", _editingLanguageId);
+		request.setAttribute("liferay-form:ddm-form-builder:refererPortletNamespace", _refererPortletNamespace);
 	}
 
-	protected static final String _ATTRIBUTE_NAMESPACE = "liferay-form:form-builder:";
+	protected static final String _ATTRIBUTE_NAMESPACE = "liferay-form:ddm-form-builder:";
 
 	private static final String _END_PAGE =
-		"/form_builder/end.jsp";
+		"/ddm_form_builder/end.jsp";
 
 	private static final String _START_PAGE =
-		"/form_builder/start.jsp";
+		"/ddm_form_builder/start.jsp";
 
 	private java.lang.Long _ddmStructureId = null;
 	private java.lang.String _defaultLanguageId = null;

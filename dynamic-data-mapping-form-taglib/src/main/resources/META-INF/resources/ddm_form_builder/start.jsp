@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/form_builder/init.jsp" %>
+<%@ include file="/ddm_form_builder/init.jsp" %>
 
 <aui:script>
 	Liferay.namespace('DDM').Settings = {

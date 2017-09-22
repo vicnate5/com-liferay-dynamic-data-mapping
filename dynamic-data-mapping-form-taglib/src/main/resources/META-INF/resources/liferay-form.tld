@@ -5,8 +5,8 @@
 	<short-name>liferay-form</short-name>
 	<uri>http://liferay.com/tld/form</uri>
 	<tag>
-		<name>form-builder</name>
-		<tag-class>com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.FormBuilderTag</tag-class>
+		<name>ddm-form-builder</name>
+		<tag-class>com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.DDMFormBuilderTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<name>ddmStructureId</name>

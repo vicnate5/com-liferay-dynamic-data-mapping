@@ -16,7 +16,7 @@ package com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib;
 
 import com.liferay.dynamic.data.mapping.form.builder.settings.DDMFormBuilderSettingsRequest;
 import com.liferay.dynamic.data.mapping.form.builder.settings.DDMFormBuilderSettingsResponse;
-import com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.base.BaseFormBuilderTag;
+import com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.base.BaseDDMFormBuilderTag;
 import com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.util.DDMFormTaglibUtil;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Rafael Praxedes
  */
-public class FormBuilderTag extends BaseFormBuilderTag {
+public class DDMFormBuilderTag extends BaseDDMFormBuilderTag {
 
 	public String getDDMFormBuilderContext(ThemeDisplay themeDisplay) {
 		return DDMFormTaglibUtil.getFormBuilderContext(

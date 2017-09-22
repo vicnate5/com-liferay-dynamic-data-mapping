@@ -4,7 +4,7 @@
 	<authors>
 		<author>Rafael Praxedes</author>
 	</authors>
-	<component bodyContent="true" name="FormBuilder" writeJSP="true">
+	<component bodyContent="true" name="DDMFormBuilder" writeJSP="true">
 		<attributes>
 			<attribute>
 				<name>ddmStructureId</name>
