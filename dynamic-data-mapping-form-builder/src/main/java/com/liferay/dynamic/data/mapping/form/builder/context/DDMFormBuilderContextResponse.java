@@ -34,6 +34,10 @@ public class DDMFormBuilderContextResponse {
 		return (T)_properties.get(name);
 	}
 
+	public void setContext(Map<String, Object> context) {
+		addProperty("context", context);
+	}
+
 	private final Map<String, Object> _properties = new HashMap<>();
 
 }

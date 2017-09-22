@@ -62,8 +62,8 @@ public class DDMFormBuilderContextFactoryImpl
 		DDMFormBuilderContextResponse ddmFormBuilderContextResponse =
 			new DDMFormBuilderContextResponse();
 
-		ddmFormBuilderContextResponse. addProperty(
-			"context", ddmFormBuilderContextFactoryHelper.create());
+		ddmFormBuilderContextResponse.setContext(
+			ddmFormBuilderContextFactoryHelper.create());
 
 		return ddmFormBuilderContextResponse;
 	}
