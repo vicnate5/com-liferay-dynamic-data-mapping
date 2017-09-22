@@ -39,19 +39,19 @@ public class DDMFormBuilderContextFactoryImpl
 	implements DDMFormBuilderContextFactory {
 
 	public DDMFormBuilderContextResponse create(
-		DDMFormBuilderContextRequest formBuilderContextRequest) {
+		DDMFormBuilderContextRequest ddmFormBuilderContextRequest) {
 
 		Optional<DDMStructure> ddmStructureOptional =
-			formBuilderContextRequest.getProperty("ddmStructureOptional");
+			ddmFormBuilderContextRequest.getProperty("ddmStructureOptional");
 
-		HttpServletRequest request = formBuilderContextRequest.getProperty(
+		HttpServletRequest request = ddmFormBuilderContextRequest.getProperty(
 			"request");
-		HttpServletResponse response = formBuilderContextRequest.getProperty(
+		HttpServletResponse response = ddmFormBuilderContextRequest.getProperty(
 			"response");
 
-		Locale locale = formBuilderContextRequest.getProperty("locale");
+		Locale locale = ddmFormBuilderContextRequest.getProperty("locale");
 
-		boolean readOnly = formBuilderContextRequest.getProperty("readOnly");
+		boolean readOnly = ddmFormBuilderContextRequest.getProperty("readOnly");
 
 		DDMFormBuilderContextFactoryHelper ddmFormBuilderContextFactoryHelper =
 			new DDMFormBuilderContextFactoryHelper(
@@ -62,7 +62,7 @@ public class DDMFormBuilderContextFactoryImpl
 		DDMFormBuilderContextResponse ddmFormBuilderContextResponse =
 			new DDMFormBuilderContextResponse();
 
-		ddmFormBuilderContextResponse.addProperty(
+		ddmFormBuilderContextResponse. addProperty(
 			"context", ddmFormBuilderContextFactoryHelper.create());
 
 		return ddmFormBuilderContextResponse;
