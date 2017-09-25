@@ -58,7 +58,16 @@
 				{/if}
 
 				<label class="{$inline ? ' radio-inline' : ''} radio-option-{$option.value}" for="{$name}_{$option.value}">
-					<input {$checked} class="field" dir="{$dir or ''}" {$disabled} id="{$name}_{$option.value}" name="{$name}" type="radio" value="{$option.value}" />
+					<input
+						{$checked}
+						class="field"
+						dir="{$dir or ''}"
+						{$disabled}
+						id="{$name}_{$option.value}"
+						name="{$name}"
+						type="radio"
+						value="{$option.value}"
+					/>
 					<span> {$option.label}</span>
 				</label>
 
