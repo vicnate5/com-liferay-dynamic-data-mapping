@@ -110,7 +110,6 @@ public class DDMFormContextToDDMForm
 			jsonObject.getString("defaultLanguageId"), ddmForm);
 		setDDMFormFields(jsonObject.getJSONArray("pages"), ddmForm);
 		setDDMFormRules(jsonObject.getJSONArray("rules"), ddmForm);
-
 		setDDMFormSuccessPageSettings(
 			jsonObject.getJSONObject("successPageSettings"), ddmForm);
 
