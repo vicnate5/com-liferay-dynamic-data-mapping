@@ -218,10 +218,10 @@ public class DDMFormContextToDDMForm
 
 		JSONObject jsonObject = jsonFactory.createJSONObject(serializedValue);
 
-		ddmFormFieldValidation.setExpression(
-			jsonObject.getString("expression"));
 		ddmFormFieldValidation.setErrorMessage(
 			jsonObject.getString("errorMessage"));
+		ddmFormFieldValidation.setExpression(
+			jsonObject.getString("expression"));
 
 		return ddmFormFieldValidation;
 	}
