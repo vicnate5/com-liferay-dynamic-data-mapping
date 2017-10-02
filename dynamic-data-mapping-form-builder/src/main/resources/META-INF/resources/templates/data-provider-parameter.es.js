@@ -5,6 +5,12 @@ import templates from './data-provider-parameter.soy';
 
 let DataProviderParameterTemplates = [];
 
+if (!window.DDMDataProviderParameter) {
+	window.DDMDataProviderParameter = {
+
+	};
+}
+
 for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
@@ -13,6 +19,7 @@ for (let template in templates) {
 			key: template,
 			component: C
 		});
+		window.DDMDataProviderParameter[template] = C;
 	}
 }
 

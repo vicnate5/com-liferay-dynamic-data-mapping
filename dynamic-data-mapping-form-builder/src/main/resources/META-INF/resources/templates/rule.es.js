@@ -5,6 +5,12 @@ import templates from './rule.soy';
 
 let RuleTemplates = [];
 
+if (!window.DDMRule) {
+	window.DDMRule = {
+
+	};
+}
+
 for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
@@ -13,6 +19,7 @@ for (let template in templates) {
 			key: template,
 			component: C
 		});
+		window.DDMRule[template] = C;
 	}
 }
 

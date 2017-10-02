@@ -5,6 +5,12 @@ import templates from './select.soy';
 
 let SelectTemplates = [];
 
+if (!window.DDMSelect) {
+	window.DDMSelect = {
+
+	};
+}
+
 for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
@@ -14,6 +20,7 @@ for (let template in templates) {
 			key: template,
 			component: C
 		});
+		window.DDMSelect[template] = C;
 	}
 }
 

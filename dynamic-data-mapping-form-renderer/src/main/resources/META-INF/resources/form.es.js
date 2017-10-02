@@ -5,6 +5,12 @@ import templates from './form.soy';
 
 let FormTemplates = [];
 
+if (!window.ddm) {
+	window.ddm = {
+
+	};
+}
+
 for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
@@ -13,6 +19,7 @@ for (let template in templates) {
 			key: template,
 			component: C
 		});
+		window.ddm[template] = C;
 	}
 }
 

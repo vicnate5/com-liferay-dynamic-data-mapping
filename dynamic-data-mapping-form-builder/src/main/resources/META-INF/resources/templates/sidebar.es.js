@@ -6,6 +6,12 @@ import templates from './sidebar.soy';
 
 let SidebarTemplates = [];
 
+if (!window.DDMSidebar) {
+	window.DDMSidebar = {
+
+	};
+}
+
 for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
@@ -14,6 +20,7 @@ for (let template in templates) {
 			key: template,
 			component: C
 		});
+		window.DDMSidebar[template] = C;
 	}
 }
 
