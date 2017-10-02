@@ -99,6 +99,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddm-form-builder-render-template', 'liferay-ddm-form-renderer-field']
+		requires: ['liferay-ddm-form-renderer-field']
 	}
 );

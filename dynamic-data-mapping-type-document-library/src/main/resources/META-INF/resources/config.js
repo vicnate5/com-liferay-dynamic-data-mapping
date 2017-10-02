@@ -13,12 +13,6 @@
 						requires: [
 							'liferay-ddm-form-renderer-field'
 						]
-					},
-					'liferay-ddm-form-field-document-library-template': {
-						condition: {
-							trigger: 'liferay-ddm-form-renderer'
-						},
-						path: 'document-library.js'
 					}
 				},
 				root: MODULE_PATH + '/'

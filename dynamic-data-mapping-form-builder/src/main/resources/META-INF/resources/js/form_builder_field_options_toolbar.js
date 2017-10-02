@@ -119,8 +119,5 @@ AUI.add(
 
 		Liferay.namespace('DDM').FormBuilderFieldOptionsToolbar = FormBuilderFieldOptionsToolbar;
 	},
-	'',
-	{
-		requires: ['liferay-ddm-form-builder-field-options-toolbar-template']
-	}
+	''
 );
