@@ -15,10 +15,12 @@ for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
 		Soy.register(C, templates, template);
-		FormTemplates.push({
-			key: template,
-			component: C
-		});
+		FormTemplates.push(
+			{
+				key: template,
+				component: C
+			}
+		);
 		window.ddm[template] = C;
 	}
 }

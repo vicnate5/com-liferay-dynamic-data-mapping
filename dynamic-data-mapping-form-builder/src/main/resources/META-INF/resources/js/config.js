@@ -203,7 +203,7 @@
 							requires: [
 								'liferay-ddm-form-renderer-wizard'
 							]
-						},
+						}
 					},
 					root: MODULE_PATH + '/js/'
 				}

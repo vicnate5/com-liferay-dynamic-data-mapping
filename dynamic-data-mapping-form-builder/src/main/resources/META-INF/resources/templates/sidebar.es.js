@@ -16,10 +16,12 @@ for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
 		Soy.register(C, templates, template);
-		SidebarTemplates.push({
-			key: template,
-			component: C
-		});
+		SidebarTemplates.push(
+			{
+				key: template,
+				component: C
+			}
+		);
 		window.DDMSidebar[template] = C;
 	}
 }

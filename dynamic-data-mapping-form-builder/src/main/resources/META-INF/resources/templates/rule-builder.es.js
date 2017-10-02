@@ -15,10 +15,12 @@ for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
 		Soy.register(C, templates, template);
-		RuleBuilderTemplates.push({
-			key: template,
-			component: C
-		});
+		RuleBuilderTemplates.push(
+			{
+				key: template,
+				component: C
+			}
+		);
 		window.DDMRuleBuilder[template] = C;
 	}
 }

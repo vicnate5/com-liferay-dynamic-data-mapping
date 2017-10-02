@@ -16,10 +16,12 @@ for (let template in templates) {
 		class C extends Component {};
 		Soy.register(C, templates, template);
 		C.Soy = Soy;
-		SelectTemplates.push({
-			key: template,
-			component: C
-		});
+		SelectTemplates.push(
+			{
+				key: template,
+				component: C
+			}
+		);
 		window.DDMSelect[template] = C;
 	}
 }

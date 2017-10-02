@@ -15,10 +15,12 @@ for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
 		Soy.register(C, templates, template);
-		CalculateTemplates.push({
-			key: template,
-			component: C
-		});
+		CalculateTemplates.push(
+			{
+				key: template,
+				component: C
+			}
+		);
 		window.DDMCalculate[template] = C;
 	}
 }

@@ -120,6 +120,14 @@
 								'liferay-ddm-form-renderer-util'
 							]
 						},
+						'liferay-ddm-form-renderer-paginated': {
+							path: 'paginated.js',
+							requires: [
+								'aui-component',
+								'aui-node',
+								'widget'
+							]
+						},
 						'liferay-ddm-form-renderer-pagination': {
 							path: 'form_pagination_support.js',
 							requires: [
@@ -165,14 +173,6 @@
 							requires: [
 								'aui-alert',
 								'liferay-ddm-form-renderer-expressions-evaluator'
-							]
-						},
-						'liferay-ddm-form-renderer-paginated': {
-							path: 'paginated.js',
-							requires: [
-								'aui-component',
-								'aui-node',
-								'widget'
 							]
 						},
 						'liferay-ddm-form-renderer-wizard': {

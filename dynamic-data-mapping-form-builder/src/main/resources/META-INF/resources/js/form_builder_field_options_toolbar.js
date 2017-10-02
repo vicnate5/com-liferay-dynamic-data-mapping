@@ -1,6 +1,8 @@
 AUI.add(
 	'liferay-ddm-form-builder-field-options-toolbar',
 	function(A) {
+		var AObject = A.Object;
+
 		var FormBuilderFieldOptionsToolbar = A.Component.create(
 			{
 				ATTRS: {

@@ -15,10 +15,12 @@ for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
 		Soy.register(C, templates, template);
-		DataProviderParameterTemplates.push({
-			key: template,
-			component: C
-		});
+		DataProviderParameterTemplates.push(
+			{
+				key: template,
+				component: C
+			}
+		);
 		window.DDMDataProviderParameter[template] = C;
 	}
 }

@@ -15,10 +15,12 @@ for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
 		Soy.register(C, templates, template);
-		OptionsToolbarTemplates.push({
-			key: template,
-			component: C
-		});
+		OptionsToolbarTemplates.push(
+			{
+				key: template,
+				component: C
+			}
+		);
 		window.DDMFieldSettingsToolbar[template] = C;
 	}
 }

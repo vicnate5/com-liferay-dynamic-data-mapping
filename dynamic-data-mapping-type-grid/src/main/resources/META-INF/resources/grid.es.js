@@ -15,10 +15,12 @@ for (let template in templates) {
 	if (template !== 'templates') {
 		class C extends Component {};
 		Soy.register(C, templates, template);
-		GridTemplates.push({
-			key: template,
-			component: C
-		});
+		GridTemplates.push(
+			{
+				key: template,
+				component: C
+			}
+		);
 		window.DDMGrid[template] = C;
 	}
 }

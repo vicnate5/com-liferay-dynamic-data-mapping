@@ -19,15 +19,15 @@ AUI.add(
 			loadModules: function(callback) {
 				var modules = AObject.keys(Liferay.MODULES);
 
-				var dependencies = modules.filter(item => /dynamic-data-.*\.es/.test(item));
+				var dependencies = modules.filter(
+					function(item) {
+						return /dynamic-data-.*\.es/.test(item);
+					}
+				);
 
 				Liferay.Loader.require.apply(
 					Liferay.Loader,
-					dependencies.concat(callback).concat(
-						function(e) {
-							console.error(e);
-						}
-					)
+					dependencies.concat(callback)
 				);
 			}
 		};
