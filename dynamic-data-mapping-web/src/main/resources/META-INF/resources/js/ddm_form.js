@@ -556,7 +556,8 @@ AUI.add(
 							var tipNode = labelNode.one('.taglib-icon-help');
 
 							var innerHTMLCopy;
-							if (A.UA.ie > 0) {
+
+							if (A.UA.ie) {
 								innerHTMLCopy = tipNode.get('innerHTML').toString();
 							}
 
@@ -564,7 +565,7 @@ AUI.add(
 								labelNode.html(A.Escape.html(label));
 							}
 
-							if(innerHTMLCopy) {
+							if (innerHTMLCopy) {
 								tipNode.set('innerHTML', innerHTMLCopy);
 							}
 
