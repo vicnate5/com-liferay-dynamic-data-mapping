@@ -6,6 +6,11 @@
 	&.form-builder-sidebar.sidenav-menu-slider {
 		max-width: $max-width;
 		width: 0;
+		z-index: 10;
+
+		&.closed {
+			z-index: 9;
+		}
 
 		&.open {
 			width: 100%;
