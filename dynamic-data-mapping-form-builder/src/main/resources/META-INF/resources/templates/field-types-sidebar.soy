@@ -1,0 +1,76 @@
+{namespace DDMFieldTypesSidebar}
+
+/**
+ * Defines the delegated template for the sidebar.
+ */
+{deltemplate DDMSidebar.sidebar_body variant="'fieldTypes'"}
+	{call .render data="all" /}
+{/deltemplate}
+
+/**
+ * Prints the field types sidebar.
+ */
+{template .render}
+	{@param fieldTypes: [
+			basic: list<[description: string, icon: html, label: string, name: string]>,
+			customized: list<[description: string, icon: html, label: string, name: string]>
+		]
+	}
+	{@param strings: [basic: string, customized: string, field: string, fieldset: string]}
+
+	<aside class="lfr-ddm-form-builder-field-types-sidebar">
+		<ul class="nav nav-underline">
+			<li class="nav-item"><a class="active nav-link" href="#1" data-tab="field-types-content">{$strings.field}</a></li>
+			<li class="nav-item"><a class="nav-link" href="#2" data-tab="field-types-fieldset">{$strings.fieldset}</a></li>
+		</ul>
+
+		<article class="field-types-content">
+			{if $fieldTypes.basic}
+				<ul class="list-group">
+					<li class="list-group-header toggler-header-expanded"><h5>{$strings.basic}</h5></li>
+
+					<div class="list-group-body">
+						{foreach $fieldType in $fieldTypes.basic}
+							{call .render_field_type_group}
+								{param fieldType: $fieldType /}
+							{/call}
+						{/foreach}
+					</div>
+				</ul>
+			{/if}
+
+			{if $fieldTypes.customized}
+				<ul class="list-group">
+					<li class="list-group-header toggler-header-expanded"><h5>{$strings.customized}</h5></li>
+
+					<div class="list-group-body">
+						{foreach $fieldType in $fieldTypes.customized}
+							{call .render_field_type_group}
+								{param fieldType: $fieldType /}
+							{/call}
+						{/foreach}
+					</div>
+				</ul>
+			{/if}
+		</article>
+
+		<article class="field-types-fieldset"></article>
+	</aside>
+{/template}
+
+/**
+ * Render a field type group
+ */
+{template .render_field_type_group}
+	{@param fieldType: [description: string, icon: html, label: string, name: string]}
+
+	<li class="list-group-item list-group-item-flex list-field-type-item" data-field-type-name="{$fieldType.name}">
+		<div class="flex-col">
+			<div class="sticker sticker-light">{$fieldType.icon}</div>
+		</div>
+		<div class="flex-col flex-col-expand">
+			<h4 class="list-group-title text-truncate">{$fieldType.label}</h4>
+			<p class="list-group-subtitle text-truncate">{$fieldType.description}</p>
+		</div>
+	</li>
+{/template}
