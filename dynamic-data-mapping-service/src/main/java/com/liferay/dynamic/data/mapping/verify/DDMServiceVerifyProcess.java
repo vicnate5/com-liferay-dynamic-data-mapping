@@ -21,6 +21,7 @@ import com.liferay.dynamic.data.mapping.model.DDMFormLayout;
 import com.liferay.dynamic.data.mapping.model.DDMStorageLink;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLink;
+import com.liferay.dynamic.data.mapping.model.DDMStructureVersion;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.model.DDMTemplateLink;
 import com.liferay.dynamic.data.mapping.service.DDMContentLocalService;
@@ -65,11 +66,11 @@ public class DDMServiceVerifyProcess extends VerifyProcess {
 	}
 
 	protected DDMFormValues getDDMFormValues(
-			DDMStructure structure, DDMContent content)
+			DDMForm ddmForm, DDMContent content)
 		throws PortalException {
 
 		return _ddmFormValuesJSONDeserializer.deserialize(
-			structure.getDDMForm(), content.getData());
+			ddmForm, content.getData());
 	}
 
 	@Reference(unbind = "-")
@@ -129,6 +130,8 @@ public class DDMServiceVerifyProcess extends VerifyProcess {
 	@Reference(unbind = "-")
 	protected void setDDMStructureVersionLocalService(
 		DDMStructureVersionLocalService ddmStructureVersionLocalService) {
+
+		_ddmStructureVersionLocalService = ddmStructureVersionLocalService;
 	}
 
 	@Reference(unbind = "-")
@@ -150,11 +153,13 @@ public class DDMServiceVerifyProcess extends VerifyProcess {
 			_ddmStorageLinkLocalService.getClassStorageLink(
 				content.getContentId());
 
-		DDMStructure structure = _ddmStructureLocalService.getStructure(
-			ddmStorageLink.getStructureId());
+		DDMStructureVersion structureVersion =
+			_ddmStructureVersionLocalService.getStructureVersion(
+				ddmStorageLink.getStructureVersionId());
 
 		try {
-			DDMFormValues ddmFormValues = getDDMFormValues(structure, content);
+			DDMFormValues ddmFormValues = getDDMFormValues(
+				structureVersion.getDDMForm(), content);
 
 			_ddmFormValuesValidator.validate(ddmFormValues);
 		}
@@ -163,9 +168,9 @@ public class DDMServiceVerifyProcess extends VerifyProcess {
 				_log.warn(
 					String.format(
 						"Stale or invalid data for DDM content %d  and " +
-							"structure %d causes: {%s}",
-						content.getContentId(), structure.getStructureId(),
-						e.getMessage()),
+							"structure version %d causes: {%s}",
+						content.getContentId(),
+						structureVersion.getStructureId(), e.getMessage()),
 					e);
 			}
 		}
@@ -323,6 +328,7 @@ public class DDMServiceVerifyProcess extends VerifyProcess {
 	private DDMStorageLinkLocalService _ddmStorageLinkLocalService;
 	private DDMStructureLinkLocalService _ddmStructureLinkLocalService;
 	private DDMStructureLocalService _ddmStructureLocalService;
+	private DDMStructureVersionLocalService _ddmStructureVersionLocalService;
 	private DDMTemplateLinkLocalService _ddmTemplateLinkLocalService;
 	private DDMTemplateLocalService _ddmTemplateLocalService;
 
