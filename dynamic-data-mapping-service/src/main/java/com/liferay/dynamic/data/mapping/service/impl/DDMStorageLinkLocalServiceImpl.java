@@ -107,6 +107,20 @@ public class DDMStorageLinkLocalServiceImpl
 	}
 
 	@Override
+	public List<DDMStorageLink> getStructureVersionStorageLinks(
+		long structureVersionId) {
+
+		return ddmStorageLinkPersistence.findByStructureVersionId(
+			structureVersionId);
+	}
+
+	@Override
+	public int getStructureVersionStorageLinksCount(long structureVersionId) {
+		return ddmStorageLinkPersistence.countByStructureVersionId(
+			structureVersionId);
+	}
+
+	@Override
 	public DDMStorageLink updateStorageLink(
 			long storageLinkId, long classNameId, long classPK)
 		throws PortalException {
