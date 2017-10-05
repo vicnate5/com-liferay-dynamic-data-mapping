@@ -256,7 +256,7 @@ AUI.add(
 						};
 
 						A.io.request(
-							Settings.getDataProviderInstancesURL,
+							Liferay.DDM.Settings.getDataProviderInstancesURL,
 							{
 								data: payload,
 								method: 'GET',
@@ -395,7 +395,7 @@ AUI.add(
 
 						if (!roles.length) {
 							A.io.request(
-								Settings.getRolesURL,
+								Liferay.DDM.Settings.getRolesURL,
 								{
 									data: payload,
 									method: 'GET',
