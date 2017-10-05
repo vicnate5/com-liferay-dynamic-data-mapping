@@ -79,6 +79,10 @@ AUI.add(
 						value: 0
 					},
 
+					showPagination: {
+						value: true
+					},
+
 					strings: {
 						value: {
 							addColumn: Liferay.Language.get('add-column'),
@@ -525,6 +529,7 @@ AUI.add(
 										pageHeader: contentBox.one('.' + CSS_PAGE_HEADER),
 										pagesQuantity: layouts.length,
 										paginationContainer: contentBox.one('.' + CSS_PAGES),
+										showPagination: instance.get('showPagination'),
 										tabviewContainer: contentBox.one('.' + CSS_FORM_BUILDER_TABS)
 									},
 									config

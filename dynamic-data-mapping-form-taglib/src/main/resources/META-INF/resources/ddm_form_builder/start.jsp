@@ -16,7 +16,8 @@
 
 <%@ include file="/ddm_form_builder/init.jsp" %>
 
-<aui:script>
+<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-rule-builder">
+
 	Liferay.namespace('DDM').Settings = {
 		evaluatorURL: '<%= evaluatorURL %>',
 		functionsMetadata: <%= functionsMetadata %>,
@@ -25,12 +26,8 @@
 		getFieldTypeSettingFormContextURL: '<%= fieldSettingsDDMFormContextURL %>',
 		getFunctionsURL: '<%= functionsURL %>',
 		getRolesURL: '<%= rolesURL %>',
-		portletNamespace: '<%= refererPortletNamespace %>',
-		showPagination: <%= showPagination %>
-	}
-</aui:script>
-
-<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-rule-builder">
+		portletNamespace: '<%= refererPortletNamespace %>'
+	};
 
 	Liferay.component(
 		'<%= refererPortletNamespace %>formBuilder',
@@ -39,7 +36,8 @@
 				{
 					context: <%= formBuilderContext %>,
 					defaultLanguageId: '<%= defaultLanguageId %>',
-					editingLanguageId: '<%= editingLanguageId %>'
+					editingLanguageId: '<%= editingLanguageId %>',
+					showPagination: <%= showPagination %>
 				}
 			);
 		}
