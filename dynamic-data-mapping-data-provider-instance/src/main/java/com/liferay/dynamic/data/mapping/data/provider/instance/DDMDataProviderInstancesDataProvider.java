@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.util.Portal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
