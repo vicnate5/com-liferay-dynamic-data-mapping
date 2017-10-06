@@ -3,18 +3,8 @@
 		flex-direction: row;
 	}
 
-	.nav-underline {
-		background: $light;
-		border-bottom: solid 1px $light-200;
-		border-top: solid 1px $light-200;
-
-		.nav-item .nav-link.active:after {
-			background-color: $light-blue;
-		}
-	}
-
 	.field-types-content {
-		height: calc(100vh - 190px);
+		height: calc(100vh - 167px);
 		overflow: auto;
 		padding-bottom: 1rem;
 	}
@@ -23,12 +13,13 @@
 		cursor: pointer;
 	}
 
-	.sidebar-header-actions .form-builder-sidebar-close svg {
-		fill: $light-700;
-	}
-
 	.list-group-header h5 {
 		font-size: 0.75rem;
+		margin: 0;
 		text-transform: uppercase;
+	}
+
+	.list-group-subtitle {
+		font-size: 0.74rem;
 	}
 }

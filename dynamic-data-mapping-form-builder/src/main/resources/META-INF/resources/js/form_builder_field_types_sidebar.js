@@ -37,7 +37,7 @@ AUI.add(
 						FormBuilderFieldTypesSidebar.superclass.bindUI.apply(instance, arguments);
 
 						var boundingBox = instance.get('boundingBox');
-						var navLink = '.' + CSS_PREFIX + ' .nav-link';
+						var navLink = '.' + CSS_PREFIX + ' .nav-tabs li';
 
 						instance._eventHandlers.push(
 							A.one('body').delegate('click', instance._bindTabAnimation.bind(instance), navLink),
@@ -112,13 +112,13 @@ AUI.add(
 
 					_bindTabAnimation: function(e) {
 						var instance = this;
-						var item = e.target;
+						var item = e.currentTarget;
 
 						if (item.hasClass('active')) {
 							return;
 						}
 
-						var oldItem = A.one('.' + CSS_PREFIX + ' .nav-link.active');
+						var oldItem = A.one('.' + CSS_PREFIX + ' .nav-tabs li.active');
 						var oldTarget = A.one('.' + oldItem.attr('data-tab'));
 						var target = A.one('.' + item.attr('data-tab'));
 

@@ -19,10 +19,12 @@
 	{@param strings: [basic: string, customized: string, field: string, fieldset: string]}
 
 	<aside class="lfr-ddm-form-builder-field-types-sidebar">
-		<ul class="nav nav-underline">
-			<li class="nav-item"><a class="active nav-link" href="#1" data-tab="field-types-content">{$strings.field}</a></li>
-			<li class="nav-item"><a class="nav-link" href="#2" data-tab="field-types-fieldset">{$strings.fieldset}</a></li>
-		</ul>
+		<nav class="navbar navbar-default navbar-no-collapse">
+			<ul class="nav navbar-nav nav-tabs" role="tablist">
+				<li class="tab yui3-widget active tab-selected" data-tab="field-types-content" role="presentation"><a href="javascript:;" class="tab-label tab-content" role="tab" tabindex="-1">{$strings.field}</a></li>
+				<li class="tab yui3-widget tab-focused" data-tab="field-types-fieldset" role="presentation"><a href="javascript:;" class="tab-label tab-content" role="tab" tabindex="0">{$strings.fieldset}</a></li>
+			</ul>
+		</nav>
 
 		<article class="field-types-content">
 			{if $fieldTypes.basic}
