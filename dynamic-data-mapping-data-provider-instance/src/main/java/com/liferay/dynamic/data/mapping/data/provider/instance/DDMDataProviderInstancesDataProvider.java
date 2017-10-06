@@ -74,15 +74,13 @@ public class DDMDataProviderInstancesDataProvider implements DDMDataProvider {
 				_ddmDataProviderInstanceLocalService.getDataProviderInstances(
 					groupIds);
 
-			Locale locale = LocaleThreadLocal.getThemeDisplayLocale();
-
 			for (DDMDataProviderInstance ddmDataProviderInstance :
 					ddmDataProviderInstances) {
 
 				long value =
 					ddmDataProviderInstance.getDataProviderInstanceId();
-
-				String label = ddmDataProviderInstance.getName(locale);
+				String label = ddmDataProviderInstance.getName(
+					LocaleThreadLocal.getThemeDisplayLocale());
 
 				data.add(new KeyValuePair(String.valueOf(value), label));
 			}
