@@ -1,8 +1,6 @@
 AUI.add(
 	'liferay-ddm-form-builder-rule-builder',
 	function(A) {
-		var Settings = Liferay.DDM.Settings;
-
 		var SoyTemplateUtil = Liferay.DDM.SoyTemplateUtil;
 
 		var MAP_ACTION_DESCRIPTIONS = {
