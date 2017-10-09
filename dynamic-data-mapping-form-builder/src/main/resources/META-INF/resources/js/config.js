@@ -14,9 +14,10 @@
 							requires: [
 								'aui-form-builder',
 								'aui-form-builder-pages',
+								'aui-popover',
 								'liferay-ddm-form-builder-confirmation-dialog',
 								'liferay-ddm-form-builder-field-list',
-								'liferay-ddm-form-builder-field-options-toolbar',
+								'liferay-ddm-form-builder-field-sets',
 								'liferay-ddm-form-builder-field-settings-sidebar',
 								'liferay-ddm-form-builder-field-support',
 								'liferay-ddm-form-builder-field-types-sidebar',
@@ -28,7 +29,8 @@
 								'liferay-ddm-form-builder-rule-builder',
 								'liferay-ddm-form-builder-util',
 								'liferay-ddm-form-field-types',
-								'liferay-ddm-form-renderer'
+								'liferay-ddm-form-renderer',
+								'liferay-ddm-form-renderer-util'
 							]
 						},
 						'liferay-ddm-form-builder-action': {
@@ -86,6 +88,14 @@
 						'liferay-ddm-form-builder-field-options-toolbar': {
 							path: 'form_builder_field_options_toolbar.js'
 						},
+						'liferay-ddm-form-builder-field-sets': {
+							path: 'form_builder_field_sets.js',
+							requires: [
+								'array-extras',
+								'liferay-ddm-form-builder-fieldset-definition-retriever',
+								'liferay-ddm-form-renderer-type'
+							]
+						},
 						'liferay-ddm-form-builder-field-settings-form': {
 							path: 'form_builder_field_settings_form.js',
 							requires: [
@@ -96,7 +106,7 @@
 						},
 						'liferay-ddm-form-builder-field-settings-sidebar': {
 							path: 'form_builder_field_settings_sidebar.js',
-							requires: ['aui-tabview', 'liferay-ddm-form-builder-sidebar', 'liferay-ddm-form-renderer-types']
+							requires: ['aui-tabview', 'liferay-ddm-form-builder-field-sets', 'liferay-ddm-form-builder-sidebar', 'liferay-ddm-form-renderer-types']
 						},
 						'liferay-ddm-form-builder-field-support': {
 							path: 'form_builder_field_support.js',
@@ -107,7 +117,18 @@
 						},
 						'liferay-ddm-form-builder-field-types-sidebar': {
 							path: 'form_builder_field_types_sidebar.js',
-							requires: ['aui-tabview', 'aui-toggler', 'liferay-ddm-form-builder-sidebar', 'liferay-ddm-form-renderer-types']
+							requires: [
+								'aui-tabview',
+								'aui-toggler',
+								'liferay-ddm-form-builder-field-list',
+								'liferay-ddm-form-builder-field-sets',
+								'liferay-ddm-form-builder-sidebar',
+								'liferay-ddm-form-renderer-types'
+							]
+						},
+						'liferay-ddm-form-builder-fieldset-definition-retriever': {
+							path: 'form_builder_fieldset_definition_retriever.js',
+							requires: ['aui-promise', 'aui-request']
 						},
 						'liferay-ddm-form-builder-layout-builder-support': {
 							path: 'form_builder_layout_builder_support.js',
