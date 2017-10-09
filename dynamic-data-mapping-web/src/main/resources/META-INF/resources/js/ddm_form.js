@@ -555,18 +555,8 @@ AUI.add(
 						if (labelNode) {
 							var tipNode = labelNode.one('.taglib-icon-help');
 
-							var tipNodeInnerHTML;
-
-							if (A.UA.ie) {
-								tipNodeInnerHTML = tipNode.get('innerHTML').toString();
-							}
-
-							if (Lang.isValue(label) && Lang.isNode(labelNode)) {
+							if (!A.UA.ie && Lang.isValue(label) && Lang.isNode(labelNode)) {
 								labelNode.html(A.Escape.html(label));
-							}
-
-							if (tipNodeInnerHTML) {
-								tipNode.set('innerHTML', tipNodeInnerHTML);
 							}
 
 							var fieldDefinition = instance.getFieldDefinition();
