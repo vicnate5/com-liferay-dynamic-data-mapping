@@ -16,10 +16,11 @@
 
 <%@ include file="/ddm_form_builder/init.jsp" %>
 
-<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-rule-builder">
+<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-field-sets, liferay-ddm-form-builder-rule-builder">
 
 	Liferay.namespace('DDM').Settings = {
 		evaluatorURL: '<%= evaluatorURL %>',
+		fieldSetDefinitionURL: '<%= fieldSetDefinitionURL %>',
 		functionsMetadata: <%= functionsMetadata %>,
 		getDataProviderInstancesURL: '<%= dataProviderInstancesURL %>',
 		getDataProviderParametersSettingsURL: '<%= dataProviderInstanceParameterSettingsURL %>',
@@ -28,6 +29,8 @@
 		getRolesURL: '<%= rolesURL %>',
 		portletNamespace: '<%= refererPortletNamespace %>'
 	};
+
+	Liferay.DDM.FieldSets.register(<%= fieldSets %>);
 
 	Liferay.component(
 		'<%= refererPortletNamespace %>formBuilder',
