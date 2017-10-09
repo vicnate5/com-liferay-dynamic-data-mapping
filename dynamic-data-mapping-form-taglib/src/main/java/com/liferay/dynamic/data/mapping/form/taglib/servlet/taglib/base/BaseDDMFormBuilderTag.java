@@ -45,6 +45,10 @@ public abstract class BaseDDMFormBuilderTag extends com.liferay.taglib.util.Incl
 		return _editingLanguageId;
 	}
 
+	public long getFieldSetsClassNameId() {
+		return _fieldSetsClassNameId;
+	}
+
 	public java.lang.String getRefererPortletNamespace() {
 		return _refererPortletNamespace;
 	}
@@ -63,6 +67,10 @@ public abstract class BaseDDMFormBuilderTag extends com.liferay.taglib.util.Incl
 
 	public void setEditingLanguageId(java.lang.String editingLanguageId) {
 		_editingLanguageId = editingLanguageId;
+	}
+
+	public void setFieldSetsClassNameId(long fieldSetsClassNameId) {
+		_fieldSetsClassNameId = fieldSetsClassNameId;
 	}
 
 	public void setRefererPortletNamespace(java.lang.String refererPortletNamespace) {
@@ -87,6 +95,7 @@ public abstract class BaseDDMFormBuilderTag extends com.liferay.taglib.util.Incl
 		_ddmStructureId = null;
 		_defaultLanguageId = null;
 		_editingLanguageId = null;
+		_fieldSetsClassNameId = 0;
 		_refererPortletNamespace = null;
 		_showPagination = true;
 	}
@@ -106,6 +115,7 @@ public abstract class BaseDDMFormBuilderTag extends com.liferay.taglib.util.Incl
 		request.setAttribute("liferay-form:ddm-form-builder:ddmStructureId", _ddmStructureId);
 		request.setAttribute("liferay-form:ddm-form-builder:defaultLanguageId", _defaultLanguageId);
 		request.setAttribute("liferay-form:ddm-form-builder:editingLanguageId", _editingLanguageId);
+		request.setAttribute("liferay-form:ddm-form-builder:fieldSetsClassNameId", String.valueOf(_fieldSetsClassNameId));
 		request.setAttribute("liferay-form:ddm-form-builder:refererPortletNamespace", _refererPortletNamespace);
 		request.setAttribute("liferay-form:ddm-form-builder:showPagination", String.valueOf(_showPagination));
 	}
@@ -121,6 +131,7 @@ public abstract class BaseDDMFormBuilderTag extends com.liferay.taglib.util.Incl
 	private java.lang.Long _ddmStructureId = null;
 	private java.lang.String _defaultLanguageId = null;
 	private java.lang.String _editingLanguageId = null;
+	private long _fieldSetsClassNameId = 0;
 	private java.lang.String _refererPortletNamespace = null;
 	private boolean _showPagination = true;
 
