@@ -3,6 +3,8 @@ AUI.add(
 	function(A) {
 		var CSS_PREFIX = A.getClassName('form', 'builder', 'field', 'types', 'sidebar');
 
+		var FieldSets = Liferay.DDM.FieldSets;
+
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 
 		var FormBuilderFieldTypesSidebar = A.Component.create(
@@ -10,6 +12,9 @@ AUI.add(
 				ATTRS: {
 					builder: {
 						value: null
+					},
+					fieldSets: {
+						getter: '_getFieldSets'
 					},
 					fieldTypes: {
 						getter: '_getFieldTypes'
@@ -41,7 +46,8 @@ AUI.add(
 
 						instance._eventHandlers.push(
 							A.one('body').delegate('click', instance._bindTabAnimation.bind(instance), navLink),
-							boundingBox.delegate('click', instance._afterFieldTypeItemClick.bind(instance), '.list-field-type-item')
+							boundingBox.delegate('click', instance._afterFieldSetItemClick.bind(instance), '.lfr-ddm-form-builder-field-set-item'),
+							boundingBox.delegate('click', instance._afterFieldTypeItemClick.bind(instance), '.lfr-ddm-form-builder-field-type-item')
 						);
 
 						new A.TogglerDelegate(
@@ -74,6 +80,7 @@ AUI.add(
 						return A.merge(
 							context,
 							{
+								fieldSets: instance.get('fieldSets'),
 								fieldTypes: instance.get('fieldTypes'),
 								strings: instance.get('strings'),
 								title: Liferay.Language.get('field-types-sidebar-title'),
@@ -88,6 +95,25 @@ AUI.add(
 						var activeElement = A.one(node || document.activeElement);
 
 						return instance.get('boundingBox').contains(activeElement);
+					},
+
+					_afterFieldSetItemClick: function(event) {
+						var instance = this;
+
+						var fieldSetId = event.currentTarget.attr('data-field-set-id');
+
+						var fieldSetSelected = FieldSets.get(fieldSetId);
+
+						var definitionRetriever = FieldSets.getDefinitionRetriever();
+
+						definitionRetriever.getDefinition(fieldSetSelected)
+							.then(
+								function(fieldSetDefinition) {
+									instance.get('builder').createFieldSet(fieldSetDefinition);
+
+									instance.close();
+								}
+							);
 					},
 
 					_afterFieldTypeItemClick: function(event) {
@@ -129,6 +155,27 @@ AUI.add(
 						target.show();
 					},
 
+					_getFieldSets: function(fieldSets) {
+						var instance = this;
+
+						var types = [];
+
+						fieldSets.forEach(
+							function(fieldSet) {
+								types.push(
+									{
+										description: fieldSet.get('description'),
+										icon: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl(fieldSet.get('icon'), 'icon-monospaced')),
+										id: fieldSet.get('id'),
+										name: fieldSet.get('name')
+									}
+								);
+							}
+						);
+
+						return types;
+					},
+
 					_getFieldTypes: function(fieldTypes) {
 						var instance = this;
 
@@ -158,6 +205,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-tabview', 'aui-toggler', 'liferay-ddm-form-builder-sidebar', 'liferay-ddm-form-renderer-types']
+		requires: ['aui-tabview', 'aui-toggler', 'liferay-ddm-form-builder-field-sets', 'liferay-ddm-form-builder-sidebar', 'liferay-ddm-form-renderer-types']
 	}
 );

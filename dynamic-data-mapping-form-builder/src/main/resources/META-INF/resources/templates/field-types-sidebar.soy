@@ -16,6 +16,7 @@
 			customized: list<[description: string, icon: html, label: string, name: string]>
 		]
 	}
+	{@param fieldSets: list<[description: string, icon: html, id: string, name: string]>}
 	{@param strings: [basic: string, customized: string, field: string, fieldset: string]}
 
 	<aside class="lfr-ddm-form-builder-field-types-sidebar">
@@ -56,7 +57,19 @@
 			{/if}
 		</article>
 
-		<article class="field-types-fieldset"></article>
+		<article class="field-types-fieldset hide">
+			{if $fieldSets}
+				<ul class="list-group">
+					<div class="list-group-body">
+						{foreach $fieldSet in $fieldSets}
+							{call .render_field_set_group}
+								{param fieldSet: $fieldSet /}
+							{/call}
+						{/foreach}
+					</div>
+				</ul>
+			{/if}
+		</article>
 	</aside>
 {/template}
 
@@ -66,13 +79,30 @@
 {template .render_field_type_group}
 	{@param fieldType: [description: string, icon: html, label: string, name: string]}
 
-	<li class="list-group-item list-group-item-flex list-field-type-item" data-field-type-name="{$fieldType.name}">
+	<li class="lfr-ddm-form-builder-field-type-item list-group-item list-group-item-flex list-field-type-item" data-field-type-name="{$fieldType.name}">
 		<div class="flex-col">
 			<div class="sticker sticker-light">{$fieldType.icon}</div>
 		</div>
 		<div class="flex-col flex-col-expand">
 			<h4 class="list-group-title text-truncate">{$fieldType.label}</h4>
 			<p class="list-group-subtitle text-truncate">{$fieldType.description}</p>
+		</div>
+	</li>
+{/template}
+
+/**
+ * Render a field set group
+ */
+{template .render_field_set_group}
+	{@param fieldSet: [description: string, icon: html, id: string, name: string]}
+
+	<li class="lfr-ddm-form-builder-field-set-item list-group-item list-group-item-flex list-field-type-item" data-field-set-id="{$fieldSet.id}">
+		<div class="flex-col">
+			<div class="sticker sticker-light">{$fieldSet.icon}</div>
+		</div>
+		<div class="flex-col flex-col-expand">
+			<h4 class="list-group-title text-truncate">{$fieldSet.name}</h4>
+			<p class="list-group-subtitle text-truncate">{$fieldSet.description}</p>
 		</div>
 	</li>
 {/template}
