@@ -239,17 +239,10 @@ justify-content: space-between;
 
 	.select-field-trigger {
 		@extend %flex-space-between;
-		border-bottom: 2px solid #869CAD;
-		color: #869CAD;
-		padding: 3px 0 3px 5px;
 
 		.option-selected {
 			@extend %text-ellipsis;
 			overflow: hidden;
-		}
-
-		.option-selected-placeholder {
-			color: rgba(134, 156, 173, 0.4);
 		}
 	}
 
