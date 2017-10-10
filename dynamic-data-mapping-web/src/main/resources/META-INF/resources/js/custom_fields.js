@@ -977,8 +977,22 @@ AUI.add(
 				function(locale) {
 					var value = A.Object.getValue(localizationMap, [locale, attribute]);
 
-					if (!isValue(value)) {
+					if (!isValue(value) || value === STR_BLANK) {
 						value = A.Object.getValue(localizationMap, [defaultLocale, attribute]);
+						
+						if (!isValue(value) || value === STR_BLANK) {
+							var userValue;
+
+							for (localizationMapLocale in localizationMap) {
+								userValue = A.Object.getValue(localizationMap, [localizationMapLocale, attribute]);
+
+								if (isValue(userValue) && userValue !== STR_BLANK) {
+									break;
+								}
+							}
+
+							value = userValue;
+						}
 
 						if (!isValue(value)) {
 							value = STR_BLANK;
