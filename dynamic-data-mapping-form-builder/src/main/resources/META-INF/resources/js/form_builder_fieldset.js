@@ -1,11 +1,11 @@
 AUI.add(
-	'liferay-ddm-form-builder-field-sets',
+	'liferay-ddm-form-builder-fieldset',
 	function(A) {
 		var AArray = A.Array;
 
 		var _fieldSets = [];
 
-		var formBuilderFieldsetDefinitionRetriever = new Liferay.DDM.FormBuilderFieldsetDefinitionRetriever();
+		var formBuilderFieldSetDefinitionRetriever = new Liferay.DDM.FormBuilderFieldSetDefinitionRetriever();
 
 		var FieldSets = {
 			get: function(id) {
@@ -28,7 +28,7 @@ AUI.add(
 			getDefinitionRetriever: function() {
 				var instance = this;
 
-				return formBuilderFieldsetDefinitionRetriever;
+				return formBuilderFieldSetDefinitionRetriever;
 			},
 
 			register: function(fieldSets) {

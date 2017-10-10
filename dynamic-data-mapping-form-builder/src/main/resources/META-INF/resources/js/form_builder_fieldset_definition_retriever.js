@@ -3,7 +3,7 @@ AUI.add(
 	function(A) {
 		var CACHE = {};
 
-		var FormBuilderFieldsetDefinitionRetriever = A.Component.create(
+		var FormBuilderFieldSetDefinitionRetriever = A.Component.create(
 			{
 				EXTENDS: A.Base,
 
@@ -66,7 +66,7 @@ AUI.add(
 			}
 		);
 
-		Liferay.namespace('DDM').FormBuilderFieldsetDefinitionRetriever = FormBuilderFieldsetDefinitionRetriever;
+		Liferay.namespace('DDM').FormBuilderFieldSetDefinitionRetriever = FormBuilderFieldSetDefinitionRetriever;
 	},
 	'',
 	{

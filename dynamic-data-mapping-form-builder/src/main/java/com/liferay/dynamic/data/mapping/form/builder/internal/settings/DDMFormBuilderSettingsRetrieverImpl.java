@@ -69,7 +69,7 @@ public class DDMFormBuilderSettingsRetrieverImpl
 			_ddmFormBuilderSettingsRetrieverHelper.getFieldSetsMetadata(
 				ddmFormBuilderSettingsRequest.getCompanyId(),
 				ddmFormBuilderSettingsRequest.getScopeGroupId(),
-				ddmFormBuilderSettingsRequest.getFieldSetsClassNameId(),
+				ddmFormBuilderSettingsRequest.getFieldSetClassNameId(),
 				locale));
 
 		DDMForm ddmForm = ddmFormBuilderSettingsRequest.getDDMForm();

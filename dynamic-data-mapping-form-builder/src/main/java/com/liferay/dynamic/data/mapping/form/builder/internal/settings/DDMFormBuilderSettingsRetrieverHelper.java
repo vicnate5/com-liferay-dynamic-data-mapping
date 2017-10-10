@@ -100,17 +100,17 @@ public class DDMFormBuilderSettingsRetrieverHelper {
 	}
 
 	public JSONArray getFieldSetsMetadata(
-		long companyId, long scopeGroupId, long fieldSetsClassNameId,
+		long companyId, long scopeGroupId, long fieldSetClassNameId,
 		Locale locale) {
 
 		JSONArray jsonArray = _jsonFactory.createJSONArray();
 
-		if (fieldSetsClassNameId == 0) {
+		if (fieldSetClassNameId == 0) {
 			return jsonArray;
 		}
 
 		List<DDMStructure> ddmStructures = _ddmStructureService.search(
-			companyId, new long[] {scopeGroupId}, fieldSetsClassNameId,
+			companyId, new long[] {scopeGroupId}, fieldSetClassNameId,
 			StringPool.BLANK, DDMStructureConstants.TYPE_FRAGMENT,
 			WorkflowConstants.STATUS_ANY, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 			new StructureNameComparator(true));

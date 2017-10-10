@@ -16,7 +16,7 @@
 
 <%@ include file="/ddm_form_builder/init.jsp" %>
 
-<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-field-sets, liferay-ddm-form-builder-rule-builder">
+<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-fieldset, liferay-ddm-form-builder-rule-builder">
 
 	Liferay.namespace('DDM').Settings = {
 		evaluatorURL: '<%= evaluatorURL %>',

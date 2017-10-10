@@ -63,9 +63,9 @@ public class DDMFieldSetDefinitionServlet extends HttpServlet {
 			HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
-		long structureId = ParamUtil.getLong(request, "ddmStructureId");
+		long ddmStructureId = ParamUtil.getLong(request, "ddmStructureId");
 
-		if (structureId == 0) {
+		if (ddmStructureId == 0) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 
 			return;
@@ -79,10 +79,10 @@ public class DDMFieldSetDefinitionServlet extends HttpServlet {
 		LocaleThreadLocal.setThemeDisplayLocale(locale);
 
 		Optional<DDMStructure> ddmStructureOptional = Optional.ofNullable(
-			getDDMStructure(structureId));
+			getDDMStructure(ddmStructureId));
 
 		DDMFormBuilderContextResponse fieldContext =
-			_ddmBuilderContextFactory.create(
+			_ddmFormBuilderContextFactory.create(
 				DDMFormBuilderContextRequest.with(
 					ddmStructureOptional, request, response, locale, true));
 
@@ -95,9 +95,9 @@ public class DDMFieldSetDefinitionServlet extends HttpServlet {
 			response, jsonSerializer.serializeDeep(fieldContext.getContext()));
 	}
 
-	protected DDMStructure getDDMStructure(long structureId) {
+	protected DDMStructure getDDMStructure(long ddmStructureId) {
 		try {
-			return _ddmStructureService.getStructure(structureId);
+			return _ddmStructureService.getStructure(ddmStructureId);
 		}
 		catch (PortalException pe) {
 			_log.error(pe, pe);
@@ -112,7 +112,7 @@ public class DDMFieldSetDefinitionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Reference
-	private DDMFormBuilderContextFactory _ddmBuilderContextFactory;
+	private DDMFormBuilderContextFactory _ddmFormBuilderContextFactory;
 
 	@Reference
 	private DDMStructureService _ddmStructureService;

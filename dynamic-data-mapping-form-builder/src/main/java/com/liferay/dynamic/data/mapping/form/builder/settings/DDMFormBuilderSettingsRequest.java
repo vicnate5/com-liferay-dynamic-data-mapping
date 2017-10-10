@@ -26,17 +26,17 @@ import java.util.Map;
 public class DDMFormBuilderSettingsRequest {
 
 	public static DDMFormBuilderSettingsRequest with(
-		long companyId, long scopeGroupId, long fieldSetsClassNameId,
-		DDMForm form, Locale locale) {
+		long companyId, long scopeGroupId, long fieldSetClassNameId,
+		DDMForm ddmForm, Locale locale) {
 
 		DDMFormBuilderSettingsRequest ddmFormBuilderSettingsRequest =
 			new DDMFormBuilderSettingsRequest();
 
 		ddmFormBuilderSettingsRequest.setCompanyId(companyId);
 		ddmFormBuilderSettingsRequest.setScopeGroupId(scopeGroupId);
-		ddmFormBuilderSettingsRequest.setFieldSetsClassNameId(
-			fieldSetsClassNameId);
-		ddmFormBuilderSettingsRequest.setDDMForm(form);
+		ddmFormBuilderSettingsRequest.setFieldSetClassNameId(
+			fieldSetClassNameId);
+		ddmFormBuilderSettingsRequest.setDDMForm(ddmForm);
 		ddmFormBuilderSettingsRequest.setLocale(locale);
 
 		return ddmFormBuilderSettingsRequest;
@@ -54,8 +54,8 @@ public class DDMFormBuilderSettingsRequest {
 		return getProperty("ddmForm");
 	}
 
-	public long getFieldSetsClassNameId() {
-		return getProperty("fieldSetsClassNameId");
+	public long getFieldSetClassNameId() {
+		return getProperty("fieldSetClassNameId");
 	}
 
 	public Locale getLocale() {
@@ -78,8 +78,8 @@ public class DDMFormBuilderSettingsRequest {
 		addProperty("ddmForm", ddmForm);
 	}
 
-	public void setFieldSetsClassNameId(long fieldSetsClassNameId) {
-		addProperty("fieldSetsClassNameId", fieldSetsClassNameId);
+	public void setFieldSetClassNameId(long fieldSetClassNameId) {
+		addProperty("fieldSetClassNameId", fieldSetClassNameId);
 	}
 
 	public void setLocale(Locale locale) {

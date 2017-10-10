@@ -205,6 +205,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-tabview', 'aui-toggler', 'liferay-ddm-form-builder-field-sets', 'liferay-ddm-form-builder-sidebar', 'liferay-ddm-form-renderer-types']
+		requires: ['aui-tabview', 'aui-toggler', 'liferay-ddm-form-builder-fieldset', 'liferay-ddm-form-builder-sidebar', 'liferay-ddm-form-renderer-types']
 	}
 );

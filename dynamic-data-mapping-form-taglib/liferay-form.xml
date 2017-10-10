@@ -25,7 +25,7 @@
 				<required>true</required>
 			</attribute>
 			<attribute>
-				<name>fieldSetsClassNameId</name>
+				<name>fieldSetClassNameId</name>
 				<inputType>long</inputType>
 				<outputType>long</outputType>
 				<required>false</required>
