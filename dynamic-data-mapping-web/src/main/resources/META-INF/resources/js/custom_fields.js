@@ -979,19 +979,15 @@ AUI.add(
 
 					if (!isValue(value)) {
 						value = A.Object.getValue(localizationMap, [defaultLocale, attribute]);
-						
+
 						if (!isValue(value)) {
-							var userValue;
-
 							for (localizationMapLocale in localizationMap) {
-								userValue = A.Object.getValue(localizationMap, [localizationMapLocale, attribute]);
+								value = A.Object.getValue(localizationMap, [localizationMapLocale, attribute]);
 
-								if (isValue(userValue)) {
+								if (isValue(value)) {
 									break;
 								}
 							}
-
-							value = userValue;
 						}
 
 						if (!isValue(value)) {
