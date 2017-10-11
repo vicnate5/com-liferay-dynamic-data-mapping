@@ -127,7 +127,7 @@ AUI.add(
 
 						var editorNode = container.one('.key-value-editor');
 
-						editorNode.insert(container.one('.help-block'), 'after');
+						editorNode.insert(container.one('.form-feedback-indicator'), 'after');
 					},
 
 					_afterKeyChange: function(event) {

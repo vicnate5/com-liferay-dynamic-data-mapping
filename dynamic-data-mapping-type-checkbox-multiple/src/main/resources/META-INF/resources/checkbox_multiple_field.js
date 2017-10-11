@@ -98,7 +98,7 @@ AUI.add(
 
 						CheckboxMultipleField.superclass.showErrorMessage.apply(instance, arguments);
 
-						container.all('.help-block').appendTo(container);
+						container.all('.form-feedback-indicator').appendTo(container);
 					},
 
 					_getOptions: function(options) {
