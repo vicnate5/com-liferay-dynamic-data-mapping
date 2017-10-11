@@ -23,7 +23,9 @@
 	{@param? tip: string}
 	{@param value: ?}
 
-	<div class="form-group liferay-ddm-form-field-checkbox-multiple" data-fieldname="{$name}">
+	<div class="form-group liferay-ddm-form-field-checkbox-multiple"
+		data-fieldname="{$name}">
+
 		{if $showLabel}
 			<label for="{$name}">
 				{$label}
@@ -33,15 +35,13 @@
 				{/if}
 			</label>
 
-			<p class="liferay-ddm-form-field-tip">{$tip ? $tip: ''}</p>
+			{if $tip}
+				<span class="form-text">{$tip}</span>
+			{/if}
 		{/if}
 
-		<div class="clearfix checkbox-multiple-options">
+		<div class="lfr-ddm-form-field-group">
 			{foreach $option in $options}
-				{if not $inline}
-					<div>
-				{/if}
-
 				{let $checked kind="attributes"}
 					{foreach $currentValue in $value}
 						{if $currentValue == $option.value}
@@ -51,55 +51,56 @@
 				{/let}
 
 				{if $showAsSwitcher}
-					<label class="checkbox-default{$inline ? ' checkbox-multiple-switcher-inline' : ''} checkbox-option-{$option.value}" for="{$name}_{$option.value}">
-						<input {$checked}
-							class="hide toggle-switch"
-							{if $readOnly}disabled{/if}
-							id="{$name}_{$option.value}"
-							name="{$name}"
-							type="checkbox"
-							value="{$option.value}"
-						/>
+					<div class="lfr-ddm-form-field-toggle-switch {$inline ? 'lfr-ddm-form-field-toggle-switch-inline' : ''}">
+						<label class="toggle-switch toggle-switch-option-{$option.value}"
+							for="{$name}_{$option.value}">
 
-						<span aria-hidden="true" class="toggle-switch-bar">
-							<span class="toggle-switch-handle"></span>
-						</span>
-						<span class="toggle-switch-text toggle-switch-text-right">
-							{$option.label}
+							<input {$checked}
+								class="toggle-switch-check"
+								{if $readOnly}disabled{/if}
+								id="{$name}_{$option.value}"
+								name="{$name}"
+								type="checkbox"
+								value="{$option.value}" />
 
-							{if $required and length($options) == 1}
-								<span class="icon-asterisk text-warning"></span>
-							{/if}
-						</span>
-					</label>
+							<span aria-hidden="true" class="toggle-switch-bar">
+								<span class="toggle-switch-handle"></span>
+							</span>
 
+							<span class="toggle-switch-text toggle-switch-text-right">
+								{$option.label}
+
+								{if $required and length($options) == 1}
+									<span class="icon-asterisk text-warning"></span>
+								{/if}
+							</span>
+						</label>
+					</div>
 				{else}
-					<label class="checkbox-default{$inline ? ' checkbox-inline' : ''} checkbox-option-{$option.value}" for="{$name}_{$option.value}">
-						<input {$checked}
-							class="field"
-							{if $dir}dir="{$dir}"{/if}
-							{if $readOnly}disabled{/if}
-							id="{$name}_{$option.value}"
-							name="{$name}"
-							type="checkbox"
-							value="{$option.value}"
-						/>
-						{$option.label}
-					</label>
+					<div class="custom-checkbox custom-control {$inline ? 'custom-control-inline' : ''}">
+						<label class="checkbox-option-{$option.value}"
+							for="{$name}_{$option.value}">
 
-					{if $required and length($options) == 1}
-						<span class="icon-asterisk text-warning"></span>
-					{/if}
-				{/if}
+							<input {$checked}
+								class="custom-control-input"
+								{if $dir}dir="{$dir}"{/if}
+								{if $readOnly}disabled{/if}
+								id="{$name}_{$option.value}"
+								name="{$name}"
+								type="checkbox"
+								value="{$option.value}" />
 
-				{if not $inline}
+							<span class="custom-control-indicator"></span>
+
+							<span class="custom-control-description">{$option.label}</span>
+						</label>
+
+						{if $required and length($options) == 1}
+							<span class="icon-asterisk text-warning"></span>
+						{/if}
 					</div>
 				{/if}
 			{/foreach}
 		</div>
-
-		{if length($options) == 1}
-			<p class="liferay-ddm-form-field-tip">{$tip ? $tip: ''}</p>
-		{/if}
 	</div>
 {/template}
