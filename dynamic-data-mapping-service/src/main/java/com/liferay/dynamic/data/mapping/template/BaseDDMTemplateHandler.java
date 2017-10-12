@@ -24,16 +24,14 @@ import com.liferay.portal.kernel.template.BaseTemplateHandler;
 import com.liferay.portal.kernel.template.TemplateVariableCodeHandler;
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
 import com.liferay.portal.kernel.templateparser.TemplateNode;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Stack;
+import java.util.Map.Entry;
 
 /**
  * @author Jorge Ferrer
@@ -77,6 +75,30 @@ public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 			templateVariableGroup.getLabel(), templateVariableGroup);
 	}
 
+	protected void collectNestedFieldNameVariableName(
+			DDMStructure ddmStructure, String parentFieldName,
+			Map<String, String> fieldNameVariableNameMap)
+		throws PortalException {
+
+		List<String> childNames = ddmStructure.getChildrenFieldNames(
+			parentFieldName);
+
+		if (childNames.isEmpty()) {
+			return;
+		}
+
+		String parentVariableName = fieldNameVariableNameMap.get(
+			parentFieldName);
+
+		for (String childName : childNames) {
+			fieldNameVariableNameMap.put(
+				childName, parentVariableName + StringPool.PERIOD + childName);
+
+			collectNestedFieldNameVariableName(
+				ddmStructure, childName, fieldNameVariableNameMap);
+		}
+	}
+
 	protected Class<?> getFieldVariableClass() {
 		return TemplateNode.class;
 	}
@@ -111,21 +133,20 @@ public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
 			ddmStructureId);
 
-		List<String> fieldNames = ListUtil.fromCollection(
-			ddmStructure.getFieldNames());
+		Map<String, String> fieldNameVariableNameMap = new LinkedHashMap<>();
 
-		Map<String, String> nestedFields = new HashMap<>();
+		for (String fieldName : ddmStructure.getRootFieldNames()) {
+			fieldNameVariableNameMap.put(fieldName, fieldName);
 
-		for (String fieldName : fieldNames) {
-			List<String> childNames = ddmStructure.getChildrenFieldNames(
-				fieldName);
-
-			for (String childName : childNames) {
-				nestedFields.put(childName, fieldName);
-			}
+			collectNestedFieldNameVariableName(
+				ddmStructure, fieldName, fieldNameVariableNameMap);
 		}
 
-		for (String fieldName : fieldNames) {
+		for (Entry<String, String> fieldNameVariableName :
+				fieldNameVariableNameMap.entrySet()) {
+
+			String fieldName = fieldNameVariableName.getKey();
+
 			String label = ddmStructure.getFieldLabel(fieldName, locale);
 			String tip = ddmStructure.getFieldTip(fieldName, locale);
 			String dataType = ddmStructure.getFieldDataType(fieldName);
@@ -135,32 +156,10 @@ public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 				continue;
 			}
 
-			if (nestedFields.containsKey(fieldName)) {
-				String parentName = nestedFields.get(fieldName);
-				Stack<String> parentNames = new Stack<>();
-
-				parentNames.push(parentName);
-
-				while (nestedFields.containsKey(parentName)) {
-					parentName = nestedFields.get(parentName);
-
-					parentNames.push(parentName);
-				}
-
-				StringBundler sb = new StringBundler();
-
-				while (!parentNames.isEmpty()) {
-					sb.append(parentNames.pop());
-					sb.append(".");
-				}
-
-				sb.append(fieldName);
-				fieldName = sb.toString();
-			}
-
 			templateVariableGroup.addFieldVariable(
-				label, getFieldVariableClass(), fieldName, tip, dataType,
-				repeatable, getTemplateVariableCodeHandler());
+				label, getFieldVariableClass(),
+				fieldNameVariableName.getValue(), tip, dataType, repeatable,
+				getTemplateVariableCodeHandler());
 		}
 
 		return templateVariableGroup;
