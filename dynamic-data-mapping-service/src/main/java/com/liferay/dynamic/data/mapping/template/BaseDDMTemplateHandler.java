@@ -14,6 +14,8 @@
 
 package com.liferay.dynamic.data.mapping.template;
 
+import com.liferay.dynamic.data.mapping.model.DDMForm;
+import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -24,6 +26,7 @@ import com.liferay.portal.kernel.template.BaseTemplateHandler;
 import com.liferay.portal.kernel.template.TemplateVariableCodeHandler;
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
 import com.liferay.portal.kernel.templateparser.TemplateNode;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -76,26 +79,28 @@ public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 	}
 
 	protected void collectNestedFieldNameVariableName(
-			DDMStructure ddmStructure, String parentFieldName,
+			DDMFormField parentDDMFormField,
 			Map<String, String> fieldNameVariableNameMap)
 		throws PortalException {
 
-		List<String> childNames = ddmStructure.getChildrenFieldNames(
-			parentFieldName);
+		List<DDMFormField> childrenDDMFormFields =
+			parentDDMFormField.getNestedDDMFormFields();
 
-		if (childNames.isEmpty()) {
+		if (ListUtil.isEmpty(childrenDDMFormFields)) {
 			return;
 		}
 
 		String parentVariableName = fieldNameVariableNameMap.get(
-			parentFieldName);
+			parentDDMFormField.getName());
 
-		for (String childName : childNames) {
+		for (DDMFormField childDDMFormField : childrenDDMFormFields) {
 			fieldNameVariableNameMap.put(
-				childName, parentVariableName + StringPool.PERIOD + childName);
+				childDDMFormField.getName(),
+				parentVariableName + StringPool.PERIOD +
+					childDDMFormField.getName());
 
 			collectNestedFieldNameVariableName(
-				ddmStructure, childName, fieldNameVariableNameMap);
+				childDDMFormField, fieldNameVariableNameMap);
 		}
 	}
 
@@ -133,13 +138,18 @@ public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
 			ddmStructureId);
 
+		DDMForm fullHierarchyDDMForm = ddmStructure.getFullHierarchyDDMForm();
+
 		Map<String, String> fieldNameVariableNameMap = new LinkedHashMap<>();
 
-		for (String fieldName : ddmStructure.getRootFieldNames()) {
-			fieldNameVariableNameMap.put(fieldName, fieldName);
+		for (DDMFormField ddmFormField :
+				fullHierarchyDDMForm.getDDMFormFields()) {
+
+			fieldNameVariableNameMap.put(
+				ddmFormField.getName(), ddmFormField.getName());
 
 			collectNestedFieldNameVariableName(
-				ddmStructure, fieldName, fieldNameVariableNameMap);
+				ddmFormField, fieldNameVariableNameMap);
 		}
 
 		for (Entry<String, String> fieldNameVariableName :
