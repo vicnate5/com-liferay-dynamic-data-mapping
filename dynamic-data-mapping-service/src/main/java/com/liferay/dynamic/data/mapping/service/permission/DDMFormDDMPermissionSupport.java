@@ -12,23 +12,27 @@
  * details.
  */
 
-package com.liferay.dynamic.data.mapping.constants;
+package com.liferay.dynamic.data.mapping.service.permission;
+
+import com.liferay.dynamic.data.mapping.util.DDMStructurePermissionSupport;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Rafael Praxedes
  */
-public class DDMActionKeys {
+@Component(
+	immediate = true,
+	property = {
+		"model.class.name=com.liferay.dynamic.data.mapping.model.DDMFormInstance"
+	}
+)
+public class DDMFormDDMPermissionSupport
+	implements DDMStructurePermissionSupport {
 
-	public static final String ADD_DATA_PROVIDER_INSTANCE =
-		"ADD_DATA_PROVIDER_INSTANCE";
-
-	public static final String ADD_FORM_INSTANCE = "ADD_FORM_INSTANCE";
-
-	public static final String ADD_FORM_INSTANCE_RECORD =
-		"ADD_FORM_INSTANCE_RECORD";
-
-	public static final String ADD_STRUCTURE = "ADD_STRUCTURE";
-
-	public static final String ADD_TEMPLATE = "ADD_TEMPLATE";
+	@Override
+	public String getResourceName() {
+		return DDMFormPermission.RESOURCE_NAME;
+	}
 
 }
