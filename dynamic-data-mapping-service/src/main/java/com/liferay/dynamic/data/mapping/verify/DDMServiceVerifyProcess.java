@@ -73,6 +73,13 @@ public class DDMServiceVerifyProcess extends VerifyProcess {
 			ddmForm, content.getData());
 	}
 
+	protected DDMFormValues getDDMFormValues(
+			DDMStructure ddmStructure, DDMContent content)
+		throws PortalException {
+
+		return getDDMFormValues(ddmStructure.getDDMForm(), content);
+	}
+
 	@Reference(unbind = "-")
 	protected void setDDMContentLocalService(
 		DDMContentLocalService ddmContentLocalService) {
