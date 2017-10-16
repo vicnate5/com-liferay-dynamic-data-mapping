@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -52,7 +53,29 @@ public class UpgradeDataProviderInstance extends UpgradeProcess {
 		_ddmFormValuesJSONSerializer = ddmFormValuesJSONSerializer;
 	}
 
-	protected void addDefaultOutputParameter(DDMFormValues ddmFormValues) {
+	protected void addDefaultInputParameters(DDMFormValues ddmFormValues) {
+		DDMFormFieldValue ddmFormFieldValue = createDDMFormFieldValue(
+			ddmFormValues, "inputParameters", null);
+
+		ddmFormFieldValue.addNestedDDMFormFieldValue(
+			createDDMFormFieldValue(
+				ddmFormValues, "inputParameterLabel", StringPool.BLANK));
+
+		ddmFormFieldValue.addNestedDDMFormFieldValue(
+			createDDMFormFieldValue(
+				ddmFormValues, "inputParameterName", StringPool.BLANK));
+
+		ddmFormFieldValue.addNestedDDMFormFieldValue(
+			createDDMFormFieldValue(
+				ddmFormValues, "inputParameterRequired", "false"));
+
+		ddmFormFieldValue.addNestedDDMFormFieldValue(
+			createDDMFormFieldValue(ddmFormValues, "inputParameterType", "[]"));
+
+		ddmFormValues.addDDMFormFieldValue(ddmFormFieldValue);
+	}
+
+	protected void addDefaultOutputParameters(DDMFormValues ddmFormValues) {
 		Map<String, List<DDMFormFieldValue>> ddmFormFieldValuesMap =
 			ddmFormValues.getDDMFormFieldValuesMap();
 
@@ -76,7 +99,7 @@ public class UpgradeDataProviderInstance extends UpgradeProcess {
 			valueDDMFormFieldValue.getValue());
 
 		ddmFormValues.addDDMFormFieldValue(
-			createDefaultOutputParameter(ddmFormValues, outputParameterPath));
+			createDefaultOutputParameters(ddmFormValues, outputParameterPath));
 	}
 
 	protected void addPaginationParameter(DDMFormValues ddmFormValues) {
@@ -125,7 +148,7 @@ public class UpgradeDataProviderInstance extends UpgradeProcess {
 		return ddmFormFieldValue;
 	}
 
-	protected DDMFormFieldValue createDefaultOutputParameter(
+	protected DDMFormFieldValue createDefaultOutputParameters(
 		DDMFormValues ddmFormValues, String outputParameterPath) {
 
 		DDMFormFieldValue ddmFormFieldValue = createDDMFormFieldValue(
@@ -207,7 +230,9 @@ public class UpgradeDataProviderInstance extends UpgradeProcess {
 				DDMFormFactory.create(ddmDataProvider.getSettings()),
 				dataProviderInstanceDefinition);
 
-		addDefaultOutputParameter(ddmFormValues);
+		addDefaultInputParameters(ddmFormValues);
+
+		addDefaultOutputParameters(ddmFormValues);
 
 		addPaginationParameter(ddmFormValues);
 
