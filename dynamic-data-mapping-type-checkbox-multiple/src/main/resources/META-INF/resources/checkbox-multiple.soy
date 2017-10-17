@@ -27,17 +27,19 @@
 		data-fieldname="{$name}">
 
 		{if $showLabel}
-			<label for="{$name}">
-				{$label}
+			<div>
+				<label for="{$name}">
+					{$label}
 
-				{if $required and length($options) > 1}
-					<span class="icon-asterisk text-warning"></span>
+					{if $required and length($options) > 1}
+						<span class="icon-asterisk text-warning"></span>
+					{/if}
+				</label>
+
+				{if $tip}
+					<span class="form-text">{$tip}</span>
 				{/if}
-			</label>
-
-			{if $tip}
-				<span class="form-text">{$tip}</span>
-			{/if}
+			</div>
 		{/if}
 
 		{foreach $option in $options}
