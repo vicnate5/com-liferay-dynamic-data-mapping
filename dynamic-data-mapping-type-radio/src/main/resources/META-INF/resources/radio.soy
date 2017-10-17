@@ -11,18 +11,18 @@
  * Prints the DDM form radio field.
  */
 {template .render}
-	{@param? dir: string}
 	{@param inline: bool}
 	{@param label: string}
 	{@param name: string}
 	{@param options: list<[label: string, value: string]>}
-	{@param? predefinedValue: string}
 	{@param readOnly: bool}
-	{@param? required: bool}
 	{@param showLabel: bool}
-	{@param? tip: string}
 	{@param value: string}
 	{@param visible: bool}
+	{@param? dir: string}
+	{@param? predefinedValue: string}
+	{@param? required: bool}
+	{@param? tip: string}
 
 	{let $displayValue: $value ? $value : $predefinedValue /}
 
@@ -43,26 +43,23 @@
 			{/if}
 		{/if}
 
-		<div class="clearfix radio radio-options">
-			{foreach $option in $options}
-				<div class="custom-control {$inline ? 'custom-control-inline' : ''} custom-radio">
-					<label class="radio-option-{$option.value}"
-						for="{$name}_{$option.value}">
-						<input {if $option.value == $displayValue}checked{/if}
-							class="custom-control-input"
-							{if $dir}dir="{$dir}"{/if}
-							{if $readOnly}disabled{/if}
-							id="{$name}_{$option.value}"
-							name="{$name}"
-							type="radio"
-							value="{$option.value}" />
+		{foreach $option in $options}
+			<div class="form-check {$inline ? 'form-check-inline' : ''}">
+				<label class="form-check-label form-check-label-option-{$option.value}"
+					for="{$name}_{$option.value}">
 
-						<span class="custom-control-indicator"></span>
+					<input {if $option.value == $displayValue}checked{/if}
+						{if $dir}dir="{$dir}"{/if}
+						{if $readOnly}disabled{/if}
+						class="form-check-input"
+						id="{$name}_{$option.value}"
+						name="{$name}"
+						type="radio"
+						value="{$option.value}" />
 
-						<span class="custom-control-description">{$option.label}</span>
-					</label>
-				</div>
-			{/foreach}
-		</div>
+					<span class="form-check-description">{$option.label}</span>
+				</label>
+			</div>
+		{/foreach}
 	</div>
 {/template}
