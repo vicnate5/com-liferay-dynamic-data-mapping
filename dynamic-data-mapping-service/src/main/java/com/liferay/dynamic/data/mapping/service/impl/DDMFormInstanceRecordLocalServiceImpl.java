@@ -14,23 +14,39 @@
 
 package com.liferay.dynamic.data.mapping.service.impl;
 
+import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.dynamic.data.mapping.exception.FormInstanceRecordGroupIdException;
+import com.liferay.dynamic.data.mapping.exception.NoSuchFormInstanceRecordException;
 import com.liferay.dynamic.data.mapping.exception.StorageException;
+import com.liferay.dynamic.data.mapping.internal.storage.StorageEngineAccessor;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecordVersion;
+import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.service.base.DDMFormInstanceRecordLocalServiceBaseImpl;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.storage.StorageEngine;
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.SystemEventConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
+import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistry;
+import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
@@ -41,7 +57,10 @@ import com.liferay.portal.spring.extender.service.ServiceReference;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -78,6 +97,8 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		ddmFormInstanceRecord.setVersionUserId(user.getUserId());
 		ddmFormInstanceRecord.setVersionUserName(user.getFullName());
 
+		StorageEngine storageEngine = storageEngineAccessor.getStorageEngine();
+
 		long ddmStorageId = storageEngine.create(
 			ddmFormInstance.getCompanyId(), ddmFormInstance.getStructureId(),
 			ddmFormValues, serviceContext);
@@ -99,6 +120,16 @@ public class DDMFormInstanceRecordLocalServiceImpl
 			addFormInstanceRecordVersion(
 				user, ddmFormInstanceRecord, ddmStorageId, status,
 				_VERSION_DEFAULT);
+
+		// Asset
+
+		Locale locale = serviceContext.getLocale();
+
+		updateAsset(
+			userId, ddmFormInstanceRecord, ddmFormInstanceRecordVersion,
+			serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames(), locale,
+			serviceContext.getAssetPriority());
 
 		if (serviceContext.getWorkflowAction() ==
 				WorkflowConstants.ACTION_PUBLISH) {
@@ -128,6 +159,8 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		List<DDMFormInstanceRecordVersion> ddmFormInstanceRecordVersions =
 			ddmFormInstanceRecordVersionPersistence.findByFormInstanceRecordId(
 				ddmFormInstanceRecord.getFormInstanceRecordId());
+
+		StorageEngine storageEngine = storageEngineAccessor.getStorageEngine();
 
 		for (DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion :
 				ddmFormInstanceRecordVersions) {
@@ -180,6 +213,15 @@ public class DDMFormInstanceRecordLocalServiceImpl
 
 		return ddmFormInstanceRecordPersistence.fetchByPrimaryKey(
 			ddmFormInstanceRecordId);
+	}
+
+	@Override
+	public DDMFormValues getDDMFormValues(long ddmStorageId)
+		throws StorageException {
+
+		StorageEngine storageEngine = storageEngineAccessor.getStorageEngine();
+
+		return storageEngine.getDDMFormValues(ddmStorageId);
 	}
 
 	@Override
@@ -238,13 +280,6 @@ public class DDMFormInstanceRecordLocalServiceImpl
 	}
 
 	@Override
-	public DDMFormValues getFormValues(long ddmStorageId)
-		throws StorageException {
-
-		return storageEngine.getDDMFormValues(ddmStorageId);
-	}
-
-	@Override
 	public void revertFormInstanceRecord(
 			long userId, long ddmFormInstanceRecordId, String version,
 			ServiceContext serviceContext)
@@ -258,6 +293,8 @@ public class DDMFormInstanceRecordLocalServiceImpl
 			return;
 		}
 
+		StorageEngine storageEngine = storageEngineAccessor.getStorageEngine();
+
 		DDMFormValues ddmFormValues = storageEngine.getDDMFormValues(
 			ddmFormInstanceRecordVersion.getStorageId());
 
@@ -266,6 +303,27 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		updateFormInstanceRecord(
 			userId, ddmFormInstanceRecordId, true, ddmFormValues,
 			serviceContext);
+	}
+
+	@Override
+	public BaseModelSearchResult<DDMFormInstanceRecord>
+		searchFormInstanceRecords(SearchContext searchContext) {
+
+		try {
+			Indexer<DDMFormInstanceRecord> indexer =
+				getDDMFormInstanceRecordIndexer();
+
+			Hits hits = indexer.search(searchContext, _SELECTED_FIELD_NAMES);
+
+			List<DDMFormInstanceRecord> formInstanceRecords =
+				getFormInstanceRecords(hits);
+
+			return new BaseModelSearchResult<>(
+				formInstanceRecords, hits.getLength());
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
@@ -286,6 +344,8 @@ public class DDMFormInstanceRecordLocalServiceImpl
 
 		ddmFormInstanceRecord = ddmFormInstanceRecordPersistence.update(
 			ddmFormInstanceRecord);
+
+		StorageEngine storageEngine = storageEngineAccessor.getStorageEngine();
 
 		DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion =
 			ddmFormInstanceRecord.getLatestFormInstanceRecordVersion();
@@ -346,6 +406,81 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		return ddmFormInstanceRecord;
 	}
 
+	@Indexable(type = IndexableType.REINDEX)
+	@Override
+	public DDMFormInstanceRecord updateStatus(
+			long userId, long recordVersionId, int status,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		// Record version
+
+		User user = userLocalService.getUser(userId);
+
+		DDMFormInstanceRecordVersion formInstanceRecordVersion =
+			ddmFormInstanceRecordVersionPersistence.findByPrimaryKey(
+				recordVersionId);
+
+		formInstanceRecordVersion.setStatus(status);
+		formInstanceRecordVersion.setStatusByUserId(user.getUserId());
+		formInstanceRecordVersion.setStatusByUserName(user.getFullName());
+		formInstanceRecordVersion.setStatusDate(new Date());
+
+		ddmFormInstanceRecordVersionPersistence.update(
+			formInstanceRecordVersion);
+
+		// Record
+
+		DDMFormInstanceRecord formInstanceRecord =
+			ddmFormInstanceRecordPersistence.findByPrimaryKey(
+				formInstanceRecordVersion.getFormInstanceRecordId());
+
+		if (status == WorkflowConstants.STATUS_APPROVED) {
+			if (DLUtil.compareVersions(
+					formInstanceRecord.getVersion(),
+					formInstanceRecordVersion.getVersion()) <= 0) {
+
+				formInstanceRecord.setStorageId(
+					formInstanceRecordVersion.getStorageId());
+				formInstanceRecord.setVersion(
+					formInstanceRecordVersion.getVersion());
+				formInstanceRecord.setFormInstanceId(
+					formInstanceRecordVersion.getFormInstanceId());
+				formInstanceRecord.setVersion(
+					formInstanceRecordVersion.getVersion());
+				formInstanceRecord.setVersionUserId(
+					formInstanceRecordVersion.getUserId());
+				formInstanceRecord.setVersionUserName(
+					formInstanceRecordVersion.getUserName());
+
+				ddmFormInstanceRecordPersistence.update(formInstanceRecord);
+			}
+		}
+		else {
+			if (Objects.equals(
+					formInstanceRecord.getVersion(),
+					formInstanceRecordVersion.getVersion())) {
+
+				String newVersion = _VERSION_DEFAULT;
+
+				List<DDMFormInstanceRecordVersion> approvedRecordVersions =
+					ddmFormInstanceRecordVersionPersistence.findByF_S(
+						formInstanceRecord.getFormInstanceRecordId(),
+						WorkflowConstants.STATUS_APPROVED);
+
+				if (!approvedRecordVersions.isEmpty()) {
+					newVersion = approvedRecordVersions.get(0).getVersion();
+				}
+
+				formInstanceRecord.setVersion(newVersion);
+
+				ddmFormInstanceRecordPersistence.update(formInstanceRecord);
+			}
+		}
+
+		return formInstanceRecord;
+	}
+
 	protected DDMFormInstanceRecordVersion addFormInstanceRecordVersion(
 		User user, DDMFormInstanceRecord ddmFormInstanceRecord,
 		long ddmStorageId, int status, String version) {
@@ -364,8 +499,8 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		ddmFormInstanceRecordVersion.setUserName(user.getFullName());
 		ddmFormInstanceRecordVersion.setCreateDate(
 			ddmFormInstanceRecord.getModifiedDate());
-		ddmFormInstanceRecordVersion.setFormInstanceRecordId(
-			ddmFormInstanceRecord.getFormInstanceRecordId());
+		ddmFormInstanceRecordVersion.setFormInstanceId(
+			ddmFormInstanceRecord.getFormInstanceId());
 		ddmFormInstanceRecordVersion.setFormInstanceVersion(
 			ddmFormInstanceRecord.getFormInstanceVersion());
 		ddmFormInstanceRecordVersion.setFormInstanceRecordId(
@@ -395,6 +530,49 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
 			companyId, groupId, DDMFormInstanceRecord.class.getName(),
 			ddmFormInstanceRecordVersionId);
+	}
+
+	protected Indexer<DDMFormInstanceRecord> getDDMFormInstanceRecordIndexer() {
+		Indexer<DDMFormInstanceRecord> indexer =
+			indexerRegistry.nullSafeGetIndexer(DDMFormInstanceRecord.class);
+
+		return indexer;
+	}
+
+	protected List<DDMFormInstanceRecord> getFormInstanceRecords(Hits hits)
+		throws PortalException {
+
+		List<DDMFormInstanceRecord> formInstanceRecords = new ArrayList<>();
+
+		for (Document document : hits.toList()) {
+			long recordId = GetterUtil.getLong(
+				document.get(Field.ENTRY_CLASS_PK));
+
+			try {
+				DDMFormInstanceRecord formInstanceRecord =
+					getFormInstanceRecord(recordId);
+
+				formInstanceRecords.add(formInstanceRecord);
+			}
+			catch (NoSuchFormInstanceRecordException nsfire) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"DDM form instance record index is stale and" +
+							"contains record " + recordId,
+						nsfire);
+				}
+
+				long companyId = GetterUtil.getLong(
+					document.get(Field.COMPANY_ID));
+
+				Indexer<DDMFormInstanceRecord> indexer =
+					getDDMFormInstanceRecordIndexer();
+
+				indexer.delete(companyId, document.getUID());
+			}
+		}
+
+		return formInstanceRecords;
 	}
 
 	protected String getNextVersion(
@@ -440,6 +618,8 @@ public class DDMFormInstanceRecordLocalServiceImpl
 			return false;
 		}
 
+		StorageEngine storageEngine = storageEngineAccessor.getStorageEngine();
+
 		DDMFormValues lastDDMFormValues = storageEngine.getDDMFormValues(
 			lastDDMFormInstanceRecordVersion.getStorageId());
 		DDMFormValues latestDDMFormValues = storageEngine.getDDMFormValues(
@@ -464,6 +644,70 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		}
 
 		return true;
+	}
+
+	protected void updateAsset(
+			long userId, DDMFormInstanceRecord formInstanceRecord,
+			DDMFormInstanceRecordVersion formInstanceRecordVersion,
+			long[] assetCategoryIds, String[] assetTagNames, Locale locale,
+			Double priority)
+		throws PortalException {
+
+		boolean addDraftAssetEntry = false;
+
+		if ((formInstanceRecordVersion != null) &&
+			!formInstanceRecordVersion.isApproved()) {
+
+			String version = formInstanceRecordVersion.getVersion();
+
+			if (!version.equals(_VERSION_DEFAULT)) {
+				int approvedRecordVersionsCount =
+					ddmFormInstanceRecordVersionPersistence.countByF_S(
+						formInstanceRecord.getFormInstanceRecordId(),
+						WorkflowConstants.STATUS_APPROVED);
+
+				if (approvedRecordVersionsCount > 0) {
+					addDraftAssetEntry = true;
+				}
+			}
+		}
+
+		DDMFormInstance formInstance = formInstanceRecord.getFormInstance();
+
+		DDMStructure ddmStructure = formInstance.getStructure();
+
+		String ddmStructureName = ddmStructure.getName(locale);
+
+		String recordSetName = formInstance.getName(locale);
+
+		String title = LanguageUtil.format(
+			locale, "new-x-for-list-x",
+			new Object[] {ddmStructureName, recordSetName}, false);
+
+		if (addDraftAssetEntry) {
+			assetEntryLocalService.updateEntry(
+				userId, formInstanceRecord.getGroupId(),
+				formInstanceRecord.getCreateDate(),
+				formInstanceRecord.getModifiedDate(),
+				DDMFormInstanceRecord.class.getName(),
+				formInstanceRecordVersion.getFormInstanceRecordVersionId(),
+				formInstanceRecord.getUuid(), 0, assetCategoryIds,
+				assetTagNames, true, false, null, null, null, null,
+				ContentTypes.TEXT_HTML, title, null, StringPool.BLANK, null,
+				null, 0, 0, priority);
+		}
+		else {
+			assetEntryLocalService.updateEntry(
+				userId, formInstanceRecord.getGroupId(),
+				formInstanceRecord.getCreateDate(),
+				formInstanceRecord.getModifiedDate(),
+				DDMFormInstanceRecord.class.getName(),
+				formInstanceRecord.getFormInstanceRecordId(),
+				formInstanceRecord.getUuid(), 0, assetCategoryIds,
+				assetTagNames, true, false, null, null, null, null,
+				ContentTypes.TEXT_HTML, title, null, StringPool.BLANK, null,
+				null, 0, 0, priority);
+		}
 	}
 
 	protected void updateFormInstanceRecordVersion(
@@ -493,9 +737,18 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		}
 	}
 
-	@ServiceReference(type = StorageEngine.class)
-	protected StorageEngine storageEngine;
+	@ServiceReference(type = IndexerRegistry.class)
+	protected IndexerRegistry indexerRegistry;
+
+	@ServiceReference(type = StorageEngineAccessor.class)
+	protected StorageEngineAccessor storageEngineAccessor;
+
+	private static final String[] _SELECTED_FIELD_NAMES =
+		{Field.COMPANY_ID, Field.ENTRY_CLASS_PK, Field.UID};
 
 	private static final String _VERSION_DEFAULT = "1.0";
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		DDMFormInstanceRecordLocalServiceImpl.class);
 
 }

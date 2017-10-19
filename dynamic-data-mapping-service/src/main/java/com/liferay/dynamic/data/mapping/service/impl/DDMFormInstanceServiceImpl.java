@@ -19,6 +19,7 @@ import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
 import com.liferay.dynamic.data.mapping.service.base.DDMFormInstanceServiceBaseImpl;
 import com.liferay.dynamic.data.mapping.service.permission.DDMFormInstancePermission;
 import com.liferay.dynamic.data.mapping.service.permission.DDMFormPermission;
+import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -37,7 +38,8 @@ public class DDMFormInstanceServiceImpl extends DDMFormInstanceServiceBaseImpl {
 	@Override
 	public DDMFormInstance addFormInstance(
 			long groupId, long ddmStructureId, Map<Locale, String> nameMap,
-			Map<Locale, String> descriptionMap, ServiceContext serviceContext)
+			Map<Locale, String> descriptionMap,
+			DDMFormValues settingsDDMFormValues, ServiceContext serviceContext)
 		throws PortalException {
 
 		DDMFormPermission.check(
@@ -45,7 +47,7 @@ public class DDMFormInstanceServiceImpl extends DDMFormInstanceServiceBaseImpl {
 
 		return ddmFormInstanceLocalService.addFormInstance(
 			getUserId(), groupId, ddmStructureId, nameMap, descriptionMap,
-			serviceContext);
+			settingsDDMFormValues, serviceContext);
 	}
 
 	@Override
@@ -126,11 +128,33 @@ public class DDMFormInstanceServiceImpl extends DDMFormInstanceServiceBaseImpl {
 			companyId, groupId, names, descriptions, andOperator);
 	}
 
+	/**
+	 * Updates the the record set's settings.
+	 *
+	 * @param  formInstanceId the primary key of the form instance
+	 * @param  settingsDDMFormValues the record set's settings. For more
+	 *         information see <code>DDMFormValues</code> in the
+	 *         <code>dynamic.data.mapping.api</code> module.
+	 * @return the record set
+	 * @throws PortalException if a portal exception occurred
+	 */
+	@Override
+	public DDMFormInstance updateFormInstance(
+			long formInstanceId, DDMFormValues settingsDDMFormValues)
+		throws PortalException {
+
+		DDMFormInstancePermission.check(
+			getPermissionChecker(), formInstanceId, ActionKeys.UPDATE);
+
+		return ddmFormInstanceLocalService.updateFormInstance(
+			formInstanceId, settingsDDMFormValues);
+	}
+
 	@Override
 	public DDMFormInstance updateFormInstance(
 			long ddmFormInstanceId, long ddmStructureId,
 			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
-			ServiceContext serviceContext)
+			DDMFormValues settingsDDMFormValues, ServiceContext serviceContext)
 		throws PortalException {
 
 		DDMFormInstancePermission.check(
@@ -138,7 +162,7 @@ public class DDMFormInstanceServiceImpl extends DDMFormInstanceServiceBaseImpl {
 
 		return ddmFormInstanceLocalService.updateFormInstance(
 			ddmFormInstanceId, ddmStructureId, nameMap, descriptionMap,
-			serviceContext);
+			settingsDDMFormValues, serviceContext);
 	}
 
 }
