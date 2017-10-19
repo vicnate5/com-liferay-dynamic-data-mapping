@@ -51,6 +51,7 @@ AUI.add(
 						instance._eventHandlers = [
 							instance.after('open', instance._afterSidebarOpen),
 							instance.after('open:start', instance._afterOpenStart)
+							instance.before('open', instance._beforeSidebarOpen),
 						];
 					},
 
@@ -141,6 +142,15 @@ AUI.add(
 						toolbar.set('field', field);
 					},
 
+					_beforeSidebarOpen: function() {
+						var instance = this;
+
+						var field = instance.get('field');
+						var fieldType = FieldTypes.get(field.get('context.type'));
+
+						instance._changeFieldTypeMenu(fieldType);
+					},
+
 					_bindSettingsFormEvents: function() {
 						var instance = this;
 
@@ -154,6 +164,12 @@ AUI.add(
 								instance.set('title', labelField.getValue());
 							}
 						);
+					},
+
+					_changeFieldTypeMenu: function(fieldType) {
+						var instance = this;
+
+						A.one('#field-type-menu-content').html(instance._getFieldTypeMenuLayout(fieldType));
 					},
 
 					_configureSideBar: function() {
