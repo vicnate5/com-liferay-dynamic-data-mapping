@@ -32,6 +32,12 @@ public class DDMFormInstanceRecordVersionImpl
 	extends DDMFormInstanceRecordVersionBaseImpl {
 
 	@Override
+	public DDMFormValues getDDMFormValues() throws StorageException {
+		return DDMFormInstanceRecordLocalServiceUtil.getDDMFormValues(
+			getStorageId());
+	}
+
+	@Override
 	public DDMFormInstance getFormInstance() throws PortalException {
 		return DDMFormInstanceLocalServiceUtil.getFormInstance(
 			getFormInstanceId());
@@ -43,12 +49,6 @@ public class DDMFormInstanceRecordVersionImpl
 
 		return DDMFormInstanceRecordLocalServiceUtil.getFormInstanceRecord(
 			getFormInstanceRecordId());
-	}
-
-	@Override
-	public DDMFormValues getFormValues() throws StorageException {
-		return DDMFormInstanceRecordLocalServiceUtil.getFormValues(
-			getStorageId());
 	}
 
 }
