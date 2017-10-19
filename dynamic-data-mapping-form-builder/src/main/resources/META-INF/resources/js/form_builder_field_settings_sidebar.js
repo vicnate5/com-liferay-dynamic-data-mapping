@@ -50,9 +50,10 @@ AUI.add(
 
 						instance._eventHandlers = [
 							instance.after('open', instance._afterSidebarOpen),
-							instance.after('open:start', instance._afterOpenStart)
 							instance.before('open', instance._beforeSidebarOpen),
+							instance.after('open:start', instance._afterOpenStart),
 							instance.before('render', instance._addFieldTypesInToolbar),
+							A.one('body').delegate('click', A.bind('changeFieldType', instance), '.' + CSS_PREFIX + ' .lfr-ddm-toolbar-field-type .dropdown-item')
 						];
 					},
 
@@ -66,6 +67,49 @@ AUI.add(
 						instance.destroyFieldSettingsForm();
 
 						(new A.EventHandle(instance._eventHandlers)).detach();
+					},
+
+					changeFieldType: function(event) {
+						var instance = this;
+
+						var fieldNode = event.currentTarget;
+						var type = fieldNode.getData('name');
+
+						var fieldType = FieldTypes.get(type);
+						var FormBuilder = instance.get('builder');
+
+						var field = FormBuilder.createField(fieldType);
+						var prevField = instance.get('field');
+
+						var columns = FormBuilder.getFieldRow(prevField)._data['layout-row'].get('cols');
+						var previousSettingsContext = prevField.get('context.settingsContext');
+						var settingsRetriever = field.get('settingsRetriever');
+
+						prevField.get('container').addClass(prevField._yuid);
+
+						instance.settingsForm.destroy();
+
+						instance._changeFieldTypeMenu(fieldType);
+
+						settingsRetriever.getSettingsContext(field).then(
+							function(settingsContext) {
+								field.saveSettings();
+
+								var newSettingsContext = instance._mergeFieldContext(settingsContext, previousSettingsContext);
+
+								field.set('context.settingsContext', newSettingsContext);
+
+								columns.forEach(
+									function(column) {
+										var node = column.get('node');
+
+										if (node.one('.' + prevField._yuid)) {
+											instance._updateField(prevField, field, column);
+										}
+									}
+								);
+							}
+						);
 					},
 
 					destroyFieldSettingsForm: function() {
@@ -142,10 +186,8 @@ AUI.add(
 						var instance = this;
 
 						var field = instance.get('field');
-
-						var toolbar = instance.get('toolbar');
-
 						var fieldType = FieldTypes.get(field.get('type'));
+						var toolbar = instance.get('toolbar');
 
 						instance.set('description', fieldType.get('label'));
 						instance.set('title', field.get('context.label'));
@@ -226,6 +268,12 @@ AUI.add(
 						return toolbar;
 					},
 
+					_getFieldTypeMenuLayout: function(fieldType) {
+						var instance = this;
+
+						return Liferay.Util.getLexiconIconTpl(fieldType.get('icon')) + '<span>' + fieldType.get('label') + '</span>' + Liferay.Util.getLexiconIconTpl('caret-bottom');
+					},
+
 					_isFieldNode: function(node) {
 						var instance = this;
 
@@ -238,8 +286,7 @@ AUI.add(
 						field.loadSettingsForm().then(
 							function(settingsForm) {
 								instance.settingsForm = settingsForm;
-
-								instance._configureSideBar();
+								var settingsFormContext = settingsForm.get('context');
 
 								settingsForm.evaluate(
 									function() {
@@ -249,13 +296,13 @@ AUI.add(
 									}
 								);
 
-								var settingsFormContext = settingsForm.get('context');
-
 								field.set('context.settingsContext', settingsFormContext);
 
 								field.saveSettings();
 
 								instance._saveCurrentContext();
+
+								instance._configureSideBar();
 
 								instance.fire(
 									'fieldSettingsFormLoaded',
@@ -266,6 +313,39 @@ AUI.add(
 								);
 							}
 						);
+					},
+
+					_mergeFieldContext: function(newSettingsContext, previousSettingsContext) {
+						var instance = this;
+
+						var FormBuilderUtil = Liferay.DDM.FormBuilderUtil;
+
+						FormBuilderUtil.visitLayout(
+							newSettingsContext.pages,
+							function(settingsFormFieldContext) {
+								var fieldLocalizable = settingsFormFieldContext.localizable;
+								var fieldName = settingsFormFieldContext.fieldName;
+
+								FormBuilderUtil.visitLayout(
+									previousSettingsContext.pages,
+									function(prevSettingsFormFieldContext) {
+										var prevFieldLocalizable = prevSettingsFormFieldContext.localizable;
+										var prevFieldName = prevSettingsFormFieldContext.fieldName;
+
+										if (fieldName === prevFieldName) {
+											settingsFormFieldContext.value = prevSettingsFormFieldContext.value;
+											settingsFormFieldContext.dataType = prevSettingsFormFieldContext.dataType;
+
+											if (fieldLocalizable == prevFieldLocalizable) {
+												settingsFormFieldContext.localizedValue = prevSettingsFormFieldContext.localizedValue;
+											}
+										}
+									}
+								);
+							}
+						);
+
+						return newSettingsContext;
 					},
 
 					_removeLoading: function() {
@@ -323,6 +403,27 @@ AUI.add(
 						}
 
 						boundingBox.addClass('loading-data');
+					},
+
+					_updateField: function(prevField, field, column) {
+						var instance = this;
+
+						var fieldset = column.get('value');
+						var fieldsetFields = fieldset.get('fields');
+
+						fieldsetFields.forEach(
+							function(fieldsetField, index) {
+								if (fieldsetField._yuid == prevField._yuid) {
+									fieldsetFields[index] = field;
+								}
+							}
+						);
+
+						fieldset.set('fields', fieldsetFields);
+						instance.set('field', field);
+
+						instance._loadFieldSettingsForm(field);
+						instance.get('builder')._renderField(field);
 					}
 				}
 			}
