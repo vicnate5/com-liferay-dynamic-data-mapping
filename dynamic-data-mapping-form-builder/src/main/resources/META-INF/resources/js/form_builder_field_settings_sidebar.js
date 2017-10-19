@@ -52,6 +52,7 @@ AUI.add(
 							instance.after('open', instance._afterSidebarOpen),
 							instance.after('open:start', instance._afterOpenStart)
 							instance.before('open', instance._beforeSidebarOpen),
+							instance.before('render', instance._addFieldTypesInToolbar),
 						];
 					},
 
@@ -107,6 +108,18 @@ AUI.add(
 						var settingsForm = instance.settingsForm;
 
 						return (settingsForm && settingsForm.hasFocus()) || instance._containsNode(activeElement) || instance._isFieldNode(activeElement);
+					},
+
+					_addFieldTypesInToolbar: function() {
+						var instance = this;
+
+						var fieldTypes = FieldTypes.getAll().filter(
+							function(fieldType) {
+								return !fieldType.get('system');
+							}
+						);
+
+						instance.set('fieldTypeOptions', instance._getFieldTypes(fieldTypes, true));
 					},
 
 					_afterOpenStart: function() {
