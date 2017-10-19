@@ -26,6 +26,10 @@ AUI.add(
 						value: ''
 					},
 
+					fieldTypeOptions: {
+						value: []
+					},
+
 					open: {
 						value: false
 					},
@@ -125,6 +129,7 @@ AUI.add(
 							bodyContent: instance.get('bodyContent'),
 							closeButtonIcon: Liferay.Util.getLexiconIconTpl('times'),
 							description: instance.get('description'),
+							fieldTypeOptions: instance.get('fieldTypeOptions'),
 							title: instance.get('title'),
 							toolbarButtonIcon: Liferay.Util.getLexiconIconTpl('ellipsis-v')
 						};
