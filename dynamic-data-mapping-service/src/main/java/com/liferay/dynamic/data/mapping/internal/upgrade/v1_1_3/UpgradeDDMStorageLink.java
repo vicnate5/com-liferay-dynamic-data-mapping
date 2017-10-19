@@ -26,12 +26,14 @@ import java.sql.ResultSet;
  */
 public class UpgradeDDMStorageLink extends UpgradeProcess {
 
-	public long getLatestStructureVersionId(long structureId) throws Exception {
+	public long getLatestStructureVersionId(long ddmStructureId)
+		throws Exception {
+
 		try (PreparedStatement ps = connection.prepareStatement(
 				"select structureVersionId from DDMStructureVersion where " +
 					"structureId = ? order by createDate desc")) {
 
-			ps.setLong(1, structureId);
+			ps.setLong(1, ddmStructureId);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				rs.first();
