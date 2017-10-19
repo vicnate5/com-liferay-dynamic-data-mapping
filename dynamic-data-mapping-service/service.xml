@@ -145,6 +145,7 @@
 
 		<reference entity="DDMFormInstanceRecord" package-path="com.liferay.dynamic.data.mapping" />
 		<reference entity="DDMFormInstanceVersion" package-path="com.liferay.dynamic.data.mapping" />
+		<reference entity="DDMStructure" package-path="com.liferay.dynamic.data.mapping" />
 		<reference entity="Resource" package-path="com.liferay.portal" />
 		<reference entity="User" package-path="com.liferay.portal" />
 		<reference entity="WorkflowDefinitionLink" package-path="com.liferay.portal" />
@@ -200,6 +201,7 @@
 		<reference entity="DDMFormInstanceRecordVersion" package-path="com.liferay.dynamic.data.mapping" />
 		<reference entity="User" package-path="com.liferay.portal" />
 		<reference entity="WorkflowInstanceLink" package-path="com.liferay.portal" />
+		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
 	</entity>
 	<entity local-service="true" name="DDMFormInstanceRecordVersion" remote-service="true">
 
@@ -251,7 +253,7 @@
 			<finder-column name="userId" />
 			<finder-column name="formInstanceId" />
 			<finder-column name="formInstanceVersion" />
-			<finder-column name="status" type="int" />
+			<finder-column name="status" />
 		</finder>
 	</entity>
 	<entity local-service="true" name="DDMFormInstanceVersion" remote-service="true">
