@@ -4,23 +4,73 @@
  * Prints the DDM sidebar.
  */
 {template .render}
+	{@param? bodyContent: html}
 	{@param closeButtonIcon: html}
 	{@param toolbarButtonIcon: html}
-	{@param? bodyContent: html}
+	{@param? currentFieldType: [
+		icon: html,
+		name: string
+	]}
 	{@param? description: string}
+	{@param? fieldTypeOptions: [
+		basic: list<[description: string, icon: html, label: string, name: string]>,
+		customized: list<[description: string, icon: html, label: string, name: string]>
+	]}
 	{@param? title: string}
 	{@param? toolbarTemplateContext: [options: list<[buttonClass: string, handler: string, label: string]>]}
 	{@param? type: string}
 
-	<div class="sidebar">
-		{call .header data="all" /}
+	<div class="sidebar" id="lfr-ddm-sidebar">
 		{if $type}
+			<div class="sidebar-header">
+				{delcall DDMSidebar.sidebar_toolbar variant="$type" data="all" /}
+
+				{call .header data="all" /}
+			</div>
+
 			{delcall DDMSidebar.sidebar_body variant="$type" data="all" /}
 		{else}
+			<div class="sidebar-header">
+				{delcall DDMSidebar.sidebar_toolbar data="all" /}
+
+				{call .header data="all" /}
+			</div>
+
 			{delcall DDMSidebar.sidebar_body data="all" /}
 		{/if}
 	</div>
 {/template}
+
+/**
+* Prints the DDM sidebar toolbar
+*/
+{deltemplate DDMSidebar.sidebar_toolbar}
+	{@param? fieldTypeOptions: [
+		basic: list<[description: string, icon: html, label: string, name: string]>,
+		customized: list<[description: string, icon: html, label: string, name: string]>
+	]}
+
+	{if length(keys($fieldTypeOptions)) != 0}
+		<ul class="lfr-ddm-toolbar-field-type nav">
+			<li class="dropdown nav-item">
+				<button aria-expanded="false" aria-haspopup="true" class="btn btn-unstyled dropdown-toggle nav-link"
+						data-toggle="dropdown" type="button" id="field-type-menu-content">
+				</button>
+
+				<div aria-labelledby="" class="dropdown-menu" x-placement="bottom-start">
+					{foreach $fieldType in $fieldTypeOptions.basic}
+					<a class="dropdown-item" data-name="{$fieldType.name}" href="#1">{$fieldType.icon} {$fieldType.label}</a>
+					{/foreach}
+
+					{foreach $fieldType in $fieldTypeOptions.customized}
+					<a class="dropdown-item" data-name="{$fieldType.name}" href="#1">{$fieldType.icon} {$fieldType.label}</a>
+					{/foreach}
+				</div>
+
+			</li>
+		</ul>
+	{/if}
+{/deltemplate}
 
 /**
  * Prints the DDM sidebar body.
@@ -51,6 +101,13 @@
 	{@param? title: string}
 	{@param? toolbarTemplateContext: [options: list<[buttonClass: string, handler: string, label: string]>]}
 
+	<ul class="sidebar-header-actions">
+		{if $toolbarTemplateContext}
+			<li>
+				{call .field_options_toolbar data="all" /}
+			</li>
+		{/if}
+
 	<div class="sidebar-header">
 		<div class="sidebar-section-flex">
 			<div class="flex-col flex-col-expand">
@@ -69,8 +126,7 @@
 						</li>
 					{/if}
 					<li class="nav-item">
-						<a class="form-builder-sidebar-close nav-link nav-link-monospaced sidebar-link"
-							href="javascript:;">
+						<a class="form-builder-sidebar-close nav-link nav-link-monospaced sidebar-link" href="javascript:;">
 							{$closeButtonIcon}
 						</a>
 					</li>
