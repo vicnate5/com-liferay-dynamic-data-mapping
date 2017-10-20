@@ -64,3 +64,33 @@
 		}
 	}
 }
+
+.lfr-ddm-form-field-container.form-builder-field {
+	min-height: 113px;
+
+	&:hover .lfr-ddm-field-actions-container {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+.lfr-ddm-field-actions-container {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 2;
+	opacity: 0;
+	visibility: hidden;
+	@include transition(all ease .3s);
+
+	button {
+		display: block;
+		border: solid 1px #ccc;
+		margin: 4px 0;
+	}
+}
