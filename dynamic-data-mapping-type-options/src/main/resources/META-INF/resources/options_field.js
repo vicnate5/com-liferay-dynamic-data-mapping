@@ -587,6 +587,13 @@ AUI.add(
 						option.set('key', contextValue.value);
 
 						option.setValue(contextValue.label);
+						
+						if (contextValue.value && option.normalizeKey(contextValue.label) !== contextValue.value) {
+							option.set('generationLocked', true);
+						}
+						else {
+							option.set('generationLocked', false);
+						}
 
 						instance._skipOptionValueChange = false;
 					},
