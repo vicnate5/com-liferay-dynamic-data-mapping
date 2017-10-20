@@ -425,12 +425,8 @@ AUI.add(
 					_bindOptionUI: function(option) {
 						var instance = this;
 
-						var editable = instance.get('editable');
-
-						if (editable) {
-							option.after(A.rbind('_afterOptionNormalizeKey', instance, option), option, 'normalizeKey');
-							option.bindContainerEvent('click', A.bind('_onOptionClickClose', instance, option), '.close');
-						}
+						option.after(A.rbind('_afterOptionNormalizeKey', instance, option), option, 'normalizeKey');
+						option.bindContainerEvent('click', A.bind('_onOptionClickClose', instance, option), '.close');
 					},
 
 					_canSortNode: function(event) {
@@ -587,7 +583,7 @@ AUI.add(
 						option.set('key', contextValue.value);
 
 						option.setValue(contextValue.label);
-						
+
 						if (contextValue.value && option.normalizeKey(contextValue.label) !== contextValue.value) {
 							option.set('generationLocked', true);
 						}
