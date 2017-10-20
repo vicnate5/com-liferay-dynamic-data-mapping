@@ -126,7 +126,7 @@ AUI.add(
 						var instance = this;
 
 						var boundingBox = instance.get('boundingBox');
-
+						
 						instance._eventHandlers = [
 							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_FIELD, instance),
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
@@ -135,6 +135,8 @@ AUI.add(
 							instance.after('render', instance._afterFormBuilderRender, instance),
 							instance.after(instance._afterRemoveField, instance, 'removeField')
 						];
+						
+						
 					},
 
 					destructor: function() {
@@ -553,6 +555,7 @@ AUI.add(
 						var instance = this;
 
 						instance._fieldToolbar.destroy();
+						
 						instance.getFieldSettingsPanel();
 						instance._renderFields();
 						instance._renderPages();
@@ -560,6 +563,26 @@ AUI.add(
 						instance._syncRequiredFieldsWarning();
 						instance._syncRowsLastColumnUI();
 						instance._syncRowIcons();
+					},
+					
+					_createFieldActions: function(){
+						var instance = this;
+
+						instance.eachFields(function(field){
+							var field = field.get('container');
+							
+							field.append(instance._getFieldActionsLayout());
+						});
+					},
+					
+					_getFieldActionsLayout: function(){
+						var instance = this;
+						
+						return "<div class='lfr-ddm-field-actions-container'> " +
+							"<button class='btn btn-monospaced btn-sm label-primary' type='button'>"+Liferay.Util.getLexiconIconTpl('pencil')+"</button>"+
+							"<button class='btn btn-monospaced btn-sm label-primary' type='button'>"+Liferay.Util.getLexiconIconTpl('move')+"</button>"+
+							"<button class='btn btn-monospaced btn-sm label-primary' type='button'>"+Liferay.Util.getLexiconIconTpl('trash')+"</button>"+
+							"</div>";
 					},
 
 					_afterLayoutColsChange: function(event) {
@@ -793,6 +816,8 @@ AUI.add(
 								var row = instance.getFieldRow(field);
 
 								activeLayout.normalizeColsHeight(new A.NodeList(row));
+								
+								field.get('container').append(instance._getFieldActionsLayout());
 							}
 						);
 
@@ -807,6 +832,8 @@ AUI.add(
 						visitor.set('fieldHandler', A.bind('_renderField', instance));
 
 						visitor.visit();
+						
+						instance._createFieldActions();
 					},
 
 					_renderPages: function() {
