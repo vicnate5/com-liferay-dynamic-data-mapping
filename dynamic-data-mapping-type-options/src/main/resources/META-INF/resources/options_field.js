@@ -20,6 +20,10 @@ AUI.add(
 						value: false
 					},
 
+					editable: {
+						value: true
+					},
+
 					sortable: {
 						value: true
 					},
@@ -57,6 +61,7 @@ AUI.add(
 							instance.after('liferay-ddm-form-field-key-value:render', instance._afterRenderOption),
 							instance.after('liferay-ddm-form-field-key-value:blur', instance._afterBlur),
 							instance.after('liferay-ddm-form-field-key-value:valueChange', instance._afterOptionValueChange),
+							instance.after('editableChange', instance._afterEditableChange),
 							sortableList.after('drag:end', A.bind('_afterSortableListDragEnd', instance)),
 							sortableList.after('drag:start', A.bind('_afterSortableListDragStart', instance))
 						);
@@ -303,6 +308,20 @@ AUI.add(
 						}
 
 						instance._setValue(value);
+					},
+
+					_afterEditableChange: function(event) {
+						var instance = this;
+
+						var options = instance.getOptions();
+
+						var editable = event.newVal;
+
+						options.forEach(
+							function(option) {
+								option.set('generationLocked', !editable);
+							}
+						);
 					},
 
 					_afterErrorMessageChange: function(event) {
