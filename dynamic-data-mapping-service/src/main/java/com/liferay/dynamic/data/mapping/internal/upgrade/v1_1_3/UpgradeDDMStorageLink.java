@@ -47,9 +47,11 @@ public class UpgradeDDMStorageLink extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		alter(
-			DDMStorageLinkTable.class,
-			new AlterTableAddColumn("structureVersionId LONG"));
+		if (!hasColumn("DDMStorageLink", "structureVersionId")) {
+			alter(
+				DDMStorageLinkTable.class,
+				new AlterTableAddColumn("structureVersionId LONG"));
+		}
 
 		try (PreparedStatement ps1 = connection.prepareStatement(
 				"select structureId from DDMStorageLink");
