@@ -52,8 +52,7 @@ public class SetPropertyFunction extends BaseDDMFormRuleFunction {
 				_propertyName, parameters[1]);
 
 			if (_propertyName.equals("value")) {
-				ddmFormFieldEvaluationResult.setProperty(
-					"valueChangeable", true);
+				ddmFormFieldEvaluationResult.setProperty("valueChanged", true);
 			}
 		}
 
