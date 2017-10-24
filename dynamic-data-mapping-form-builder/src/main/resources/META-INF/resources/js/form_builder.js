@@ -33,6 +33,8 @@ AUI.add(
 
 		var TPL_CONFIRM_CANCEL_FIELD_EDITION = '<p>' + Liferay.Language.get('are-you-sure-you-want-to-cancel') + '</p>';
 
+		var TPL_CONFIRM_DELETE_FIELD = '<p>' + Liferay.Language.get('are-you-sure-you-want-to-delete-this-field') + '</p>';
+
 		var TPL_REQURIED_FIELDS = '<label class="hide required-warning">{message}</label>';
 
 		var Util = Liferay.DDM.Renderer.Util;
@@ -144,6 +146,7 @@ AUI.add(
 						instance._eventHandlers = [
 							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_EDIT_FIELD_BUTTON, instance),
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
+							boundingBox.delegate('click', instance._removeFieldCol, '.lexicon-icon-trash', instance),
 							instance.after('editingLanguageIdChange', instance._afterEditingLanguageIdChange),
 							instance.after('liferay-ddm-form-builder-field-list:fieldsChange', instance._afterFieldListChange, instance),
 							instance.after('render', instance._afterFormBuilderRender, instance),
@@ -464,10 +467,33 @@ AUI.add(
 						var config = {
 							body: TPL_CONFIRM_CANCEL_FIELD_EDITION,
 							confirmFn: confirmFn,
-							id: 'cancelFieldChangesDialog'
+							id: 'cancelFieldChangesDialog',
+							labelHTML: Liferay.Language.get('yes-cancel'),
+							title: Liferay.Language.get('cancel-field-changes-question')
+
 						};
 
 						FormBuilderConfirmDialog.open(config);
+					},
+
+					openConfirmDeleteFieldDialog: function(confirmFn) {
+						var instance = this;
+
+						var config = {
+							body: TPL_CONFIRM_DELETE_FIELD,
+							confirmFn: confirmFn,
+							id: 'deleteFieldDialog',
+							labelHTML: Liferay.Language.get('yes-delete'),
+							title: Liferay.Language.get('delete-field-question')
+
+						};
+
+						FormBuilderConfirmDialog.open(config);
+					},
+
+					removeField: function(field) {
+						var instance = this;
+
 					},
 
 					showFieldSettingsPanel: function(field) {
@@ -650,7 +676,7 @@ AUI.add(
 					_getFieldActionsLayout: function() {
 						var instance = this;
 
-						return '<div class="lfr-ddm-field-actions-container">' +
+						return '<div class="lfr-ddm-field-actions-container"> ' +
 							'<button class="btn btn-monospaced btn-sm label-primary lfr-edit-field" type="button">' + Liferay.Util.getLexiconIconTpl('pencil') + '</button>' +
 							'<button class="btn btn-monospaced btn-sm label-primary" type="button">' + Liferay.Util.getLexiconIconTpl('move') + '</button>' +
 							'<button class="btn btn-monospaced btn-sm label-primary" type="button">' + Liferay.Util.getLexiconIconTpl('trash') + '</button>' +
@@ -795,6 +821,31 @@ AUI.add(
 						instance.showFieldTypesPanel();
 					},
 
+					_removeFieldCol: function(event) {
+						var col;
+						var field = event.currentTarget.ancestor('.' + CSS_FIELD).getData('field-instance');
+						var fieldNode = event.currentTarget.ancestor('.' + CSS_FIELD);
+						var instance = this;
+						var row;
+
+						col = field.get('content').ancestor('.col').getData('layout-col');
+						field._col = col;
+						if (field) {
+
+							instance.openConfirmDeleteFieldDialog(
+								function() {
+									var layout = instance.getActiveLayout();
+
+									field._col.get('value').removeField(field);
+									row = field.get('content').ancestor('.layout-row');
+									layout.normalizeColsHeight(new A.NodeList(row));
+									fieldNode.remove();
+									instance.getFieldSettingsPanel().close();
+								}
+							);
+						}
+					},
+
 					_renderArrowActions: function() {
 						var instance = this;
 
@@ -857,6 +908,8 @@ AUI.add(
 						visitor.set('fieldHandler', A.bind('_renderField', instance));
 
 						visitor.visit();
+
+						instance._createFieldActions();
 					},
 
 					_renderPages: function() {
