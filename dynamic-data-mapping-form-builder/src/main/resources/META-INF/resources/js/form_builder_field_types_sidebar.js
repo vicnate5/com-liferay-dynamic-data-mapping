@@ -19,6 +19,12 @@ AUI.add(
 					fieldTypes: {
 						getter: '_getFieldTypes'
 					},
+					icons: {
+						value: {
+							angleDown: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl('angle-down')),
+							angleRight: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl('angle-right'))
+						}
+					},
 					strings: {
 						value: {
 							basic: Liferay.Language.get('field-types-basic-elements'),
@@ -53,14 +59,14 @@ AUI.add(
 						new A.TogglerDelegate(
 							{
 								animated: true,
-								closeAllOnExpand: true,
+								closeAllOnExpand: false,
 								container: '.' + CSS_PREFIX + ' .field-types-content',
 								content: '.list-group-body',
-								expanded: false,
+								expanded: true,
 								header: '.list-group-header',
 								transition: {
-									duration: 0.2,
-									easing: 'cubic-bezier(0, 0.1, 0, 1)'
+									duration: 0.5,
+									easing: 'ease-in-out'
 								}
 							}
 						);
@@ -82,6 +88,7 @@ AUI.add(
 							{
 								fieldSets: instance.get('fieldSets'),
 								fieldTypes: instance.get('fieldTypes'),
+								icons: instance.get('icons'),
 								strings: instance.get('strings'),
 								title: Liferay.Language.get('field-types-sidebar-title'),
 								type: 'fieldTypes'
@@ -165,7 +172,7 @@ AUI.add(
 								types.push(
 									{
 										description: fieldSet.get('description'),
-										icon: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl(fieldSet.get('icon'), 'icon-monospaced')),
+										icon: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl(fieldSet.get('icon'))),
 										id: fieldSet.get('id'),
 										name: fieldSet.get('name')
 									}
@@ -187,7 +194,7 @@ AUI.add(
 									{
 										description: fieldType.get('description'),
 										group: fieldType.get('group') || 'customized',
-										icon: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl(fieldType.get('icon'), 'icon-monospaced')),
+										icon: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl(fieldType.get('icon'))),
 										label: fieldType.get('label'),
 										name: fieldType.get('name')
 									}
