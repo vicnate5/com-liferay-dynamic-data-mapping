@@ -94,3 +94,20 @@
 		margin: 4px 0;
 	}
 }
+
+div.layout-builder-resize-col-draggable-handle {
+	background-color: transparent;
+	border-radius: 0;
+	text-align: center;
+	color: #1c67fb;
+	padding: 0;
+	font-size: 20px;
+
+	&:hover, &.layout-builder-resize-col-draggable-handle {
+		background: transparent;
+	}
+}
+
+.lfr-edit-field {
+	cursor: pointer;
+}

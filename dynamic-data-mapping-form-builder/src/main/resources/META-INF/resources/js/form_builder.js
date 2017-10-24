@@ -10,6 +10,11 @@ AUI.add(
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 
 		var FormBuilderUtil = Liferay.DDM.FormBuilderUtil;
+		var CSS_RESIZE_COL_DRAGGABLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable');
+
+		var CSS_RESIZE_COL_DRAGGABLE_BORDER = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'border');
+
+		var CSS_RESIZE_COL_DRAGGABLE_HANDLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'handle');
 
 		var Lang = A.Lang;
 
@@ -28,6 +33,12 @@ AUI.add(
 		var TPL_REQURIED_FIELDS = '<label class="hide required-warning">{message}</label>';
 
 		var Util = Liferay.DDM.Renderer.Util;
+
+		var MOVE_COLUMN_CONTAINER = '<div class="' + CSS_RESIZE_COL_DRAGGABLE_BORDER + '"></div>' +
+			'<div class="' + CSS_RESIZE_COL_DRAGGABLE_HANDLE + '">' +
+			Liferay.Util.getLexiconIconTpl('horizontal-scroll') + '</div>';
+
+		var MOVE_COLUMN_TPL = '<div class="' + CSS_RESIZE_COL_DRAGGABLE + ' lfr-tpl">' + MOVE_COLUMN_CONTAINER + '</div>';
 
 		var FormBuilder = A.Component.create(
 			{
@@ -780,6 +791,19 @@ AUI.add(
 
 						instance._newFieldContainer = target.ancestor('.col').getData('layout-col');
 						instance.showFieldTypesPanel();
+					},
+
+					_renderArrowActions: function() {
+						var instance = this;
+
+						instance._layoutBuilder.TPL_RESIZE_COL_DRAGGABLE = MOVE_COLUMN_TPL;
+						instance._layoutBuilder._uiSetEnableResizeCols(instance._layoutBuilder.get('enableResizeCols'));
+
+						instance.get('boundingBox').all('.' + CSS_RESIZE_COL_DRAGGABLE + ':not(.lfr-tpl)').each(
+							function(handler) {
+								handler.html(MOVE_COLUMN_CONTAINER);
+							}
+						);
 					},
 
 					_renderContentBox: function() {
