@@ -75,22 +75,22 @@
 }
 
 .lfr-ddm-field-actions-container {
-	height: 100%;
-	display: flex;
-	justify-content: center;
 	align-items: center;
+	display: flex;
 	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+	opacity: 0;
 	position: absolute;
 	right: 0;
 	top: 0;
-	z-index: 2;
-	opacity: 0;
 	visibility: hidden;
+	z-index: 2;
 	@include transition(all ease .3s);
 
 	button {
+		border: solid 1px #CCC;
 		display: block;
-		border: solid 1px #ccc;
 		margin: 4px 0;
 	}
 }
@@ -98,10 +98,10 @@
 div.layout-builder-resize-col-draggable-handle {
 	background-color: transparent;
 	border-radius: 0;
-	text-align: center;
-	color: #1c67fb;
-	padding: 0;
+	color: #1C67FB;
 	font-size: 20px;
+	padding: 0;
+	text-align: center;
 
 	&:hover, &.layout-builder-resize-col-draggable-handle {
 		background: transparent;

@@ -470,7 +470,6 @@ AUI.add(
 							id: 'cancelFieldChangesDialog',
 							labelHTML: Liferay.Language.get('yes-cancel'),
 							title: Liferay.Language.get('cancel-field-changes-question')
-
 						};
 
 						FormBuilderConfirmDialog.open(config);
@@ -485,15 +484,9 @@ AUI.add(
 							id: 'deleteFieldDialog',
 							labelHTML: Liferay.Language.get('yes-delete'),
 							title: Liferay.Language.get('delete-field-question')
-
 						};
 
 						FormBuilderConfirmDialog.open(config);
-					},
-
-					removeField: function(field) {
-						var instance = this;
-
 					},
 
 					showFieldSettingsPanel: function(field) {
@@ -578,9 +571,9 @@ AUI.add(
 					_afterFieldClick: function(event) {
 						var instance = this;
 
-						var field = event.currentTarget.ancestor('.' + CSS_FIELD).getData('field-instance');
+						var ancestor = event.currentTarget.ancestor('.' + CSS_FIELD);
 
-						instance.editField(field);
+						instance.editField(ancestor.getData('field-instance'));
 					},
 
 					_afterFieldListChange: function() {
@@ -648,7 +641,9 @@ AUI.add(
 
 						instance.eachFields(
 							function(field) {
-								field.get('container').append(instance._getFieldActionsLayout());
+								var container = field.get('container');
+
+								container.append(instance._getFieldActionsLayout());
 							}
 						);
 					},
@@ -817,30 +812,39 @@ AUI.add(
 					_openNewFieldPanel: function(target) {
 						var instance = this;
 
-						instance._newFieldContainer = target.ancestor('.col').getData('layout-col');
+						var ancestorCol = target.ancestor('.col');
+
+						instance._newFieldContainer = ancestorCol.getData('layout-col');
 						instance.showFieldTypesPanel();
 					},
 
 					_removeFieldCol: function(event) {
-						var col;
-						var field = event.currentTarget.ancestor('.' + CSS_FIELD).getData('field-instance');
-						var fieldNode = event.currentTarget.ancestor('.' + CSS_FIELD);
 						var instance = this;
-						var row;
 
-						col = field.get('content').ancestor('.col').getData('layout-col');
-						field._col = col;
+						var fieldNode = event.currentTarget.ancestor('.' + CSS_FIELD);
+
+						var field = fieldNode.getData('field-instance');
+
 						if (field) {
+							var content = field.get('content');
+
+							var ancestor = content.ancestor('.col');
+
+							field._col = ancestor.getData('layout-col');
 
 							instance.openConfirmDeleteFieldDialog(
 								function() {
+									field._col.get('value').removeField(field);
+
 									var layout = instance.getActiveLayout();
 
-									field._col.get('value').removeField(field);
-									row = field.get('content').ancestor('.layout-row');
-									layout.normalizeColsHeight(new A.NodeList(row));
+									layout.normalizeColsHeight(new A.NodeList(content.ancestor('.layout-row')));
+
 									fieldNode.remove();
-									instance.getFieldSettingsPanel().close();
+
+									var fieldSettingsPanel = instance.getFieldSettingsPanel();
+
+									fieldSettingsPanel.close();
 								}
 							);
 						}
@@ -849,10 +853,14 @@ AUI.add(
 					_renderArrowActions: function() {
 						var instance = this;
 
-						instance._layoutBuilder.TPL_RESIZE_COL_DRAGGABLE = MOVE_COLUMN_TPL;
-						instance._layoutBuilder._uiSetEnableResizeCols(instance._layoutBuilder.get('enableResizeCols'));
+						var layoutBuilder = instance._layoutBuilder;
 
-						instance.get('boundingBox').all('.' + CSS_RESIZE_COL_DRAGGABLE + ':not(.lfr-tpl)').each(
+						layoutBuilder.TPL_RESIZE_COL_DRAGGABLE = MOVE_COLUMN_TPL;
+						layoutBuilder._uiSetEnableResizeCols(layoutBuilder.get('enableResizeCols'));
+
+						var boundingBox = instance.get('boundingBox');
+
+						boundingBox.all('.' + CSS_RESIZE_COL_DRAGGABLE + ':not(.lfr-tpl)').each(
 							function(handler) {
 								handler.html(MOVE_COLUMN_CONTAINER);
 							}
