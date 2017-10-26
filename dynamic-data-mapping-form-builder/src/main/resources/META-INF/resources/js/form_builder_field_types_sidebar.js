@@ -20,10 +20,7 @@ AUI.add(
 						getter: '_getFieldTypes'
 					},
 					icons: {
-						value: {
-							angleDown: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl('angle-down')),
-							angleRight: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl('angle-right'))
-						}
+						valueFn: '_getIcons'
 					},
 					strings: {
 						value: {
@@ -203,6 +200,15 @@ AUI.add(
 						);
 
 						return _.groupBy(types, 'group');
+					},
+
+					_getIcons: function() {
+						var instance = this;
+
+						return {
+							angleDown: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl('angle-down')),
+							angleRight: window.DDMFieldTypesSidebar.render.Soy.toIncDom(Liferay.Util.getLexiconIconTpl('angle-right'))
+						};
 					}
 				}
 			}
