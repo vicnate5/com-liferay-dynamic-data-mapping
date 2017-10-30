@@ -602,7 +602,7 @@ public class DDMFormFieldTemplateContextFactory {
 	private DDMFormFieldEvaluationResult _getDDMFormFieldEvaluationResult(
 		DDMFormFieldValue ddmFormFieldValue) {
 
-		return _ddmFormEvaluationResult.geDDMFormFieldEvaluationResult(
+		return _ddmFormEvaluationResult.getDDMFormFieldEvaluationResult(
 			ddmFormFieldValue.getName(), ddmFormFieldValue.getInstanceId());
 	}
 
