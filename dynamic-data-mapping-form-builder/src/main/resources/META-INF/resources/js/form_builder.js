@@ -23,8 +23,6 @@ AUI.add(
 
 		var CSS_ROW_CONTAINER_ROW = A.getClassName('layout', 'row', 'container', 'row');
 
-		var MAXIMUM_COLS_PER_ROW = 12;
-
 		var TPL_CONFIRM_CANCEL_FIELD_EDITION = '<p>' + Liferay.Language.get('are-you-sure-you-want-to-cancel') + '</p>';
 
 		var TPL_REQURIED_FIELDS = '<label class="hide required-warning">{message}</label>';
@@ -295,7 +293,7 @@ AUI.add(
 
 												var layoutColumn = new A.LayoutCol(
 													{
-														size: MAXIMUM_COLS_PER_ROW / columns.length,
+														size: column.size,
 														value: new Liferay.DDM.FormBuilderFieldList(
 															{
 																fields: fieldColumns
