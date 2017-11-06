@@ -286,7 +286,8 @@ AUI.add(
 						field.loadSettingsForm().then(
 							function(settingsForm) {
 								instance.settingsForm = settingsForm;
-								var settingsFormContext = settingsForm.get('context');
+								
+								instance._configureSideBar();
 
 								settingsForm.evaluate(
 									function() {
@@ -296,13 +297,11 @@ AUI.add(
 									}
 								);
 
-								field.set('context.settingsContext', settingsFormContext);
+								field.set('context.settingsContext', settingsForm.get('context'));
 
 								field.saveSettings();
 
 								instance._saveCurrentContext();
-
-								instance._configureSideBar();
 
 								instance.fire(
 									'fieldSettingsFormLoaded',
