@@ -981,7 +981,7 @@ AUI.add(
 						value = A.Object.getValue(localizationMap, [defaultLocale, attribute]);
 
 						if (!isValue(value)) {
-							for (localizationMapLocale in localizationMap) {
+							for (var localizationMapLocale in localizationMap) {
 								value = A.Object.getValue(localizationMap, [localizationMapLocale, attribute]);
 
 								if (isValue(value)) {
