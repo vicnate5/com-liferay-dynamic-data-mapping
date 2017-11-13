@@ -19,7 +19,6 @@ AUI.add(
 
 		var Lang = A.Lang;
 
-		var CSS_EDIT_FIELD_BUTTON = A.getClassName('lfr-edit-field');
 		var CSS_DELETE_FIELD_BUTTON = A.getClassName('lfr-delete-field');
 
 		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
@@ -570,11 +569,13 @@ AUI.add(
 					},
 
 					_afterFieldClick: function(event) {
+						var field = event.currentTarget.getData('field-instance');
 						var instance = this;
 
-						var ancestor = event.currentTarget.ancestor('.' + CSS_FIELD);
-
-						instance.editField(ancestor.getData('field-instance'));
+						if (event.target.ancestor('.lfr-ddm-field-actions-container')) {
+							return;
+						}
+						instance.editField(field);
 					},
 
 					_afterFieldListChange: function() {
@@ -673,9 +674,7 @@ AUI.add(
 						var instance = this;
 
 						return '<div class="lfr-ddm-field-actions-container"> ' +
-							'<button class="btn btn-monospaced btn-sm label-primary lfr-edit-field" type="button">' + Liferay.Util.getLexiconIconTpl('pencil') + '</button>' +
-							'<button class="btn btn-monospaced btn-sm label-primary" type="button">' + Liferay.Util.getLexiconIconTpl('move') + '</button>' +
-							'<button class="btn btn-monospaced btn-sm label-primary" type="button">' + Liferay.Util.getLexiconIconTpl('trash') + '</button>' +
+							'<button class="btn btn-monospaced btn-sm label-primary lfr-duplicate-field" type="button">' + Liferay.Util.getLexiconIconTpl('paste') + '</button>' +
 							'<button class="btn btn-monospaced btn-sm label-primary lfr-delete-field" type="button">' + Liferay.Util.getLexiconIconTpl('trash') + '</button>' +
 							'</div>';
 					},
