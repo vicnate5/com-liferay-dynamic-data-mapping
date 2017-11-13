@@ -20,6 +20,7 @@ AUI.add(
 		var Lang = A.Lang;
 
 		var CSS_EDIT_FIELD_BUTTON = A.getClassName('lfr-edit-field');
+		var CSS_DELETE_FIELD_BUTTON = A.getClassName('lfr-delete-field');
 
 		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
 
@@ -144,9 +145,9 @@ AUI.add(
 						var boundingBox = instance.get('boundingBox');
 
 						instance._eventHandlers = [
-							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_EDIT_FIELD_BUTTON, instance),
+							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_FIELD, instance),
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
-							boundingBox.delegate('click', instance._removeFieldCol, '.lexicon-icon-trash', instance),
+							boundingBox.delegate('click', instance._removeFieldCol, '.' + CSS_DELETE_FIELD_BUTTON, instance),
 							instance.after('editingLanguageIdChange', instance._afterEditingLanguageIdChange),
 							instance.after('liferay-ddm-form-builder-field-list:fieldsChange', instance._afterFieldListChange, instance),
 							instance.after('render', instance._afterFormBuilderRender, instance),
@@ -675,6 +676,7 @@ AUI.add(
 							'<button class="btn btn-monospaced btn-sm label-primary lfr-edit-field" type="button">' + Liferay.Util.getLexiconIconTpl('pencil') + '</button>' +
 							'<button class="btn btn-monospaced btn-sm label-primary" type="button">' + Liferay.Util.getLexiconIconTpl('move') + '</button>' +
 							'<button class="btn btn-monospaced btn-sm label-primary" type="button">' + Liferay.Util.getLexiconIconTpl('trash') + '</button>' +
+							'<button class="btn btn-monospaced btn-sm label-primary lfr-delete-field" type="button">' + Liferay.Util.getLexiconIconTpl('trash') + '</button>' +
 							'</div>';
 					},
 
