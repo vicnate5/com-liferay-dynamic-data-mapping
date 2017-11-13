@@ -286,7 +286,7 @@ AUI.add(
 						field.loadSettingsForm().then(
 							function(settingsForm) {
 								instance.settingsForm = settingsForm;
-								
+
 								instance._configureSideBar();
 
 								settingsForm.evaluate(
