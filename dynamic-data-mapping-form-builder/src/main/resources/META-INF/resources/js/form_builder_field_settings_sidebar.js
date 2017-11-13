@@ -79,13 +79,13 @@ AUI.add(
 						var FormBuilder = instance.get('builder');
 
 						var field = FormBuilder.createField(fieldType);
-						var prevField = instance.get('field');
+						var previousField = instance.get('field');
 
-						var columns = FormBuilder.getFieldRow(prevField)._data['layout-row'].get('cols');
-						var previousSettingsContext = prevField.get('context.settingsContext');
+						var columns = FormBuilder.getFieldRow(previousField)._data['layout-row'].get('cols');
+						var previousSettingsContext = previousField.get('context.settingsContext');
 						var settingsRetriever = field.get('settingsRetriever');
 
-						prevField.get('container').addClass(prevField._yuid);
+						previousField.get('container').addClass(previousField._yuid);
 
 						instance.settingsForm.destroy();
 
@@ -103,8 +103,8 @@ AUI.add(
 									function(column) {
 										var node = column.get('node');
 
-										if (node.one('.' + prevField._yuid)) {
-											instance._updateField(prevField, field, column);
+										if (node.one('.' + previousField._yuid)) {
+											instance._updateField(previousField, field, column);
 										}
 									}
 								);
@@ -327,16 +327,16 @@ AUI.add(
 
 								FormBuilderUtil.visitLayout(
 									previousSettingsContext.pages,
-									function(prevSettingsFormFieldContext) {
-										var prevFieldLocalizable = prevSettingsFormFieldContext.localizable;
-										var prevFieldName = prevSettingsFormFieldContext.fieldName;
+									function(previousSettingsFormFieldContext) {
+										var previousFieldLocalizable = previousSettingsFormFieldContext.localizable;
+										var previousFieldName = previousSettingsFormFieldContext.fieldName;
 
-										if (fieldName === prevFieldName) {
-											settingsFormFieldContext.value = prevSettingsFormFieldContext.value;
-											settingsFormFieldContext.dataType = prevSettingsFormFieldContext.dataType;
+										if (fieldName === previousFieldName) {
+											settingsFormFieldContext.value = previousSettingsFormFieldContext.value;
+											settingsFormFieldContext.dataType = previousSettingsFormFieldContext.dataType;
 
-											if (fieldLocalizable == prevFieldLocalizable) {
-												settingsFormFieldContext.localizedValue = prevSettingsFormFieldContext.localizedValue;
+											if (fieldLocalizable == previousFieldLocalizable) {
+												settingsFormFieldContext.localizedValue = previousSettingsFormFieldContext.localizedValue;
 											}
 										}
 									}
@@ -404,7 +404,7 @@ AUI.add(
 						boundingBox.addClass('loading-data');
 					},
 
-					_updateField: function(prevField, field, column) {
+					_updateField: function(previousField, field, column) {
 						var instance = this;
 
 						var fieldset = column.get('value');
@@ -412,7 +412,7 @@ AUI.add(
 
 						fieldsetFields.forEach(
 							function(fieldsetField, index) {
-								if (fieldsetField._yuid == prevField._yuid) {
+								if (fieldsetField._yuid == previousField._yuid) {
 									fieldsetFields[index] = field;
 								}
 							}
