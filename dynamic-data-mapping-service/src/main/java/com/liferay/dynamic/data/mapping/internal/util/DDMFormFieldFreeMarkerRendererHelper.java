@@ -39,22 +39,20 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 )
 public class DDMFormFieldFreeMarkerRendererHelper {
 
-	public static Editor getEditor(
-		HttpServletRequest request, String editorName) {
-
+	public static Editor getEditor(HttpServletRequest request) {
 		if (!BrowserSnifferUtil.isRtf(request)) {
 			return _editors.get("simple");
 		}
 
-		if (Validator.isNull(editorName)) {
+		if (Validator.isNull(_TEXT_HTML_EDITOR_WYSIWYG_DEFAULT)) {
 			return _editors.get(_EDITOR_WYSIWYG_DEFAULT);
 		}
 
-		if (!_editors.containsKey(editorName)) {
+		if (!_editors.containsKey(_TEXT_HTML_EDITOR_WYSIWYG_DEFAULT)) {
 			return _editors.get(_EDITOR_WYSIWYG_DEFAULT);
 		}
 
-		return _editors.get(editorName);
+		return _editors.get(_TEXT_HTML_EDITOR_WYSIWYG_DEFAULT);
 	}
 
 	@Reference(
@@ -72,6 +70,9 @@ public class DDMFormFieldFreeMarkerRendererHelper {
 
 	private static final String _EDITOR_WYSIWYG_DEFAULT = PropsUtil.get(
 		PropsKeys.EDITOR_WYSIWYG_DEFAULT);
+
+	private static final String _TEXT_HTML_EDITOR_WYSIWYG_DEFAULT =
+		PropsUtil.get("editor.wysiwyg.portal-impl.portlet.ddm.text_html.ftl");
 
 	private static final Map<String, Editor> _editors =
 		new ConcurrentHashMap<>();

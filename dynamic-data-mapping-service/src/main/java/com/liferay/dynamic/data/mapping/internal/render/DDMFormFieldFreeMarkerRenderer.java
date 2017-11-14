@@ -48,7 +48,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -278,14 +277,6 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 			request, response, portletNamespace, namespace, ddmFormField,
 			parentDDMFormField, showEmptyFieldLabel, locale);
 
-		Editor editor = DDMFormFieldFreeMarkerRendererHelper.getEditor(
-			request,
-			PropsUtil.get(
-				"editor.wysiwyg.portal-web.docroot.html.portlet." +
-					"message_boards.edit_message.html.jsp"));
-
-		freeMarkerContext.put("editorName", editor.getName());
-
 		if (fields != null) {
 			freeMarkerContext.put("fields", fields);
 		}
@@ -507,6 +498,11 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 
 		freeMarkerContext.put(
 			"ddmPortletId", DDMPortletKeys.DYNAMIC_DATA_MAPPING);
+
+		Editor editor = DDMFormFieldFreeMarkerRendererHelper.getEditor(request);
+
+		freeMarkerContext.put("editorName", editor.getName());
+
 		freeMarkerContext.put("fieldStructure", fieldContext);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
