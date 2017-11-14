@@ -16,6 +16,7 @@ package com.liferay.dynamic.data.mapping.internal.render;
 
 import com.liferay.dynamic.data.mapping.constants.DDMPortletKeys;
 import com.liferay.dynamic.data.mapping.internal.util.DDMFieldsCounter;
+import com.liferay.dynamic.data.mapping.internal.util.DDMFormFieldFreeMarkerRendererHelper;
 import com.liferay.dynamic.data.mapping.internal.util.DDMImpl;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
@@ -46,6 +47,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -274,6 +276,14 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 		Map<String, Object> freeMarkerContext = getFreeMarkerContext(
 			request, response, portletNamespace, namespace, ddmFormField,
 			parentDDMFormField, showEmptyFieldLabel, locale);
+
+		String editorName = DDMFormFieldFreeMarkerRendererHelper.getEditor(
+			request,
+			PropsUtil.get(
+				"editor.wysiwyg.portal-web.docroot.html.portlet." +
+					"message_boards.edit_message.html.jsp")).getName();
+
+		freeMarkerContext.put("editorName", editorName);
 
 		if (fields != null) {
 			freeMarkerContext.put("fields", fields);
