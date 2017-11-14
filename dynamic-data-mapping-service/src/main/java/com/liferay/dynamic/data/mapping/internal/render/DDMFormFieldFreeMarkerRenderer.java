@@ -28,6 +28,7 @@ import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderingContext;
 import com.liferay.dynamic.data.mapping.storage.Field;
 import com.liferay.dynamic.data.mapping.storage.Fields;
 import com.liferay.petra.string.CharPool;
+import com.liferay.portal.kernel.editor.Editor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.language.LanguageConstants;
@@ -277,13 +278,13 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 			request, response, portletNamespace, namespace, ddmFormField,
 			parentDDMFormField, showEmptyFieldLabel, locale);
 
-		String editorName = DDMFormFieldFreeMarkerRendererHelper.getEditor(
+		Editor editor = DDMFormFieldFreeMarkerRendererHelper.getEditor(
 			request,
 			PropsUtil.get(
 				"editor.wysiwyg.portal-web.docroot.html.portlet." +
-					"message_boards.edit_message.html.jsp")).getName();
+					"message_boards.edit_message.html.jsp"));
 
-		freeMarkerContext.put("editorName", editorName);
+		freeMarkerContext.put("editorName", editor.getName());
 
 		if (fields != null) {
 			freeMarkerContext.put("fields", fields);
