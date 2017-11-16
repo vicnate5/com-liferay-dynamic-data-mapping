@@ -261,6 +261,7 @@ AUI.add(
 
 						var toolbar = new Liferay.DDM.FormBuilderFieldOptionsToolbar(
 							{
+								element: instance.get('boundingBox'),
 								formBuilder: instance.get('builder')
 							}
 						);
