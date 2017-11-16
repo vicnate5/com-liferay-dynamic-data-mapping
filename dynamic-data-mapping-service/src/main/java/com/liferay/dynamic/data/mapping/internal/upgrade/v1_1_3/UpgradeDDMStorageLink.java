@@ -26,25 +26,6 @@ import java.sql.ResultSet;
  */
 public class UpgradeDDMStorageLink extends UpgradeProcess {
 
-	public long getLatestStructureVersionId(long ddmStructureId)
-		throws Exception {
-
-		try (PreparedStatement ps = connection.prepareStatement(
-				"select structureVersionId from DDMStructureVersion where " +
-					"structureId = ? order by createDate desc")) {
-
-			ps.setLong(1, ddmStructureId);
-
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					return rs.getLong("structureVersionId");
-				}
-
-				return 0;
-			}
-		}
-	}
-
 	@Override
 	protected void doUpgrade() throws Exception {
 		if (!hasColumn("DDMStorageLink", "structureVersionId")) {
