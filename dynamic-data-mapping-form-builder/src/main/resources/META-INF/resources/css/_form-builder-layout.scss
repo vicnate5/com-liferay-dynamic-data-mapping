@@ -1,3 +1,16 @@
+div.layout-builder-resize-col-draggable-handle {
+	background-color: transparent;
+	border-radius: 0;
+	color: #1C67FB;
+	font-size: 20px;
+	padding: 0;
+	text-align: center;
+
+	&:hover, &.layout-builder-resize-col-draggable-handle {
+		background: transparent;
+	}
+}
+
 .form-builder-field-move-target:last-child {
 	margin-top: -22px;
 }
@@ -52,28 +65,6 @@
 	display: none;
 }
 
-.tool-tip-cut-row.tool-tip-white {
-	.tooltip-content {
-		background-color: #FFF;
-		color: #869CAD;
-	}
-
-	&.top {
-		.tooltip-arrow {
-			border-top-color: #FFF;
-		}
-	}
-}
-
-.lfr-ddm-form-field-container.form-builder-field {
-	min-height: 113px;
-
-	&:hover .lfr-ddm-field-actions-container {
-		opacity: 1;
-		visibility: visible;
-	}
-}
-
 .lfr-ddm-field-actions-container {
 	align-items: center;
 	display: flex;
@@ -93,19 +84,28 @@
 	@include transition(all ease 0.3s);
 }
 
-div.layout-builder-resize-col-draggable-handle {
-	background-color: transparent;
-	border-radius: 0;
-	color: #1C67FB;
-	font-size: 20px;
-	padding: 0;
-	text-align: center;
+.lfr-ddm-form-field-container.form-builder-field {
+	min-height: 113px;
 
-	&:hover, &.layout-builder-resize-col-draggable-handle {
-		background: transparent;
+	&:hover .lfr-ddm-field-actions-container {
+		opacity: 1;
+		visibility: visible;
 	}
 }
 
 .lfr-edit-field {
 	cursor: pointer;
+}
+
+.tool-tip-cut-row.tool-tip-white {
+	.tooltip-content {
+		background-color: #FFF;
+		color: #869CAD;
+	}
+
+	&.top {
+		.tooltip-arrow {
+			border-top-color: #FFF;
+		}
+	}
 }

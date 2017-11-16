@@ -3,22 +3,6 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 
-		var FormBuilderConfirmDialog = Liferay.DDM.FormBuilderConfirmationDialog;
-
-		var FormBuilderUtil = Liferay.DDM.FormBuilderUtil;
-
-		var FieldSets = Liferay.DDM.FieldSets;
-
-		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
-
-		var CSS_RESIZE_COL_DRAGGABLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable');
-
-		var CSS_RESIZE_COL_DRAGGABLE_BORDER = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'border');
-
-		var CSS_RESIZE_COL_DRAGGABLE_HANDLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'handle');
-
-		var Lang = A.Lang;
-
 		var CSS_DELETE_FIELD_BUTTON = A.getClassName('lfr-delete-field');
 
 		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
@@ -29,7 +13,27 @@ AUI.add(
 
 		var CSS_PAGES = A.getClassName('form', 'builder', 'pages', 'lexicon');
 
+		var CSS_RESIZE_COL_DRAGGABLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable');
+
+		var CSS_RESIZE_COL_DRAGGABLE_BORDER = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'border');
+
+		var CSS_RESIZE_COL_DRAGGABLE_HANDLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'handle');
+
 		var CSS_ROW_CONTAINER_ROW = A.getClassName('layout', 'row', 'container', 'row');
+
+		var FormBuilderConfirmDialog = Liferay.DDM.FormBuilderConfirmationDialog;
+
+		var FormBuilderUtil = Liferay.DDM.FormBuilderUtil;
+
+		var FieldSets = Liferay.DDM.FieldSets;
+
+		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
+
+		var Lang = A.Lang;
+
+		var MOVE_COLUMN_CONTAINER = '<div class="' + CSS_RESIZE_COL_DRAGGABLE_BORDER + '"></div>' + '<div class="' + CSS_RESIZE_COL_DRAGGABLE_HANDLE + '">' + Liferay.Util.getLexiconIconTpl('horizontal-scroll') + '</div>';
+
+		var MOVE_COLUMN_TPL = '<div class="' + CSS_RESIZE_COL_DRAGGABLE + ' lfr-tpl">' + MOVE_COLUMN_CONTAINER + '</div>';
 
 		var TPL_CONFIRM_CANCEL_FIELD_EDITION = '<p>' + Liferay.Language.get('are-you-sure-you-want-to-cancel') + '</p>';
 
@@ -38,12 +42,6 @@ AUI.add(
 		var TPL_REQURIED_FIELDS = '<label class="hide required-warning">{message}</label>';
 
 		var Util = Liferay.DDM.Renderer.Util;
-
-		var MOVE_COLUMN_CONTAINER = '<div class="' + CSS_RESIZE_COL_DRAGGABLE_BORDER + '"></div>' +
-			'<div class="' + CSS_RESIZE_COL_DRAGGABLE_HANDLE + '">' +
-			Liferay.Util.getLexiconIconTpl('horizontal-scroll') + '</div>';
-
-		var MOVE_COLUMN_TPL = '<div class="' + CSS_RESIZE_COL_DRAGGABLE + ' lfr-tpl">' + MOVE_COLUMN_CONTAINER + '</div>';
 
 		var FormBuilder = A.Component.create(
 			{
@@ -569,8 +567,9 @@ AUI.add(
 					},
 
 					_afterFieldClick: function(event) {
-						var field = event.currentTarget.getData('field-instance');
 						var instance = this;
+
+						var field = event.currentTarget.getData('field-instance');
 
 						if (event.target.ancestor('.lfr-ddm-field-actions-container')) {
 							return;
@@ -917,8 +916,6 @@ AUI.add(
 						visitor.set('fieldHandler', A.bind('_renderField', instance));
 
 						visitor.visit();
-
-						instance._createFieldActions();
 					},
 
 					_renderPages: function() {
