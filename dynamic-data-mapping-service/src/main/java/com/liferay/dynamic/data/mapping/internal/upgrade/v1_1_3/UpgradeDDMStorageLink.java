@@ -54,7 +54,12 @@ public class UpgradeDDMStorageLink extends UpgradeProcess {
 		}
 
 		try (PreparedStatement ps1 = connection.prepareStatement(
-				"select structureId from DDMStorageLink");
+				"select structureId, structureVersionId from " +
+					"DDMStructureVersion parent where parent.structureId in (" +
+						"select structureId from DDMStorageLink) and version " +
+							"in (select max(child.version) from " +
+								"DDMStructureVersion child where " +
+									"child.structureId = parent.structureId) ");
 			PreparedStatement ps2 =
 				AutoBatchPreparedStatementUtil.concurrentAutoBatch(
 					connection,
@@ -65,8 +70,7 @@ public class UpgradeDDMStorageLink extends UpgradeProcess {
 			while (rs.next()) {
 				long ddmStructureId = rs.getLong("structureId");
 
-				long ddmStructureVersionId = getLatestStructureVersionId(
-					ddmStructureId);
+				long ddmStructureVersionId = rs.getLong("structureVersionId");
 
 				if (ddmStructureVersionId > 0) {
 					ps2.setLong(1, ddmStructureVersionId);
