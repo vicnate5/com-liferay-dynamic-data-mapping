@@ -798,7 +798,7 @@ AUI.add(
 			},
 
 			validateFieldName: function(fieldName) {
-				return (/^[\w]+$/).test(fieldName) && !Lang.String.contains(fieldName, '_');
+				return (/^[\w]+$/).test(fieldName);
 			}
 		};
 
