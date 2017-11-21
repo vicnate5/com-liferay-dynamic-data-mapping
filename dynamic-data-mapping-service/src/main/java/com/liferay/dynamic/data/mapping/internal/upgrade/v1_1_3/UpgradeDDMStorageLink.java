@@ -16,6 +16,7 @@ package com.liferay.dynamic.data.mapping.internal.upgrade.v1_1_3;
 
 import com.liferay.dynamic.data.mapping.internal.upgrade.v1_1_3.util.DDMStorageLinkTable;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.upgrade.AutoBatchPreparedStatementUtil;
 
 import java.sql.PreparedStatement;
@@ -35,12 +36,12 @@ public class UpgradeDDMStorageLink extends UpgradeProcess {
 		}
 
 		try (PreparedStatement ps1 = connection.prepareStatement(
-				"select structureId, structureVersionId from " +
-					"DDMStructureVersion parent where parent.structureId in (" +
-						"select structureId from DDMStorageLink) and version " +
-							"in (select max(child.version) from " +
-								"DDMStructureVersion child where " +
-									"child.structureId = parent.structureId) ");
+				StringBundler.concat(
+					"select structureId, structureVersionId from ",
+					"DDMStructureVersion parent where parent.structureId in (",
+					"select structureId from DDMStorageLink) and version in (",
+					"select max(child.version) from DDMStructureVersion child ",
+					"where child.structureId = parent.structureId)"));
 			PreparedStatement ps2 =
 				AutoBatchPreparedStatementUtil.concurrentAutoBatch(
 					connection,
