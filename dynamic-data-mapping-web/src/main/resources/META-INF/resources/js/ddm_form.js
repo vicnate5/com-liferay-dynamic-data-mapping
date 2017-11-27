@@ -2865,6 +2865,10 @@ AUI.add(
 						value: false
 					},
 
+					requestedLocale: {
+						validator: Lang.isString
+					},
+
 					translationManager: {
 						valueFn: '_valueTranslationManager'
 					}
@@ -3184,7 +3188,7 @@ AUI.add(
 						if (!translationManager) {
 							translationManager = new Liferay.TranslationManager(
 								{
-									defaultLocale: themeDisplay.getLanguageId()
+									defaultLocale: instance.get('requestedLocale') || themeDisplay.getLanguageId()
 								}
 							);
 						}
