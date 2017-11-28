@@ -33,8 +33,6 @@ AUI.add(
 
 		var MOVE_COLUMN_CONTAINER = '<div class="' + CSS_RESIZE_COL_DRAGGABLE_BORDER + '"></div><div class="' + CSS_RESIZE_COL_DRAGGABLE_HANDLE + '">' + Liferay.Util.getLexiconIconTpl('horizontal-scroll') + '</div>';
 
-		var MOVE_COLUMN_TPL = '<div class="' + CSS_RESIZE_COL_DRAGGABLE + ' lfr-tpl">' + MOVE_COLUMN_CONTAINER + '</div>';
-
 		var TPL_CONFIRM_CANCEL_FIELD_EDITION = '<p>' + Liferay.Language.get('are-you-sure-you-want-to-cancel') + '</p>';
 
 		var TPL_CONFIRM_DELETE_FIELD = '<p>' + Liferay.Language.get('are-you-sure-you-want-to-delete-this-field') + '</p>';
@@ -42,6 +40,14 @@ AUI.add(
 		var TPL_REQURIED_FIELDS = '<label class="hide required-warning">{message}</label>';
 
 		var Util = Liferay.DDM.Renderer.Util;
+
+		var CSS_RESIZE_COL_DRAGGING = A.getClassName('layout', 'builder', 'resize', 'col', 'dragging');
+
+		var CSS_RESIZE_COL_DRAGGABLE_DRAGGING = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'dragging');
+
+		var SELECTOR_ROW = '.layout-row';
+
+		var MOVE_COLUMN_TPL = '<div class="' + CSS_RESIZE_COL_DRAGGABLE + ' lfr-tpl">' + MOVE_COLUMN_CONTAINER + '</div>';
 
 		var FormBuilder = A.Component.create(
 			{
@@ -147,6 +153,7 @@ AUI.add(
 							boundingBox.delegate('click', instance._removeFieldCol, '.' + CSS_DELETE_FIELD_BUTTON, instance),
 							instance.after('editingLanguageIdChange', instance._afterEditingLanguageIdChange),
 							instance.after('liferay-ddm-form-builder-field-list:fieldsChange', instance._afterFieldListChange, instance),
+							instance.before('render', instance._beforeFormBuilderRender, instance),
 							instance.after('render', instance._afterFormBuilderRender, instance),
 							instance.after(instance._afterRemoveField, instance, 'removeField')
 						];
@@ -160,10 +167,28 @@ AUI.add(
 						visitor.set('fieldHandler', instance.destroyField);
 
 						instance._sidebar.destroy();
+						instance.sortable1.delegate.destroy();
+						instance.sortable1.destroy();
 
 						visitor.visit();
 
 						(new A.EventHandle(instance._eventHandlers)).detach();
+					},
+
+					addButtonInTopbar: function() {
+						var instance = this;
+
+						var button = A.Node.create('<button />');
+
+						button.set('text', '+');
+
+						button.addClass('btn');
+						button.addClass('btn-primary');
+						button.addClass('lfr-ddm-add-field');
+
+						A.one('#_com_liferay_dynamic_data_lists_form_web_portlet_DDLFormAdminPortlet_navTagNavbarCollapse').append(button);
+
+						button.on('click', instance.openSidebarByButton, instance);
 					},
 
 					cancelFieldEdition: function(field) {
@@ -491,6 +516,13 @@ AUI.add(
 						FormBuilderConfirmDialog.open(config);
 					},
 
+					openSidebarByButton: function() {
+						var instance = this;
+
+						instance._newFieldContainer = instance.getActiveLayout().get('rows')[0].get('cols')[0];
+						instance.showFieldTypesPanel();
+					},
+
 					showFieldSettingsPanel: function(field) {
 						var instance = this;
 
@@ -513,6 +545,129 @@ AUI.add(
 						fieldTypesPanel.open();
 					},
 
+					_addColumnInRow: function(row, hasContext) {
+						var instance = this;
+
+						if (hasContext) {
+							row.push(
+								{
+									columns: [{
+										fields: [],
+										size: 12
+									}]
+								}
+							);
+						}
+						else {
+							row.push(new A.LayoutRow());
+						}
+
+						return row;
+					},
+
+					_addDragAndDropActions: function() {
+						var instance = this;
+
+						var sortable1 = instance.sortable1 = new A.SortableLayout(
+							{
+								delegateConfig: {
+									target: false,
+									useShim: false
+								},
+								dragNodes: '.layout-col-content',
+								dropNodes: '.layout-row .col-empty',
+								proxyNode: '<div></div>'
+							}
+						);
+
+						sortable1.after(
+							'drag:start',
+							function(event) {
+								var fieldNodeStart = event.target.get('node');
+								var proxyActive;
+
+								var fieldColumnStart = fieldNodeStart.ancestor('.col');
+
+								fieldNodeStart.addClass('hidden');
+								fieldColumnStart.addClass('current-dragging');
+								fieldColumnStart.addClass('col-empty');
+
+								sortable1.addDropNode(fieldColumnStart);
+								A.DD.DDM._activateTargets();
+
+								instance._addToStack(fieldColumnStart);
+
+								proxyActive = A.one('.yui3-dd-proxy');
+
+								if (proxyActive) {
+									proxyActive.empty();
+									proxyActive.append(fieldNodeStart._node.innerHTML);
+								}
+							}
+						);
+
+						sortable1.after(
+							'placeholderAlign',
+							function(event) {
+								var activeDropNode = event.drop.get('node');
+
+								instance._addToStack(activeDropNode);
+							}
+						);
+
+						sortable1.on(
+							'drag:end',
+							function(event) {
+								var fieldColumnEnd = event.target.get('node').ancestor('.col');
+								var fieldColumnStart = A.one('.current-dragging');
+								var fieldNodeEnd = event.target.get('node');
+								var layoutRows = instance.get('layouts')[instance._getActiveLayoutIndex()].get('rows');
+								var positions = {};
+
+								instance.gridDOM.forEach(
+									function(cols, indexRow) {
+										cols.forEach(
+											function(col, indexCol) {
+												if (fieldColumnStart._node.id == col._node.id) {
+													positions.positionRowStart = indexRow;
+													positions.positionColumnStart = indexCol;
+												}
+											}
+										);
+
+										cols.forEach(
+											function(col, indexCol) {
+												if (fieldColumnEnd._node.id == col._node.id) {
+													positions.positionRowEnd = indexRow;
+													positions.positionColumnEnd = indexCol;
+												}
+											}
+										);
+									}
+								);
+
+								if ((positions.positionRowEnd == positions.positionRowStart - 1) && (layoutRows[positions.positionRowStart].get('cols').length == 1)) {
+									return instance._updateDragAndDropUI(fieldNodeEnd, sortable1, positions);
+								}
+
+								return instance._updateDragAndDropContext(fieldNodeEnd, sortable1, positions);
+							}
+						);
+
+						instance._getPageManagerInstance()._getWizard().after(
+							'selectedChange',
+							function() {
+								setTimeout(
+									function() {
+										instance._destroySortable(sortable1);
+										instance._applyDragAndDrop();
+									},
+									0
+								);
+							}
+						);
+					},
+
 					_addFieldsChangeListener: function(layouts) {
 						var instance = this;
 
@@ -526,6 +681,15 @@ AUI.add(
 								);
 							}
 						);
+					},
+
+					_addToStack: function(node) {
+						var instance = this;
+
+						instance._clearStack();
+
+						node.addClass('col-empty-over');
+						instance.activeDropColStack.push(node);
 					},
 
 					_afterActivePageNumberChange: function(event) {
@@ -600,6 +764,11 @@ AUI.add(
 						instance._syncRequiredFieldsWarning();
 						instance._syncRowsLastColumnUI();
 						instance._syncRowIcons();
+						instance._traverseFormPages();
+						instance._applyDragAndDrop();
+
+						instance._layoutBuilder._delegateDrag.detach('drag:end');
+						instance._layoutBuilder._delegateDrag.after('drag:end', A.bind(instance._afterResizeColEnd, instance));
 					},
 
 					_afterLayoutColsChange: function(event) {
@@ -635,10 +804,66 @@ AUI.add(
 						instance.getFieldSettingsPanel().close();
 					},
 
+					_afterResizeColEnd: function() {
+						var instance = this;
+
+						var layoutBuilder = instance._layoutBuilder;
+
+						var dragNode = layoutBuilder._delegateDrag.get('lastNode');
+						var row = dragNode.ancestor(SELECTOR_ROW);
+
+						if (row) {
+							if (dragNode.getData('layout-action') && dragNode.getData('layout-action') === 'addColumn') {
+								layoutBuilder._insertColumnAfterDropHandles(dragNode);
+							}
+							else {
+								layoutBuilder._resize(dragNode);
+								layoutBuilder.get('layout').normalizeColsHeight(new A.NodeList(row));
+							}
+
+							row.removeClass(CSS_RESIZE_COL_DRAGGING);
+
+							layoutBuilder._hideBreakpoints(row);
+						}
+
+						layoutBuilder._syncDragHandles();
+
+						layoutBuilder.dragging = false;
+
+						dragNode.removeClass(CSS_RESIZE_COL_DRAGGABLE_DRAGGING);
+
+						dragNode.show();
+						instance._traverseFormPages();
+						instance._applyDragAndDrop();
+					},
+
 					_afterSelectFieldType: function(event) {
 						var instance = this;
 
 						instance.createNewField(event.fieldType);
+					},
+
+					_applyDragAndDrop: function(event) {
+						var instance = this;
+
+						instance._removeAddWrapper();
+						instance._formatGridLayout();
+						instance._addDragAndDropActions();
+					},
+
+					_beforeFormBuilderRender: function() {
+						var instance = this;
+
+						instance.activeDropColStack = [];
+						instance.addButtonInTopbar();
+					},
+
+					_clearStack: function() {
+						var instance = this;
+
+						while (instance.activeDropColStack.length > 0) {
+							instance.activeDropColStack.pop().removeClass('col-empty-over');
+						}
 					},
 
 					_createFieldActions: function() {
@@ -646,9 +871,7 @@ AUI.add(
 
 						instance.eachFields(
 							function(field) {
-								var container = field.get('container');
-
-								container.append(instance._getFieldActionsLayout());
+								field.get('container').append(instance._getFieldActionsLayout());
 							}
 						);
 					},
@@ -671,6 +894,97 @@ AUI.add(
 						}
 
 						return 0;
+					},
+
+					_destroySortable: function(sortable) {
+						var instance = this;
+
+						var dropNodes = sortable.get('dropNodes');
+
+						dropNodes.each(
+							function(node) {
+								var drop = A.DD.DDM.getDrop(node);
+
+								if (drop) {
+									drop.destroy();
+								}
+							}
+						);
+
+						sortable.delegate.destroy();
+						sortable.destroy();
+					},
+
+					_duplicateFieldToColumn: function(field, column) {
+						var instance = this;
+
+						var fieldCopy = field.copy();
+
+						fieldCopy.set('fieldName', fieldCopy.get('fieldName') + 1);
+						fieldCopy.render();
+
+						column.get('value').addField(fieldCopy, column.get('value').get('fields').length);
+					},
+
+					_formatDragRow: function(rows, activePageIndex) {
+						var instance = this;
+
+						var newRows = {
+							contextRows: [],
+							layoutRows: []
+						};
+						var rowsIndex = [];
+
+						instance.get('layouts')[activePageIndex].get('rows').forEach(
+							function(row, index) {
+								row.get('cols').forEach(
+									function(col) {
+										if (col.get('value') && col.get('value').get('fields').length) {
+											rowsIndex.push(index);
+										}
+									}
+								);
+							}
+						);
+
+						rows.forEach(
+							function(row, index) {
+								if (rowsIndex.indexOf(index) != -1) {
+									newRows.layoutRows = instance._addColumnInRow(newRows.layoutRows);
+									newRows.layoutRows.push(row);
+								}
+
+								if (rows.length - 1 == index) {
+									newRows.layoutRows = instance._addColumnInRow(newRows.layoutRows);
+								}
+							}
+						);
+
+						return newRows;
+					},
+
+					_formatGridLayout: function() {
+						var instance = this;
+						var rows = instance.get('layouts')[instance._getActiveLayoutIndex()].get('rows');
+
+						instance.gridDOM = [];
+
+						rows.forEach(
+							function(row) {
+								instance.gridDOM.push(row.get('node').all('.col').get('nodes'));
+							}
+						);
+					},
+
+					_formatNewDropRows: function(activePageIndex) {
+						var instance = this;
+
+						var activeLayout = instance.get('layouts')[activePageIndex];
+						var rows = activeLayout.get('rows');
+
+						var rowsData = instance._formatDragRow(rows, activePageIndex);
+
+						instance.get('layouts')[activePageIndex].set('rows', rowsData.layoutRows);
 					},
 
 					_getFieldActionsLayout: function() {
@@ -772,20 +1086,26 @@ AUI.add(
 							}
 						);
 
-						if (this._newFieldContainer) {
-							if (A.instanceOf(this._newFieldContainer.get('value'), A.FormBuilderFieldList)) {
-								this._newFieldContainer.get('value').addField(field);
-								this._newFieldContainer.set('removable', false);
+						if (instance._newFieldContainer) {
+							if (A.instanceOf(instance._newFieldContainer.get('value'), A.FormBuilderFieldList)) {
+								instance._newFieldContainer.get('value').addField(field);
+								instance._newFieldContainer.set('removable', false);
 							}
 							else {
-								this._addNestedField(
-									this._newFieldContainer,
+								instance._addNestedField(
+									instance._newFieldContainer,
 									field,
-									this._newFieldContainer.get('nestedFields').length
+									instance._newFieldContainer.get('nestedFields').length
 								);
 							}
-							this._newFieldContainer = null;
+
+							instance._newFieldContainer.get('node').append(instance._newFieldContainer.get('value').get('content').ancestor());
+
+							instance._newFieldContainer = null;
 						}
+
+						instance._traverseFormPages();
+						instance._applyDragAndDrop();
 
 						instance._syncRequiredFieldsWarning();
 
@@ -816,39 +1136,59 @@ AUI.add(
 					_openNewFieldPanel: function(target) {
 						var instance = this;
 
-						var ancestorCol = target.ancestor('.col');
-
-						instance._newFieldContainer = ancestorCol.getData('layout-col');
+						instance._newFieldContainer = target.ancestor('.col').getData('layout-col');
 						instance.showFieldTypesPanel();
 					},
 
-					_removeFieldCol: function(event) {
+					_removeAddWrapper: function() {
 						var instance = this;
+						var listCols = A.all('.form-builder-field-list-empty');
 
+						if (listCols) {
+							listCols.get('node').forEach(
+								function(element) {
+									if (!element.ancestor('.col-empty')) {
+										element.ancestor('.col').addClass('col-empty');
+										element.ancestor('.col').empty();
+									}
+								}
+							);
+
+							A.all('.form-builder-field-list-add-container').remove();
+						}
+					},
+
+					_removeDropTarget: function(dropInstance, sortable) {
+						var colDrop = A.DD.DDM.getDrop(dropInstance);
+
+						if (colDrop) {
+							colDrop.destroy();
+							sortable.removeDropTarget(colDrop);
+						}
+					},
+
+					_removeFieldCol: function(event) {
+						var col;
+						var field = event.currentTarget.ancestor('.' + CSS_FIELD).getData('field-instance');
 						var fieldNode = event.currentTarget.ancestor('.' + CSS_FIELD);
+						var instance = this;
+						var row;
 
-						var field = fieldNode.getData('field-instance');
+						col = field.get('content').ancestor('.col').getData('layout-col');
+						field._col = col;
 
 						if (field) {
-							var content = field.get('content');
-
-							var ancestor = content.ancestor('.col');
-
-							field._col = ancestor.getData('layout-col');
-
 							instance.openConfirmDeleteFieldDialog(
 								function() {
-									field._col.get('value').removeField(field);
-
 									var layout = instance.getActiveLayout();
 
-									layout.normalizeColsHeight(new A.NodeList(content.ancestor('.layout-row')));
-
+									field._col.get('value').removeField(field);
+									row = field.get('content').ancestor('.layout-row');
+									layout.normalizeColsHeight(new A.NodeList(row));
 									fieldNode.remove();
-
-									var fieldSettingsPanel = instance.getFieldSettingsPanel();
-
-									fieldSettingsPanel.close();
+									instance.getFieldSettingsPanel().close();
+									instance._traverseFormPages();
+									instance._applyDragAndDrop();
 								}
 							);
 						}
@@ -920,6 +1260,8 @@ AUI.add(
 						visitor.set('fieldHandler', A.bind('_renderField', instance));
 
 						visitor.visit();
+
+						instance._createFieldActions();
 					},
 
 					_renderPages: function() {
@@ -1028,6 +1370,99 @@ AUI.add(
 						var rows = instance.getActiveLayout().get('rows');
 
 						rows.forEach(instance._syncRowLastColumnUI);
+					},
+
+					_traverseFormPages: function() {
+						var instance = this;
+						var pages = instance.get('layouts');
+
+						pages.forEach(
+							function(activePage, index) {
+								instance._formatNewDropRows(index);
+							}
+						);
+					},
+
+					_updateDragAndDropContext: function(fieldNodeEnd, sortable, positions) {
+						var instance = this;
+
+						var activePageIndex = instance._getActiveLayoutIndex();
+						var fieldColumnEnd = fieldNodeEnd.ancestor('.col');
+						var fieldColumnStart = A.one('.current-dragging');
+
+						var activeLayout = instance.get('layouts')[activePageIndex];
+						var layoutRows = activeLayout.get('rows');
+						var positionColumnEnd = positions.positionColumnEnd;
+						var positionColumnStart = positions.positionColumnStart;
+						var positionRowEnd = positions.positionRowEnd;
+						var positionRowStart = positions.positionRowStart;
+
+						var columnEnd = layoutRows[positionRowEnd].get('cols')[positionColumnEnd];
+						var columnStart = layoutRows[positionRowStart].get('cols')[positionColumnStart];
+
+						fieldColumnStart.addClass('col-empty');
+						fieldColumnStart.removeClass('col-empty-over');
+						fieldColumnEnd.removeClass('col-empty');
+						fieldNodeEnd.removeClass('hidden');
+						fieldColumnStart.removeClass('current-dragging');
+
+						instance._removeDropTarget(fieldColumnEnd, sortable);
+
+						var field = fieldColumnEnd.one('.' + CSS_FIELD).getData('field-instance');
+
+						if (positionRowEnd != positionRowStart || (positionRowEnd == positionRowStart && positionColumnEnd != positionColumnStart)) {
+							instance._updateFieldsetDraggingStatus(columnStart.get('value'), true);
+							instance._updateFieldsetDraggingStatus(columnEnd.get('value'), true);
+
+							layoutRows[positionRowStart].get('cols')[positionColumnStart].get('value').removeField(field);
+							layoutRows[positionRowEnd].get('cols')[positionColumnEnd].get('value').addField(field);
+						}
+
+						instance._clearStack();
+
+						setTimeout(
+							function() {
+								if (positionRowEnd != positionRowStart || (positionRowEnd == positionRowStart && positionColumnEnd != positionColumnStart)) {
+									instance._updateFieldsetDraggingStatus(columnStart.get('value'));
+									instance._updateFieldsetDraggingStatus(columnEnd.get('value'));
+									instance._formatNewDropRows(instance._getActiveLayoutIndex());
+								}
+
+								instance._destroySortable(sortable);
+								instance._applyDragAndDrop();
+							},
+							0
+						);
+					},
+
+					_updateDragAndDropUI: function(fieldNodeEnd, sortable, positions) {
+						var instance = this;
+
+						var layoutRows = instance.get('layouts')[instance._getActiveLayoutIndex()].get('rows');
+						var positionColumnEnd = positions.positionColumnEnd;
+						var positionColumnStart = positions.positionColumnStart;
+						var positionRowEnd = positions.positionRowEnd;
+						var positionRowStart = positions.positionRowStart;
+
+						var columnEnd = layoutRows[positionRowEnd].get('cols')[positionColumnEnd];
+						var columnStart = layoutRows[positionRowStart].get('cols')[positionColumnStart];
+						var fieldColumnEnd = fieldNodeEnd.ancestor('.col');
+						var fieldColumnStart = A.one('.current-dragging');
+
+						columnStart.get('node').append(columnEnd.get('node').one('> div'));
+						columnEnd.get('node').empty();
+
+						fieldColumnEnd.removeClass('col-empty-over');
+
+						fieldColumnStart.removeClass('current-dragging');
+						fieldColumnStart.removeClass('col-empty');
+						fieldNodeEnd.removeClass('hidden');
+
+						return instance._removeDropTarget(fieldColumnStart, sortable);
+					},
+
+					_updateFieldsetDraggingStatus: function(fieldset, status) {
+						return fieldset.set('isDragging', status);
 					},
 
 					_valueDeserializer: function() {
