@@ -14,6 +14,8 @@
 
 package com.liferay.dynamic.data.mapping.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.liferay.dynamic.data.mapping.annotations.DDMForm;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormField;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormLayout;
@@ -77,6 +79,7 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormRule;
 		)
 	}
 )
+@ProviderType
 public interface DDMFormInstanceSettings {
 
 	@DDMFormField(
@@ -114,9 +117,7 @@ public interface DDMFormInstanceSettings {
 		label = "%require-user-authentication", predefinedValue = "false",
 		properties = {"showAsSwitcher=true"}
 	)
-	public default boolean requireAuthentication() {
-		return false;
-	}
+	public boolean requireAuthentication();
 
 	@DDMFormField(
 		label = "%require-captcha", properties = {"showAsSwitcher=true"},
