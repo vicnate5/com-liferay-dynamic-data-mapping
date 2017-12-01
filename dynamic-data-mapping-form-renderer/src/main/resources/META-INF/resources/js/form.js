@@ -8,6 +8,10 @@ AUI.add(
 		var Form = A.Component.create(
 			{
 				ATTRS: {
+					builder: {
+						value: {}
+					},
+
 					container: {
 						setter: A.one,
 						valueFn: '_valueContainer'
@@ -81,7 +85,10 @@ AUI.add(
 					getEvaluationPayload: function() {
 						var instance = this;
 
+						var builder = instance.get('builder');
+
 						return {
+							languageId: builder.get('defaultLanguageId'),
 							p_auth: Liferay.authToken,
 							portletNamespace: instance.get('portletNamespace'),
 							serializedFormContext: JSON.stringify(instance.get('context'))
