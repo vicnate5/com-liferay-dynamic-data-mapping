@@ -232,7 +232,7 @@ public class DDMFormAdminPortletDataHandler extends BasePortletDataHandler {
 		target = "(model.class.name=com.liferay.dynamic.data.mapping.model.DDMFormInstance)",
 		unbind = "-"
 	)
-	protected void setFormInstanceStagedModelRepository(
+	protected void setDDMFormInstanceStagedModelRepository(
 		DDMFormInstanceStagedModelRepository
 			formInstanceStagedModelRepository) {
 
