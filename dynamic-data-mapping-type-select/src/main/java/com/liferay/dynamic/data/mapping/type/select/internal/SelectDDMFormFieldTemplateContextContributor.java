@@ -66,9 +66,7 @@ public class SelectDDMFormFieldTemplateContextContributor
 			"dataSourceType",
 			GetterUtil.getString(
 				ddmFormField.getProperty("dataSourceType"), "manual"));
-		parameters.put(
-			"multiple",
-			ddmFormField.isMultiple() ? "multiple" : StringPool.BLANK);
+		parameters.put("multiple", ddmFormField.isMultiple());
 
 		DDMFormFieldOptions ddmFormFieldOptions =
 			ddmFormFieldOptionsFactory.create(

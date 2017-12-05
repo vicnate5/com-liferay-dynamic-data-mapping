@@ -14,8 +14,8 @@
 	{@param? badgeCloseIcon: html}
 	{@param? dir: string}
 	{@param? label: string}
-	{@param? multiple: ?}
 	{@param name: string}
+	{@param? multiple: bool}
 	{@param? open: bool}
 	{@param options: list<[label: string, value: string]>}
 	{@param? readOnly: bool}
@@ -134,12 +134,12 @@
  */
 {template .hidden_select}
 	{@param? dir: string}
-	{@param? multiple: ?}
 	{@param name: string}
 	{@param options: list<[label: string, value: string]>}
 	{@param? readOnly: bool}
 	{@param strings: [chooseAnOption: string, chooseOptions: string, search: string, emptyList: string]}
 	{@param value: list<?>}
+	{@param? multiple: bool}
 
 	<select class="form-control hide" {if $dir}dir="{$dir}"{/if} id="{$name}" name="{$name}" {if $multiple}multiple size="{length($options)}"{/if}>
 		{if not $readOnly}
@@ -183,10 +183,10 @@
  * Prints the DDM form select field UI itens.
  */
 {template .select_options}
-	{@param? multiple: ?}
 	{@param options: list<[label: string, value: string]>}
 	{@param strings: [chooseAnOption: string, chooseOptions: string, search: string, emptyList: string]}
 	{@param value: list<?>}
+	{@param? multiple: bool}
 
 	<ul class="results-chosen">
 		{if length($options) > 0}
