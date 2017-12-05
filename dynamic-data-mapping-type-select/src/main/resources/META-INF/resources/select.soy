@@ -202,7 +202,7 @@
 	<ul class="results-chosen">
 		{if length($options) > 0}
 			{foreach $option in $options}
-				{let $selected kind="attributes"}
+				{let $selected kind="text"}
 					{if $value}
 						{foreach $currentValue in $value}
 							{if $currentValue.value == $option.value}
@@ -212,9 +212,9 @@
 					{/if}
 				{/let}
 
-				<li class="select-option-item {if $selected}option-selected{/if}" data-option-index="{index($option)}" data-option-selected="{if $selected}true{/if}" data-option-value="{$option.value}">
+				<li class="select-option-item {if $selected == 'selected'}option-selected{/if}" data-option-index="{index($option)}" data-option-selected="{if $selected == 'selected'}true{/if}" data-option-value="{$option.value}">
 					{if $multiple}
-						<input type="checkbox" value="" {if $selected}checked{/if}>
+						<input type="checkbox" value="" {if $selected == 'selected'}checked{/if}>
 					{/if}
 					<span title="{$option.label}">
 						{$option.label}
