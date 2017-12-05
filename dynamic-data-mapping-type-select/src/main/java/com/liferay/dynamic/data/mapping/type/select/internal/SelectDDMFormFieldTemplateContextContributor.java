@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ResourceBundleLoader;
 import com.liferay.portal.kernel.util.ResourceBundleLoaderUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
-import com.liferay.portal.kernel.util.StringPool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,6 +87,9 @@ public class SelectDDMFormFieldTemplateContextContributor
 		stringsMap.put(
 			"chooseAnOption",
 			LanguageUtil.get(resourceBundle, "choose-an-option"));
+		stringsMap.put(
+			"chooseOptions",
+			LanguageUtil.get(resourceBundle, "choose-options"));
 		stringsMap.put(
 			"dynamicallyLoadedData",
 			LanguageUtil.get(resourceBundle, "dynamically-loaded-data"));
