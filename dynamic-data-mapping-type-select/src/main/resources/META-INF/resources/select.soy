@@ -11,22 +11,22 @@
  * Prints the DDM form select field.
  */
 {template .render}
+	{@param name: string}
+	{@param options: list<[label: string, value: string]>}
+	{@param strings: [chooseAnOption: string, chooseOptions: string, search: string, emptyList: string]}
+	{@param value: list<?>}
+	{@param visible: bool}
 	{@param? badgeCloseIcon: html}
 	{@param? dir: string}
 	{@param? label: string}
-	{@param name: string}
 	{@param? multiple: bool}
 	{@param? open: bool}
-	{@param options: list<[label: string, value: string]>}
 	{@param? readOnly: bool}
 	{@param? required: bool}
 	{@param? selectCaretDoubleIcon: html}
 	{@param? selectSearchIcon: html}
 	{@param? showLabel: bool}
-	{@param strings: [chooseAnOption: string, chooseOptions: string, search: string, emptyList: string]}
 	{@param? tip: string}
-	{@param value: list<?>}
-	{@param visible: bool}
 
 	<div class="form-group{$visible ? '' : ' hide'}" data-fieldname="{$name}">
 		<div class="input-select-wrapper">
@@ -123,8 +123,8 @@
  * Prints the select label.
  */
 {template .select_label}
-	{@param? label: string}
 	{@param name: string}
+	{@param? label: string}
 	{@param? readOnly: bool}
 	{@param? required: bool}
 	{@param? tip: string}
@@ -144,13 +144,13 @@
  * Prints hidden select tag.
  */
 {template .hidden_select}
-	{@param? dir: string}
 	{@param name: string}
 	{@param options: list<[label: string, value: string]>}
-	{@param? readOnly: bool}
 	{@param strings: [chooseAnOption: string, chooseOptions: string, search: string, emptyList: string]}
 	{@param value: list<?>}
+	{@param? dir: string}
 	{@param? multiple: bool}
+	{@param? readOnly: bool}
 
 	<select class="form-control hide" {if $dir}dir="{$dir}"{/if} id="{$name}" name="{$name}" {if $multiple}multiple size="{length($options)}"{/if}>
 		{if not $readOnly}
@@ -173,9 +173,9 @@
  * Prints the DDM form hidden select options.
  */
 {template .select_hidden_options}
-	{@param? dir: string}
 	{@param option: [label: string, value: string]}
 	{@param values: list<?>}
+	{@param? dir: string}
 
 	{let $selected kind="attributes"}
 		{if $values}
