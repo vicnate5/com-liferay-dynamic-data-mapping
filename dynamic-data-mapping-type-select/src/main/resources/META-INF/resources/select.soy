@@ -42,18 +42,19 @@
 
 				<div class="form-control select-field-trigger" {if $dir}dir="{$dir}"{/if} id="{$name}" name="{$name}">
 					{if $multiple}
-						{if length($value) == 0}
-							<div class="option-selected option-selected-placeholder">{$strings.chooseOptions}</div>
-						{else}
+						{if $value and length($value) > 0}
 							<ul class="multiple-badge-list">
-								{foreach $currentValue in $value}
+								{foreach $option in $options}
 									{call .badge_item}
 										{param badgeCloseIcon: $badgeCloseIcon /}
-										{param value: $currentValue.value /}
-										{param label: $currentValue.label /}
+										{param option: $option /}
+										{param readOnly: $readOnly /}
+										{param value: $value /}
 									{/call}
 								{/foreach}
 							</ul>
+						{else}
+							<div class="option-selected option-selected-placeholder">{$strings.chooseOptions}</div>
 						{/if}
 					{else}
 						{if $value and length($value) > 0}
@@ -96,16 +97,26 @@
  * Prints the badge item.
  */
 {template .badge_item}
+	{@param option: [label: string, value: string]}
+	{@param value: list<?>}
 	{@param? badgeCloseIcon: html}
-	{@param? label: string}
-	{@param value: string}
+	{@param? readOnly: bool}
 
-	<li>
-		<span class="badge badge-default badge-sm multiple-badge" data-original-title="{$label}" title="{$label}">
-			{$label}
-			<a class="trigger-badge-item-close" data-badge-value="{$value}" href="javascript:void(0)">{$badgeCloseIcon}</a>
-		</span>
-	</li>
+	{if $value}
+		{foreach $currentValue in $value}
+			{if $option.value == $currentValue.value}
+				<li>
+					<span class="badge badge-default badge-sm multiple-badge" data-original-title="{$option.label}" title="{$option.label}">
+						{$option.label}
+						{if not $readOnly}
+							<a class="trigger-badge-item-close" data-badge-value="{$option.value}" href="javascript:void(0)">{$badgeCloseIcon}</a>
+						{/if}
+					</span>
+				</li>
+			{/if}
+		{/foreach}
+	{/if}
+
 {/template}
 
 /**
