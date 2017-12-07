@@ -402,42 +402,6 @@ AUI.add(
 						return field;
 					},
 
-					checkAvailableLocales: function(localizationMap) {
-						var instance = this;
-
-						var parent = instance.get('parent');
-
-						var translationManager = parent.get('translationManager');
-
-						var availableLocales = translationManager.get('availableLocales');
-
-						if (availableLocales.length == 0) {
-							return;
-						}
-
-						var deleteLocales = [];
-
-						for (var item in localizationMap) {
-							var contains = false;
-
-							for (var i = 0; i < availableLocales.length; i++) {
-								if (availableLocales[i] == item) {
-									contains = true;
-
-									break;
-								}
-							}
-
-							if (!contains) {
-								deleteLocales.push(item);
-							}
-						}
-
-						for (var j = 0; j < deleteLocales.length; j++) {
-							delete localizationMap[deleteLocales[j]];
-						}
-					},
-
 					getDefaulLocale: function() {
 						var instance = this;
 
@@ -556,6 +520,26 @@ AUI.add(
 						instance.destroy();
 
 						instance.get('container').remove(true);
+					},
+
+					removeNotAvailableLocales: function(localizationMap) {
+						var instance = this;
+
+						var parent = instance.get('parent');
+
+						var translationManager = parent.get('translationManager');
+
+						var availableLocales = translationManager.get('availableLocales');
+
+						if (availableLocales.length == 0) {
+							return;
+						}
+
+						for (var localization in localizationMap) {
+							if (availableLocales.indexOf(localization) == -1) {
+								delete localizationMap[localization];
+							}
+						}
 					},
 
 					renderRepeatableUI: function() {
@@ -711,7 +695,7 @@ AUI.add(
 						var value = instance.getValue();
 
 						if (Object.keys(localizationMap).length != 0) {
-							this.checkAvailableLocales(localizationMap);
+							this.removeNotAvailableLocales(localizationMap);
 						}
 
 						if (instance.get('localizable')) {
