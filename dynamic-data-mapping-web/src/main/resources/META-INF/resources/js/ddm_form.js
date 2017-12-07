@@ -402,7 +402,7 @@ AUI.add(
 						return field;
 					},
 
-					getDefaulLocale: function() {
+					getDefaultLocale: function() {
 						var instance = this;
 
 						var defaultLocale = themeDisplay.getDefaultLanguageId();
@@ -604,7 +604,7 @@ AUI.add(
 					syncLabelUI: function() {
 						var instance = this;
 
-						var defaultLocale = instance.getDefaulLocale();
+						var defaultLocale = instance.getDefaultLocale();
 
 						var fieldDefinition = instance.getFieldDefinition();
 
@@ -757,7 +757,7 @@ AUI.add(
 						if (tipNode) {
 							var instance = this;
 
-							var defaultLocale = instance.getDefaulLocale();
+							var defaultLocale = instance.getDefaultLocale();
 							var fieldDefinition = instance.getFieldDefinition();
 
 							var tipsMap = fieldDefinition.tip;
@@ -1220,7 +1220,6 @@ AUI.add(
 						var instance = this;
 
 						instance.setValue('');
-
 					},
 
 					_handleSelectButtonClick: function(event) {
