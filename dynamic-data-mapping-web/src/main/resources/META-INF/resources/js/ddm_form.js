@@ -3,6 +3,8 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 
+		var AObject = A.Object;
+
 		var DateMath = A.DataType.DateMath;
 
 		var Lang = A.Lang;
@@ -189,7 +191,7 @@ AUI.add(
 
 				var field = new FieldClass(
 					A.merge(
-						instance.getAttrs(A.Object.keys(DDMPortletSupport.ATTRS)),
+						instance.getAttrs(AObject.keys(DDMPortletSupport.ATTRS)),
 						{
 							container: fieldNode,
 							dataType: fieldDefinition.dataType,
@@ -694,7 +696,7 @@ AUI.add(
 
 						var value = instance.getValue();
 
-						if (Object.keys(localizationMap).length != 0) {
+						if (AObject.keys(localizationMap).length != 0) {
 							this.removeNotAvailableLocales(localizationMap);
 						}
 
