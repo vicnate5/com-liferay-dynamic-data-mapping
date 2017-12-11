@@ -22,10 +22,12 @@ import com.liferay.dynamic.data.mapping.form.web.internal.notification.DDMFormEm
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstance;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord;
+import com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecordVersion;
 import com.liferay.dynamic.data.mapping.model.DDMFormInstanceSettings;
 import com.liferay.dynamic.data.mapping.model.DDMFormSuccessPageSettings;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.service.DDMFormInstanceRecordService;
+import com.liferay.dynamic.data.mapping.service.DDMFormInstanceRecordVersionLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMFormInstanceService;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.portal.kernel.captcha.CaptchaTextException;
@@ -42,6 +44,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -108,9 +111,25 @@ public class AddFormInstanceRecordMVCActionCommand
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DDMFormInstanceRecord.class.getName(), actionRequest);
 
-		DDMFormInstanceRecord ddmFormInstanceRecord =
-			_ddmFormInstanceRecordService.addFormInstanceRecord(
-				groupId, formInstanceId, ddmFormValues, serviceContext);
+		DDMFormInstanceRecordVersion formInstanceRecordVersion =
+			_ddmFormInstanceRecordVersionLocalService.
+				fetchLatestFormInstanceRecordVersion(
+					themeDisplay.getUserId(), formInstanceId,
+					formInstance.getVersion(), WorkflowConstants.STATUS_DRAFT);
+
+		DDMFormInstanceRecord ddmFormInstanceRecord;
+
+		if (formInstanceRecordVersion == null) {
+			ddmFormInstanceRecord =
+				_ddmFormInstanceRecordService.addFormInstanceRecord(
+					groupId, formInstanceId, ddmFormValues, serviceContext);
+		}
+		else {
+			ddmFormInstanceRecord =
+				_ddmFormInstanceRecordService.updateFormInstanceRecord(
+					formInstanceRecordVersion.getFormInstanceRecordId(), false,
+					ddmFormValues, serviceContext);
+		}
 
 		if (isEmailNotificationEnabled(formInstance)) {
 			_ddmFormEmailNotificationSender.sendEmailNotification(
@@ -219,6 +238,11 @@ public class AddFormInstanceRecordMVCActionCommand
 
 	private DDMFormEmailNotificationSender _ddmFormEmailNotificationSender;
 	private DDMFormInstanceRecordService _ddmFormInstanceRecordService;
+
+	@Reference
+	private DDMFormInstanceRecordVersionLocalService
+		_ddmFormInstanceRecordVersionLocalService;
+
 	private DDMFormInstanceService _ddmFormInstanceService;
 	private DDMFormValuesFactory _ddmFormValuesFactory;
 
