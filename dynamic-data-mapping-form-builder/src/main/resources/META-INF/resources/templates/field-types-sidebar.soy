@@ -119,16 +119,15 @@
 
 	<div class="list-group-body">
 		{foreach $fieldType in $fieldTypes}
-			<a class="list-group-item list-group-item-flex list-group-item-action lfr-ddm-form-builder-field-type-item"
-				data-field-type-name="{$fieldType.name}"
-				href="javascript:;">
+			<div class="list-group-item list-group-item-flex list-group-item-action lfr-ddm-form-builder-field-type-item"
+				data-field-type-name="{$fieldType.name}">
 
 				{call .render_field_template}
 					{param description: $fieldType.description /}
 					{param icon: $fieldType.icon /}
 					{param name: $fieldType.label /}
 				{/call}
-			</a>
+			</div>
 		{/foreach}
 	</div>
 {/template}

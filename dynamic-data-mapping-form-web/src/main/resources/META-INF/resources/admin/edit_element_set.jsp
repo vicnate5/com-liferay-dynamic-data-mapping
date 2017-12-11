@@ -56,6 +56,8 @@ renderResponse.setTitle((structure == null) ? LanguageUtil.get(request, "new-ele
 		/>
 	</div>
 
+	<button class="lfr-ddm-add-field btn btn-primary">+</button>
+
 	<aui:form action="<%= saveStructureURL %>" cssClass="ddm-form-builder-form" method="post" name="editForm">
 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 		<aui:input name="groupId" type="hidden" value="<%= groupId %>" />
