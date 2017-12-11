@@ -74,14 +74,31 @@ div.sortable-layout-drag-indicator {
 	}
 }
 
-.yui3-dd-proxy *, .yui3-dd-shim, .yui3-dd-proxy {
+.yui3-dd-proxy {
+	border: none!important;
+
+	.list-group-item {
+		background-color: $light;
+		box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+	}
+}
+
+.form-builder-field-list .form-builder-field:hover, .form-builder-field-list,
+.lfr-ddm-form-builder-field-type-item {
+	cursor: -webkit-grab!important;
+	cursor: -moz-grab!important;
+	cursor: grab!important;
+}
+
+.yui3-dd-shim, .yui3-dd-proxy {
 	cursor: -webkit-grabbing!important;
 	cursor: -moz-grabbing!important;
 	cursor: grabbing!important;
 }
 
-.form-builder-field-list .form-builder-field:hover, .form-builder-field-list {
-	cursor: -webkit-grab!important;
-	cursor: -moz-grab!important;
-	cursor: grab!important;
+@include respond-to(phone) {
+	.form-builder-layout .layout-row .col {
+		flex: 0 0 100%;
+		max-width: 100%;
+	}
 }
