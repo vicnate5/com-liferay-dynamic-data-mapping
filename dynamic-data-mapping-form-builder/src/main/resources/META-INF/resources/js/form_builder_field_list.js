@@ -53,9 +53,7 @@ AUI.add(
 
 						var fields = instance.get('fields');
 
-						if (!instance.get('isDragging')) {
-							instance._uiSetFields(fields);
-						}
+						instance._uiSetFields(fields);
 
 						instance._updateRemovableLayoutColProperty();
 					},
