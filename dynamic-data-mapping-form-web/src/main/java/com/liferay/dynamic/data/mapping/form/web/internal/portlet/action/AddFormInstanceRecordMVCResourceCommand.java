@@ -121,7 +121,7 @@ public class AddFormInstanceRecordMVCResourceCommand
 	}
 
 	protected DDMFormValues createDDMFormValues(
-			DDMFormInstance formInstance, ResourceRequest resourceRequest)
+			DDMFormInstance ddmFormInstance, ResourceRequest resourceRequest)
 		throws Exception {
 
 		String serializedDDMFormValues = ParamUtil.getString(
@@ -131,12 +131,12 @@ public class AddFormInstanceRecordMVCResourceCommand
 			return null;
 		}
 
-		DDMForm ddmForm = getDDMForm(formInstance);
+		DDMForm ddmForm = getDDMForm(ddmFormInstance);
 
 		DDMFormValues ddmFormValues = new DDMFormValues(ddmForm);
 
 		setDDMFormValuesLocales(
-			_portal.getSiteDefaultLocale(formInstance.getGroupId()),
+			_portal.getSiteDefaultLocale(ddmFormInstance.getGroupId()),
 			ddmFormValues);
 
 		JSONObject jsonObject = _jsonFactory.createJSONObject(
@@ -185,40 +185,41 @@ public class AddFormInstanceRecordMVCResourceCommand
 		long formInstanceId = ParamUtil.getLong(
 			resourceRequest, "formInstanceId");
 
-		DDMFormInstance formInstance = _ddmFormInstanceService.getFormInstance(
-			formInstanceId);
+		DDMFormInstance ddmFormInstance =
+			_ddmFormInstanceService.getFormInstance(formInstanceId);
 
 		DDMFormValues ddmFormValues = createDDMFormValues(
-			formInstance, resourceRequest);
+			ddmFormInstance, resourceRequest);
 
 		if (ddmFormValues == null) {
 			return;
 		}
 
-		DDMFormInstanceRecordVersion formInstanceRecordVersion =
+		DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion =
 			_ddmFormInstanceRecordVersionLocalService.
 				fetchLatestFormInstanceRecordVersion(
 					themeDisplay.getUserId(), formInstanceId,
-					formInstance.getVersion(), WorkflowConstants.STATUS_DRAFT);
+					ddmFormInstance.getVersion(),
+					WorkflowConstants.STATUS_DRAFT);
 
 		ServiceContext serviceContext = createServiceContext(resourceRequest);
 
-		if (formInstanceRecordVersion == null) {
+		if (ddmFormInstanceRecordVersion == null) {
 			_ddmFormInstanceRecordService.addFormInstanceRecord(
-				formInstance.getGroupId(), formInstanceId, ddmFormValues,
+				ddmFormInstance.getGroupId(), formInstanceId, ddmFormValues,
 				serviceContext);
 		}
 		else {
 			_ddmFormInstanceRecordService.updateFormInstanceRecord(
-				formInstanceRecordVersion.getFormInstanceRecordId(), false,
+				ddmFormInstanceRecordVersion.getFormInstanceRecordId(), false,
 				ddmFormValues, serviceContext);
 		}
 	}
 
-	protected DDMForm getDDMForm(DDMFormInstance formInstance)
+	protected DDMForm getDDMForm(DDMFormInstance ddmFormInstance)
 		throws PortalException {
 
-		DDMStructure ddmStructure = formInstance.getStructure();
+		DDMStructure ddmStructure = ddmFormInstance.getStructure();
 
 		return ddmStructure.getDDMForm();
 	}

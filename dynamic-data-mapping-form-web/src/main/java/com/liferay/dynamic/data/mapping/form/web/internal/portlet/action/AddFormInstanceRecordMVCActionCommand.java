@@ -90,12 +90,12 @@ public class AddFormInstanceRecordMVCActionCommand
 					DDMFormWebKeys.DYNAMIC_DATA_MAPPING_FORM_INSTANCE_ID));
 		}
 
-		DDMFormInstance formInstance = _ddmFormInstanceService.getFormInstance(
-			formInstanceId);
+		DDMFormInstance ddmFormInstance =
+			_ddmFormInstanceService.getFormInstance(formInstanceId);
 
-		validateCaptcha(actionRequest, formInstance);
+		validateCaptcha(actionRequest, ddmFormInstance);
 
-		DDMForm ddmForm = getDDMForm(formInstance);
+		DDMForm ddmForm = getDDMForm(ddmFormInstance);
 
 		DDMFormValues ddmFormValues = _ddmFormValuesFactory.create(
 			actionRequest, ddmForm);
@@ -111,15 +111,16 @@ public class AddFormInstanceRecordMVCActionCommand
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			DDMFormInstanceRecord.class.getName(), actionRequest);
 
-		DDMFormInstanceRecordVersion formInstanceRecordVersion =
+		DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion =
 			_ddmFormInstanceRecordVersionLocalService.
 				fetchLatestFormInstanceRecordVersion(
 					themeDisplay.getUserId(), formInstanceId,
-					formInstance.getVersion(), WorkflowConstants.STATUS_DRAFT);
+					ddmFormInstance.getVersion(),
+					WorkflowConstants.STATUS_DRAFT);
 
 		DDMFormInstanceRecord ddmFormInstanceRecord;
 
-		if (formInstanceRecordVersion == null) {
+		if (ddmFormInstanceRecordVersion == null) {
 			ddmFormInstanceRecord =
 				_ddmFormInstanceRecordService.addFormInstanceRecord(
 					groupId, formInstanceId, ddmFormValues, serviceContext);
@@ -127,18 +128,18 @@ public class AddFormInstanceRecordMVCActionCommand
 		else {
 			ddmFormInstanceRecord =
 				_ddmFormInstanceRecordService.updateFormInstanceRecord(
-					formInstanceRecordVersion.getFormInstanceRecordId(), false,
-					ddmFormValues, serviceContext);
+					ddmFormInstanceRecordVersion.getFormInstanceRecordId(),
+					false, ddmFormValues, serviceContext);
 		}
 
-		if (isEmailNotificationEnabled(formInstance)) {
+		if (isEmailNotificationEnabled(ddmFormInstance)) {
 			_ddmFormEmailNotificationSender.sendEmailNotification(
 				actionRequest, ddmFormInstanceRecord);
 		}
 
 		if (SessionErrors.isEmpty(actionRequest)) {
 			DDMFormInstanceSettings formInstanceSettings =
-				formInstance.getSettingsModel();
+				ddmFormInstance.getSettingsModel();
 
 			String redirectURL = formInstanceSettings.redirectURL();
 
@@ -167,19 +168,20 @@ public class AddFormInstanceRecordMVCActionCommand
 		}
 	}
 
-	protected DDMForm getDDMForm(DDMFormInstance formInstance)
+	protected DDMForm getDDMForm(DDMFormInstance ddmFormInstance)
 		throws PortalException {
 
-		DDMStructure ddmStructure = formInstance.getStructure();
+		DDMStructure ddmStructure = ddmFormInstance.getStructure();
 
 		return ddmStructure.getDDMForm();
 	}
 
-	protected boolean isEmailNotificationEnabled(DDMFormInstance formInstance)
+	protected boolean isEmailNotificationEnabled(
+			DDMFormInstance ddmFormInstance)
 		throws PortalException {
 
 		DDMFormInstanceSettings formInstanceSettings =
-			formInstance.getSettingsModel();
+			ddmFormInstance.getSettingsModel();
 
 		return formInstanceSettings.sendEmailNotification();
 	}
@@ -213,11 +215,11 @@ public class AddFormInstanceRecordMVCActionCommand
 	}
 
 	protected void validateCaptcha(
-			ActionRequest actionRequest, DDMFormInstance formInstance)
+			ActionRequest actionRequest, DDMFormInstance ddmFormInstance)
 		throws Exception {
 
 		DDMFormInstanceSettings formInstanceSettings =
-			formInstance.getSettingsModel();
+			ddmFormInstance.getSettingsModel();
 
 		if (formInstanceSettings.requireCaptcha()) {
 			try {
