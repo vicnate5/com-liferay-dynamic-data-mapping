@@ -116,11 +116,8 @@ public class DDMFormAdminFieldSetDisplayContext
 		DDMStructure structure = getDDMStructure();
 
 		if (structure != null) {
-			ThemeDisplay themeDisplay =
-				formAdminRequestHelper.getThemeDisplay();
-
 			return LocalizationUtil.getLocalization(
-				structure.getDescription(), themeDisplay.getLanguageId());
+				structure.getDescription(), getDefaultLanguageId());
 		}
 
 		return getJSONObjectLocalizedPropertyFromRequest("description");
@@ -177,11 +174,8 @@ public class DDMFormAdminFieldSetDisplayContext
 		DDMStructure structure = getDDMStructure();
 
 		if (structure != null) {
-			ThemeDisplay themeDisplay =
-				formAdminRequestHelper.getThemeDisplay();
-
 			return LocalizationUtil.getLocalization(
-				structure.getName(), themeDisplay.getLanguageId());
+				structure.getName(), getDefaultLanguageId());
 		}
 
 		return getJSONObjectLocalizedPropertyFromRequest("name");

@@ -261,13 +261,10 @@ public class DDMFormAdminDisplayContext {
 
 	public String getFormDescription() throws PortalException {
 		DDMFormInstance formInstance = getDDMFormInstance();
-
+			
 		if (formInstance != null) {
-			ThemeDisplay themeDisplay =
-				formAdminRequestHelper.getThemeDisplay();
-
 			return LocalizationUtil.getLocalization(
-				formInstance.getDescription(), themeDisplay.getLanguageId());
+				formInstance.getDescription(), getFormDefaultLanguageId());
 		}
 
 		return getJSONObjectLocalizedPropertyFromRequest("description");
@@ -318,11 +315,8 @@ public class DDMFormAdminDisplayContext {
 		DDMFormInstance formInstance = getDDMFormInstance();
 
 		if (formInstance != null) {
-			ThemeDisplay themeDisplay =
-				formAdminRequestHelper.getThemeDisplay();
-
 			return LocalizationUtil.getLocalization(
-				formInstance.getName(), themeDisplay.getLanguageId());
+				formInstance.getName(), getFormDefaultLanguageId());
 		}
 
 		return getJSONObjectLocalizedPropertyFromRequest("name");
