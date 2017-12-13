@@ -78,6 +78,10 @@ AUI.add(
 						value: true
 					},
 
+					startedFilling: {
+						value: false
+					},
+
 					type: {
 						value: ''
 					},

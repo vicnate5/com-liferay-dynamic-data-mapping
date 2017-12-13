@@ -353,6 +353,8 @@ AUI.add(
 						instance.setValue(value);
 
 						instance.focus();
+
+						instance._fireStartedFillingEvent();
 					},
 
 					_handleSelectTriggerClick: function(event) {

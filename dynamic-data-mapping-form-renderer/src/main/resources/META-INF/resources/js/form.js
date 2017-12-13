@@ -88,6 +88,18 @@ AUI.add(
 						};
 					},
 
+					getFormId: function() {
+						var instance = this;
+
+						var formNode = instance.getFormNode();
+
+						if (!formNode) {
+							return 0;
+						}
+
+						return formNode.getData('DDMFormInstanceId');
+					},
+
 					getFormNode: function() {
 						var instance = this;
 

@@ -81,6 +81,23 @@ AUI.add(
 				instance.bindInputEvent(instance.getChangeEventName(), instance._onValueChange, true);
 			},
 
+			_fireStartedFillingEvent: function() {
+				var instance = this;
+
+				if (!instance.get('startedFilling')) {
+					instance.set('startedFilling', true);
+
+					var root = instance.getRoot();
+
+					if (root) {
+						Liferay.fire("ddmFieldStartedFilling", {
+							fieldName: instance.get("fieldName"),
+							formId: root.getFormId()
+						});
+					}
+				}
+			},
+
 			_getEventPayload: function(originalEvent) {
 				var instance = this;
 
@@ -108,6 +125,8 @@ AUI.add(
 				var value = instance.getValue();
 
 				instance.set('value', value);
+
+				instance._fireStartedFillingEvent();
 			}
 		};
 
