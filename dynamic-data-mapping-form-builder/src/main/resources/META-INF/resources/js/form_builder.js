@@ -189,7 +189,7 @@ AUI.add(
 
 								var fieldColumnEnd = fieldNodeEnd.ancestor('.col');
 
-								if (fieldNodeEnd.getData('field-type')) {
+								if (fieldNodeEnd.getData('field-type') || fieldNodeEnd.getData('field-set-id')) {
 									return instance.updateDragAndDropBySidebar(fieldNodeEnd);
 								}
 
@@ -265,6 +265,83 @@ AUI.add(
 								instance._addToStack(activeDropNode);
 							}
 						);
+					},
+
+					beforeSidebarDragStart: function() {
+						var instance = this;
+
+						instance.sidebarSortable.before(
+							'drag:start',
+							function(event) {
+								var clonedNode = A.DD.DDM.activeDrag.get('node').clone();
+								var fieldNodeStart = event.target.get('node');
+								var proxyActive = A.one('.yui3-dd-proxy');
+
+								instance.currentFieldTypeDrag = event.target;
+
+								A.DD.DDM._activateTargets();
+
+								instance._addToStack(fieldNodeStart);
+
+								if (proxyActive) {
+									proxyActive.empty();
+									proxyActive.append(clonedNode);
+								}
+
+								if (fieldNodeStart.getData('field-set-id')) {
+									instance.formatDragRowsToReceiveFieldset();
+								}
+							}
+						);
+					},
+
+					beforeSidebarItemPlaceholderAlign: function() {
+						var instance = this;
+
+						instance.sidebarSortable.before(
+							'placeholderAlign',
+							function(event) {
+								var fieldStart = instance.currentFieldTypeDrag;
+								var newTarget = A.one(document.createElement('div'));
+
+								if (fieldStart.get('node').attr('data-field-set-id')) {
+									newTarget.setData('field-set-id', fieldStart.get('node').getData('field-set-id'));
+									fieldStart.set('node', newTarget);
+								}
+
+								if (!fieldStart.get('node').getData('field-type') && fieldStart.get('node').attr('data-field-type-name')) {
+									newTarget.setData('field-type', FieldTypes.get(fieldStart.get('node').attr('data-field-type-name')));
+									fieldStart.set('node', newTarget);
+								}
+							}
+						);
+					},
+
+					bindSidebarFieldDragAction: function() {
+						var instance = this;
+						var rows = instance.getActiveLayout().get('rows');
+
+						instance._newFieldContainer = rows[rows.length - 1].get('cols')[0];
+
+						if (instance.sidebarSortable) {
+							return;
+						}
+
+						instance.sidebarSortable = new A.SortableLayout(
+							{
+								delegateConfig: {
+									target: false,
+									useShim: false
+								},
+								dragNodes: '.lfr-ddm-form-builder-draggable-item',
+								dropNodes: '.layout-row .col-empty'
+							}
+						);
+
+						instance.beforeSidebarDragStart();
+						instance.beforeSidebarItemPlaceholderAlign();
+						instance.afterPlaceholderAlign(instance.sidebarSortable);
+						instance.afterDragEnd(instance.sidebarSortable);
 					},
 
 					cancelFieldEdition: function(field) {
@@ -529,6 +606,19 @@ AUI.add(
 						return FieldTypes.get(field.get('type'));
 					},
 
+					formatDragRowsToReceiveFieldset: function() {
+						var instance = this;
+
+						A.all('.col-empty').each(
+							function(col) {
+								if (!col.hasClass('col-md-12')) {
+									col.removeClass('col-empty');
+									col.setAttribute('data-removed-col-empty', true);
+								}
+							}
+						);
+					},
+
 					getFieldSettingsPanel: function() {
 						var instance = this;
 
@@ -594,62 +684,9 @@ AUI.add(
 
 					openSidebarByButton: function() {
 						var instance = this;
-						var rows = instance.getActiveLayout().get('rows');
 
-						instance._newFieldContainer = rows[rows.length - 1].get('cols')[0];
 						instance.showFieldTypesPanel();
-
-						if (instance.sidebarSortable) {
-							return;
-						}
-
-						instance.sidebarSortable = new A.SortableLayout(
-							{
-								delegateConfig: {
-									target: false,
-									useShim: false
-								},
-								dragNodes: '.lfr-ddm-form-builder-field-type-item',
-								dropNodes: '.layout-row .col-empty'
-							}
-						);
-
-						instance.sidebarSortable.before(
-							'drag:start',
-							function(event) {
-								var clonedNode = A.DD.DDM.activeDrag.get('node').clone();
-								var fieldNodeStart = event.target.get('node');
-								var proxyActive = A.one('.yui3-dd-proxy');
-
-								instance.currentFieldTypeDrag = event.target;
-
-								A.DD.DDM._activateTargets();
-
-								instance._addToStack(fieldNodeStart);
-
-								if (proxyActive) {
-									proxyActive.empty();
-									proxyActive.append(clonedNode);
-								}
-							}
-						);
-
-						instance.sidebarSortable.before(
-							'placeholderAlign',
-							function(event) {
-								var fieldStart = instance.currentFieldTypeDrag;
-								var newTarget = A.one(document.createElement('div'));
-
-								if (!fieldStart.get('node').getData('field-type')) {
-									newTarget.setData('field-type', FieldTypes.get(fieldStart.get('node').attr('data-field-type-name')));
-									fieldStart.set('node', newTarget);
-								}
-							}
-						);
-
-						instance.afterPlaceholderAlign(instance.sidebarSortable);
-
-						instance.afterDragEnd(instance.sidebarSortable);
+						instance.bindSidebarFieldDragAction();
 					},
 
 					showFieldSettingsPanel: function(field) {
@@ -674,12 +711,27 @@ AUI.add(
 						fieldTypesPanel.open();
 					},
 
+					unformatFieldsetRows: function() {
+						A.all('[data-removed-col-empty="true"]').each(
+							function(col) {
+								col.addClass('col-empty');
+								col.removeAttribute('data-removed-col-empty', true);
+							}
+						);
+					},
+
 					updateDragAndDropBySidebar: function(fieldNode) {
 						var instance = this;
 
+						var fieldSetId = fieldNode.getData('field-set-id');
 						var fieldType = fieldNode.getData('field-type');
 
 						instance._newFieldContainer = fieldNode.ancestor('.col').getData('layout-col');
+
+						if (fieldSetId) {
+							return instance._addFieldSetInDragAndDropLayout(fieldSetId);
+						}
+
 						instance.createNewField(fieldType);
 					},
 
@@ -749,6 +801,20 @@ AUI.add(
 										A.bind(instance._afterFieldsChange, instance)
 									)
 								);
+							}
+						);
+					},
+
+					_addFieldSetInDragAndDropLayout: function(fieldSetId) {
+						var instance = this;
+
+						instance._getFieldSetDefinitionRetriever(
+							fieldSetId,
+							function(fieldSetDefinition) {
+								instance.createFieldSet(fieldSetDefinition);
+								instance.unformatFieldsetRows();
+								instance._traverseFormPages();
+								instance._applyDragAndDrop();
 							}
 						);
 					},
@@ -953,7 +1019,7 @@ AUI.add(
 						var rows = layout.get('rows');
 
 						if (A.instanceOf(instance._newFieldContainer.get('value'), A.FormBuilderFieldList)) {
-							var row = instance._newFieldContainer.get('value').get('content').ancestor('.row').getData();
+							var row = instance._newFieldContainer.get('node').ancestor('.row').getData('layout-row');
 
 							return A.Array.indexOf(rows, row);
 						}
@@ -1063,6 +1129,14 @@ AUI.add(
 							'<button class="btn btn-monospaced btn-sm label-primary lfr-duplicate-field" type="button">' + Liferay.Util.getLexiconIconTpl('paste') + '</button>' +
 							'<button class="btn btn-monospaced btn-sm label-primary lfr-delete-field" type="button">' + Liferay.Util.getLexiconIconTpl('trash') + '</button>' +
 							'</div>';
+					},
+
+					_getFieldSetDefinitionRetriever: function(fieldSetId, cb) {
+						var fieldSetSelected = FieldSets.get(fieldSetId);
+
+						var definitionRetriever = FieldSets.getDefinitionRetriever();
+
+						definitionRetriever.getDefinition(fieldSetSelected).then(cb);
 					},
 
 					_getFieldSettingsPanel: function(fieldSettingsPanel) {
