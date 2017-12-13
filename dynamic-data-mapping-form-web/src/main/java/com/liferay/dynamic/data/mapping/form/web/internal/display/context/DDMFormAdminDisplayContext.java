@@ -801,7 +801,7 @@ public class DDMFormAdminDisplayContext {
 	}
 
 	protected String getFormLayoutURL(boolean privateLayout) {
-		StringBundler sb = new StringBundler(4);
+		StringBundler sb = new StringBundler(3);
 
 		ThemeDisplay themeDisplay = formAdminRequestHelper.getThemeDisplay();
 
