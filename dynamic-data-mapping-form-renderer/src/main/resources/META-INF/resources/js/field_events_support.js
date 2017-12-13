@@ -117,6 +117,17 @@ AUI.add(
 				var instance = this;
 
 				instance.fire('focus', instance._getEventPayload(event));
+
+				var root = instance.getRoot();
+
+				if (root) {
+					instance.set('fieldFocusDate', new Date());
+
+					Liferay.fire("ddmFieldFocus", {
+						fieldName: instance.get("fieldName"),
+						formId: root.getFormId()
+					});
+				}
 			},
 
 			_onValueChange: function(event) {
