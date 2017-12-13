@@ -230,4 +230,8 @@ long formInstanceId = ddmFormDisplayContext.getFormInstanceId();
 	</div>
 </c:if>
 
+<aui:script use="aui-base">
+	Liferay.fire('ddmFormView', {formId: <%= formInstanceId %>});
+</aui:script>
+
 <liferay-util:dynamic-include key="com.liferay.dynamic.data.mapping.form.web#/display/view.jsp#post" />
