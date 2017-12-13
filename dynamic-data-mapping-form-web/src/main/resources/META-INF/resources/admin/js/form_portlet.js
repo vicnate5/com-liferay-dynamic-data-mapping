@@ -80,10 +80,10 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
-                        var formBuilder = instance.get('formBuilder');
+						var formBuilder = instance.get('formBuilder');
 
 						formBuilder.set('defaultLanguageId', instance.get('defaultLanguageId'));
-                        formBuilder.set('editingLanguageId', instance.get('editingLanguageId'));
+						formBuilder.set('editingLanguageId', instance.get('editingLanguageId'));
 
 						instance.layoutVisitor = new LayoutSerializer(
 							{

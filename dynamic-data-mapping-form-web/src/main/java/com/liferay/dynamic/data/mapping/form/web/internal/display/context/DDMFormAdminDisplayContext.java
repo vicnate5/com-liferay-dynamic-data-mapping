@@ -261,7 +261,7 @@ public class DDMFormAdminDisplayContext {
 
 	public String getFormDescription() throws PortalException {
 		DDMFormInstance formInstance = getDDMFormInstance();
-			
+
 		if (formInstance != null) {
 			return LocalizationUtil.getLocalization(
 				formInstance.getDescription(), getFormDefaultLanguageId());

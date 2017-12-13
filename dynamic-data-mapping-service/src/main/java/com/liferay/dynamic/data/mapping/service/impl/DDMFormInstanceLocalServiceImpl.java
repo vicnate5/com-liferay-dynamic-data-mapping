@@ -36,7 +36,6 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -111,14 +110,6 @@ public class DDMFormInstanceLocalServiceImpl
 			serviceContext);
 
 		return updatedDDMFormInstance;
-	}
-
-	protected Locale getDDMFormDefaultLocale(DDMFormInstance ddmFormInstance) throws PortalException {
-		DDMStructure ddmStructure = ddmFormInstance.getStructure();
-
-		DDMForm ddmForm = ddmStructure.getDDMForm();
-
-		return ddmForm.getDefaultLocale();
 	}
 
 	@Override
@@ -463,8 +454,21 @@ public class DDMFormInstanceLocalServiceImpl
 		return updatedDDMFormInstance;
 	}
 
-	protected Locale getDDMFormDefaultLocale(long ddmStructureId) throws PortalException {
-		DDMStructure ddmStructure = ddmStructureLocalService.getDDMStructure(ddmStructureId);
+	protected Locale getDDMFormDefaultLocale(DDMFormInstance ddmFormInstance)
+		throws PortalException {
+
+		DDMStructure ddmStructure = ddmFormInstance.getStructure();
+
+		DDMForm ddmForm = ddmStructure.getDDMForm();
+
+		return ddmForm.getDefaultLocale();
+	}
+
+	protected Locale getDDMFormDefaultLocale(long ddmStructureId)
+		throws PortalException {
+
+		DDMStructure ddmStructure = ddmStructureLocalService.getDDMStructure(
+			ddmStructureId);
 
 		DDMForm ddmForm = ddmStructure.getDDMForm();
 
@@ -575,7 +579,8 @@ public class DDMFormInstanceLocalServiceImpl
 		ddmFormValuesValidator.validate(settingsDDMFormValues);
 	}
 
-	protected void validateName(Map<Locale, String> nameMap, Locale defaultLocale)
+	protected void validateName(
+			Map<Locale, String> nameMap, Locale defaultLocale)
 		throws PortalException {
 
 		String name = nameMap.get(defaultLocale);
