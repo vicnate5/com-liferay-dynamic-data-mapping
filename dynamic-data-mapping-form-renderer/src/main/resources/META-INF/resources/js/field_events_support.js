@@ -111,6 +111,18 @@ AUI.add(
 				var instance = this;
 
 				instance.fire('blur', instance._getEventPayload(event));
+
+				var root = instance.getRoot();
+
+				if (root) {
+					var now = new Date();
+
+					Liferay.fire("ddmFieldBlur", {
+						fieldName: instance.get("fieldName"),
+						formId: root.getFormId(),
+						interactionTime: (now - (instance.get('fieldFocusDate') || now)) / 1000
+					});
+				}
 			},
 
 			_onInputFocus: function(event) {
