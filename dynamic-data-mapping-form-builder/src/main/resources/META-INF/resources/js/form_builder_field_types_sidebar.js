@@ -3,8 +3,6 @@ AUI.add(
 	function(A) {
 		var CSS_PREFIX = A.getClassName('form', 'builder', 'field', 'types', 'sidebar');
 
-		var FieldSets = Liferay.DDM.FieldSets;
-
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 
 		var FormBuilderFieldTypesSidebar = A.Component.create(
@@ -109,18 +107,15 @@ AUI.add(
 
 						var fieldSetId = event.currentTarget.attr('data-field-set-id');
 
-						var fieldSetSelected = FieldSets.get(fieldSetId);
-
-						var definitionRetriever = FieldSets.getDefinitionRetriever();
-
-						definitionRetriever.getDefinition(fieldSetSelected)
-							.then(
-								function(fieldSetDefinition) {
-									instance.get('builder').createFieldSet(fieldSetDefinition);
-
-									instance.close();
-								}
-							);
+						instance.get('builder')._getFieldSetDefinitionRetriever(
+							fieldSetId,
+							function(fieldSetDefinition) {
+								instance.get('builder').createFieldSet(fieldSetDefinition);
+								instance.get('builder')._traverseFormPages();
+								instance.get('builder')._applyDragAndDrop();
+								instance.close();
+							}
+						);
 					},
 
 					_afterFieldTypeItemClick: function(event) {

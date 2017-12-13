@@ -119,7 +119,7 @@
 
 	<div class="list-group-body">
 		{foreach $fieldType in $fieldTypes}
-			<div class="list-group-item list-group-item-flex list-group-item-action lfr-ddm-form-builder-field-type-item"
+			<div class="list-group-item list-group-item-flex list-group-item-action lfr-ddm-form-builder-draggable-item lfr-ddm-form-builder-field-type-item"
 				data-field-type-name="{$fieldType.name}">
 
 				{call .render_field_template}
@@ -140,16 +140,15 @@
 
 	<div class="list-group-body">
 		{foreach $fieldSet in $fieldSets}
-			<a class="list-group-item list-group-item-flex list-group-item-action lfr-ddm-form-builder-field-set-item"
-				data-field-set-id="{$fieldSet.id}"
-				href="javascript:;">
+			<div class="list-group-item list-group-item-flex list-group-item-action lfr-ddm-form-builder-field-set-item lfr-ddm-form-builder-draggable-item"
+				data-field-set-id="{$fieldSet.id}">
 
 				{call .render_field_template}
 					{param description: $fieldSet.description /}
 					{param icon: $fieldSet.icon /}
 					{param name: $fieldSet.name /}
 				{/call}
-			</a>
+			</div>
 		{/foreach}
 	</div>
 {/template}
