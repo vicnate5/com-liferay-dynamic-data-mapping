@@ -207,7 +207,7 @@ public class DDMFormInstanceStagedModelDataHandler
 	}
 
 	@Reference(
-		target = "(model.class.name=com.liferay.dynamic.data.lists.model.DDMFormInstance)",
+		target = "(model.class.name=com.liferay.dynamic.data.mapping.model.DDMFormInstance)",
 		unbind = "-"
 	)
 	protected void setStagedModelRepository(
