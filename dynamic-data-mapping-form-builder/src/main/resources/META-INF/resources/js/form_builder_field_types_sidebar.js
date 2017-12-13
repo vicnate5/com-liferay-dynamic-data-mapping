@@ -26,8 +26,8 @@ AUI.add(
 						value: {
 							basic: Liferay.Language.get('field-types-basic-elements'),
 							customized: Liferay.Language.get('field-types-customized-elements'),
-							field: Liferay.Language.get('field'),
-							fieldset: Liferay.Language.get('fieldset')
+							element_set: Liferay.Language.get('element-sets'),
+							elements: Liferay.Language.get('elements')
 						}
 					}
 				},

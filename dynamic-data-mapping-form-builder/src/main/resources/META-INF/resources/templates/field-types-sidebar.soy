@@ -39,7 +39,7 @@
 			basic: list<[description: string, icon: html, label: string, name: string]>,
 			customized: list<[description: string, icon: html, label: string, name: string]>
 		]}
-	{@param strings: [basic: string, customized: string, field: string, fieldset: string]}
+	{@param strings: [basic: string, customized: string, elements: string, element_set: string]}
 	{@param? icons: [angleDown: html, angleRight: html]}
 
 	<div class="sidebar-body">
@@ -51,7 +51,7 @@
 					<a href="javascript:;"
 						class="tab-content tab-label"
 						role="tab">
-						{$strings.field}
+						{$strings.elements}
 					</a>
 				</li>
 				<li class="yui3-widget tab tab-selected"
@@ -60,7 +60,7 @@
 					<a href="javascript:;"
 						class="tab-content tab-label"
 						role="tab">
-						{$strings.fieldset}
+						{$strings.element_set}
 					</a>
 				</li>
 			</ul>
