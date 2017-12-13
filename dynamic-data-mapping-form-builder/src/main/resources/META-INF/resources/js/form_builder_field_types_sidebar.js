@@ -47,11 +47,14 @@ AUI.add(
 						var boundingBox = instance.get('boundingBox');
 						var navLink = '.' + CSS_PREFIX + ' .nav-tabs li';
 
-						instance._eventHandlers.push(
-							A.one('body').delegate('click', instance._bindTabAnimation.bind(instance), navLink),
-							boundingBox.delegate('click', instance._afterFieldSetItemClick.bind(instance), '.lfr-ddm-form-builder-field-set-item'),
-							boundingBox.delegate('click', instance._afterFieldTypeItemClick.bind(instance), '.lfr-ddm-form-builder-field-type-item')
-						);
+						instance._eventHandlers.push(A.one('body').delegate('click', instance._bindTabAnimation.bind(instance), navLink));
+
+						if (Liferay.Browser.isMobile()) {
+							instance._eventHandlers.push(
+								boundingBox.delegate('click', instance._afterFieldSetItemClick.bind(instance), '.lfr-ddm-form-builder-field-set-item'),
+									boundingBox.delegate('click', instance._afterFieldTypeItemClick.bind(instance), '.lfr-ddm-form-builder-field-type-item')
+							);
+						}
 
 						new A.TogglerDelegate(
 							{
