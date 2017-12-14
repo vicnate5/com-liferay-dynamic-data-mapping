@@ -16,13 +16,24 @@
 
 <%@ include file="/display/init.jsp" %>
 
-<liferay-util:dynamic-include key="com.liferay.dynamic.data.mapping.form.web#/display/view.jsp#pre" />
-
 <%
 String redirect = ParamUtil.getString(request, "redirect", currentURL);
 
 long formInstanceId = ddmFormDisplayContext.getFormInstanceId();
 %>
+
+<aui:script>
+function <portlet:namespace />analyticsClientCreated(event) {
+	Liferay.fire('ddmFormView', {formId: <%= formInstanceId %>});
+
+	Liferay.fire("ddmFormPageShow", {
+		formId: <%= formInstanceId %>,
+		page: 1
+	});
+}
+
+Liferay.on('analyticsClientCreated', <portlet:namespace />analyticsClientCreated);
+</aui:script>
 
 <c:choose>
 	<c:when test="<%= formInstanceId == 0 %>">
@@ -229,9 +240,3 @@ long formInstanceId = ddmFormDisplayContext.getFormInstanceId();
 		</div>
 	</div>
 </c:if>
-
-<aui:script use="aui-base">
-	Liferay.fire('ddmFormView', {formId: <%= formInstanceId %>});
-</aui:script>
-
-<liferay-util:dynamic-include key="com.liferay.dynamic.data.mapping.form.web#/display/view.jsp#post" />
