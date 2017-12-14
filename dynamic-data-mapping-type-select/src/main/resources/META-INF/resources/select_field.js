@@ -65,6 +65,7 @@ AUI.add(
 					},
 
 					value: {
+						state: true,
 						value: []
 					}
 				},
@@ -149,7 +150,7 @@ AUI.add(
 								selectCaretDoubleIcon: soyIncDom(Liferay.Util.getLexiconIconTpl('caret-double-l', 'icon-monospaced')),
 								selectSearchIcon: soyIncDom(Liferay.Util.getLexiconIconTpl('search', 'icon-monospaced')),
 								strings: instance.get('strings'),
-								value: instance.getValueSelected()
+								value: instance.getValue()
 							}
 						);
 					},
@@ -158,14 +159,6 @@ AUI.add(
 						var instance = this;
 
 						return instance.get('value') || [];
-					},
-
-					getValueSelected: function() {
-						var instance = this;
-
-						var value = instance.get('value') || [];
-
-						return instance._getOptionsSelected(value);
 					},
 
 					openList: function() {
@@ -263,28 +256,6 @@ AUI.add(
 
 					_getOptions: function(options) {
 						return options || [];
-					},
-
-					_getOptionsSelected: function(value) {
-						var instance = this;
-
-						var options = instance.get('options');
-
-						var optionsSelected = [];
-
-						value.forEach(
-							function(value, index) {
-								options.forEach(
-									function(option, index) {
-										if (value && option.value === value) {
-											optionsSelected.push(option);
-										}
-									}
-								);
-							}
-						);
-
-						return optionsSelected;
 					},
 
 					_getSelectTriggerAction: function() {
