@@ -348,7 +348,8 @@ public class DDMStructureLocalServiceTest extends BaseDDMServiceTestCase {
 		List<DDMStructure> structures =
 			DDMStructureLocalServiceUtil.getStructures(structure.getGroupId());
 
-		Assert.assertTrue(structures.contains(structure));
+		Assert.assertTrue(
+			structures.toString(), structures.contains(structure));
 	}
 
 	@Test

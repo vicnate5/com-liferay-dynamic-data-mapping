@@ -128,7 +128,7 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 		List<String> value = (List<String>)parameters.get("value");
 
 		Assert.assertEquals(value.toString(), 1, value.size());
-		Assert.assertTrue(value.contains("value 1"));
+		Assert.assertTrue(value.toString(), value.contains("value 1"));
 	}
 
 	@Test
@@ -183,8 +183,8 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 		List<String> value = (List<String>)parameters.get("value");
 
 		Assert.assertEquals(value.toString(), 2, value.size());
-		Assert.assertTrue(value.contains("value 2"));
-		Assert.assertTrue(value.contains("value 3"));
+		Assert.assertTrue(value.toString(), value.contains("value 2"));
+		Assert.assertTrue(value.toString(), value.contains("value 3"));
 	}
 
 	@Test
@@ -193,8 +193,8 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 			_selectDDMFormFieldTemplateContextContributor.getValue(
 				"[\"a\",\"b\"]");
 
-		Assert.assertTrue(values.contains("a"));
-		Assert.assertTrue(values.contains("b"));
+		Assert.assertTrue(values.toString(), values.contains("a"));
+		Assert.assertTrue(values.toString(), values.contains("b"));
 	}
 
 	@Test
@@ -203,7 +203,7 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 			_selectDDMFormFieldTemplateContextContributor.getValue(
 				"INVALID_JSON");
 
-		Assert.assertTrue(values.isEmpty());
+		Assert.assertTrue(values.toString(), values.isEmpty());
 	}
 
 	protected DDMFormFieldOptions createDDMFormFieldOptions() {

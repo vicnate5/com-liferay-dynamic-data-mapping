@@ -279,7 +279,8 @@ public class DDMFormEvaluatorHelperTest {
 		Set<Integer> disabledPagesIndexes =
 			ddmFormEvaluationResult.getDisabledPagesIndexes();
 
-		Assert.assertTrue(disabledPagesIndexes.contains(2));
+		Assert.assertTrue(
+			disabledPagesIndexes.toString(), disabledPagesIndexes.contains(2));
 	}
 
 	@Test
@@ -453,7 +454,8 @@ public class DDMFormEvaluatorHelperTest {
 		Set<Integer> disabledPagesIndexes =
 			ddmFormEvaluationResult.getDisabledPagesIndexes();
 
-		Assert.assertTrue(disabledPagesIndexes.isEmpty());
+		Assert.assertTrue(
+			disabledPagesIndexes.toString(), disabledPagesIndexes.isEmpty());
 	}
 
 	@Test

@@ -176,7 +176,7 @@ public class DDMTemplateLocalServiceTest extends BaseDDMServiceTestCase {
 		List<DDMTemplate> templates = DDMTemplateLocalServiceUtil.getTemplates(
 			template.getGroupId(), template.getClassNameId());
 
-		Assert.assertTrue(templates.contains(template));
+		Assert.assertTrue(templates.toString(), templates.contains(template));
 	}
 
 	@Test

@@ -225,7 +225,8 @@ public class DDMTemplateServiceTest extends BaseDDMServiceTestCase {
 		Assert.assertEquals(templates.toString(), 3, templates.size());
 
 		for (DDMTemplate newTemplate : newTemplates) {
-			Assert.assertTrue(templates.contains(newTemplate));
+			Assert.assertTrue(
+				templates.toString(), templates.contains(newTemplate));
 		}
 	}
 

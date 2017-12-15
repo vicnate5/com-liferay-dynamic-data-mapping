@@ -308,8 +308,12 @@ public class DDMFormValuesJSONDeserializerTest extends BaseDDMTestCase {
 
 		Assert.assertEquals(
 			availableLocales.toString(), 2, availableLocales.size());
-		Assert.assertTrue(availableLocales.contains(LocaleUtil.US));
-		Assert.assertTrue(availableLocales.contains(LocaleUtil.BRAZIL));
+		Assert.assertTrue(
+			availableLocales.toString(),
+			availableLocales.contains(LocaleUtil.US));
+		Assert.assertTrue(
+			availableLocales.toString(),
+			availableLocales.contains(LocaleUtil.BRAZIL));
 	}
 
 	protected void testBooleanDDMFormFieldValueValues(
