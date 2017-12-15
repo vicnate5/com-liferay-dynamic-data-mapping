@@ -902,7 +902,8 @@ public class UpgradeDynamicDataMappingTest {
 			sb.append(dateFieldName);
 			sb.append(".getData()) />");
 
-			Assert.assertTrue(actualDefinition.contains(sb.toString()));
+			Assert.assertTrue(
+				actualDefinition, actualDefinition.contains(sb.toString()));
 
 			// If statement
 
@@ -912,7 +913,8 @@ public class UpgradeDynamicDataMappingTest {
 			sb.append(dateFieldName);
 			sb.append("_Data)>");
 
-			Assert.assertTrue(actualDefinition.contains(sb.toString()));
+			Assert.assertTrue(
+				actualDefinition, actualDefinition.contains(sb.toString()));
 
 			// Date parse statement
 
@@ -924,7 +926,8 @@ public class UpgradeDynamicDataMappingTest {
 			sb.append(dateFieldName);
 			sb.append("_Data, locale) />");
 
-			Assert.assertTrue(actualDefinition.contains(sb.toString()));
+			Assert.assertTrue(
+				actualDefinition, actualDefinition.contains(sb.toString()));
 		}
 	}
 
@@ -957,7 +960,8 @@ public class UpgradeDynamicDataMappingTest {
 		sb.append("_DateObj");
 		sb.append(", \"dd MMM yyyy - HH:mm:ss\", locale)");
 
-		Assert.assertTrue(actualDefinition.contains(sb.toString()));
+		Assert.assertTrue(
+			actualDefinition, actualDefinition.contains(sb.toString()));
 	}
 
 	@Test
@@ -1070,7 +1074,8 @@ public class UpgradeDynamicDataMappingTest {
 			sb.append(dateFieldName);
 			sb.append(".getData()))");
 
-			Assert.assertTrue(actualDefinition.contains(sb.toString()));
+			Assert.assertTrue(
+				actualDefinition, actualDefinition.contains(sb.toString()));
 
 			// If statement
 
@@ -1080,7 +1085,8 @@ public class UpgradeDynamicDataMappingTest {
 			sb.append(dateFieldName);
 			sb.append("_Data))");
 
-			Assert.assertTrue(actualDefinition.contains(sb.toString()));
+			Assert.assertTrue(
+				actualDefinition, actualDefinition.contains(sb.toString()));
 
 			// Date parse statement
 
@@ -1092,7 +1098,8 @@ public class UpgradeDynamicDataMappingTest {
 			sb.append(dateFieldName);
 			sb.append("_Data, $locale))");
 
-			Assert.assertTrue(actualDefinition.contains(sb.toString()));
+			Assert.assertTrue(
+				actualDefinition, actualDefinition.contains(sb.toString()));
 		}
 	}
 
@@ -1125,7 +1132,8 @@ public class UpgradeDynamicDataMappingTest {
 		sb.append("_DateObj");
 		sb.append(", \"dd MMM yyyy - HH:mm:ss\", $locale)");
 
-		Assert.assertTrue(actualDefinition.contains(sb.toString()));
+		Assert.assertTrue(
+			actualDefinition, actualDefinition.contains(sb.toString()));
 	}
 
 	@Test
