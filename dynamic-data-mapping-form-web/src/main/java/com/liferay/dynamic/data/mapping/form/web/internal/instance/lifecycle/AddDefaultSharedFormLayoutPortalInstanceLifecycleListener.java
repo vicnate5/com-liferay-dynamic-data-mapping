@@ -14,6 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.web.internal.instance.lifecycle;
 
+import com.liferay.dynamic.data.mapping.form.web.internal.layout.type.constants.DDMFormPortletLayoutTypeConstants;
 import com.liferay.portal.instance.lifecycle.BasePortalInstanceLifecycleListener;
 import com.liferay.portal.instance.lifecycle.PortalInstanceLifecycleListener;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -78,7 +79,7 @@ public class AddDefaultSharedFormLayoutPortalInstanceLifecycleListener
 
 		String type = layout.getType();
 
-		return type.equals(LayoutConstants.TYPE_SHARED_PORTLET);
+		return type.equals(DDMFormPortletLayoutTypeConstants.LAYOUT_TYPE);
 	}
 
 	@Override
@@ -141,7 +142,7 @@ public class AddDefaultSharedFormLayoutPortalInstanceLifecycleListener
 			defaultUserId, groupId, true,
 			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Shared",
 			StringPool.BLANK, StringPool.BLANK,
-			LayoutConstants.TYPE_SHARED_PORTLET, true, "/shared",
+			DDMFormPortletLayoutTypeConstants.LAYOUT_TYPE, true, "/shared",
 			serviceContext);
 
 		updateUserLayoutViewPermissionPermission(companyId, layout);
@@ -168,7 +169,7 @@ public class AddDefaultSharedFormLayoutPortalInstanceLifecycleListener
 			defaultUserId, groupId, false,
 			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Shared",
 			StringPool.BLANK, StringPool.BLANK,
-			LayoutConstants.TYPE_SHARED_PORTLET, true, "/shared",
+			DDMFormPortletLayoutTypeConstants.LAYOUT_TYPE, true, "/shared",
 			serviceContext);
 	}
 
