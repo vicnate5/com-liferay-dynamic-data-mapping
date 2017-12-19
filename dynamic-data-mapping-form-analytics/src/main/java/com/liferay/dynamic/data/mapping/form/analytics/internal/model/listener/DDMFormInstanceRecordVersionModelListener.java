@@ -26,14 +26,11 @@ import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ModelListener;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -51,33 +48,51 @@ public class DDMFormInstanceRecordVersionModelListener
 		throws ModelListenerException {
 
 		try {
-			Map<String, String> properties = createProperties(
-				ddmFormInstanceRecordVersion);
-
 			sendAnalytics(
 				Event.FORM_SUBMIT.name(),
 				String.valueOf(ddmFormInstanceRecordVersion.getUserId()),
-				properties);
+				createEventProperties(ddmFormInstanceRecordVersion));
 
-			sendFormFieldEvent(ddmFormInstanceRecordVersion);
+			checkEmptyFields(ddmFormInstanceRecordVersion);
 		}
 		catch (Exception e) {
 			throw new ModelListenerException(e);
 		}
 	}
 
-	protected Map<String, String> createProperties(
+	protected void checkEmptyFields(
+			DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion)
+		throws Exception {
+
+		DDMFormValues ddmFormValues =
+			ddmFormInstanceRecordVersion.getDDMFormValues();
+
+		Set<String> fieldNames = new HashSet<>();
+
+		for (DDMFormFieldValue ddmFormFieldValue :
+				ddmFormValues.getDDMFormFieldValues()) {
+
+			if (isEmpty(
+					ddmFormFieldValue.getDDMFormField(), ddmFormFieldValue)) {
+
+				String fieldName = ddmFormFieldValue.getName();
+
+				if (fieldNames.contains(fieldName)) {
+					continue;
+				}
+
+				fieldNames.add(fieldName);
+
+				sendEmptyFieldEvent(ddmFormInstanceRecordVersion, fieldName);
+			}
+		}
+	}
+
+	protected Map<String, String> createEventProperties(
 			DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion)
 		throws PortalException {
 
 		Map<String, String> properties = new HashMap<>();
-
-		Date date = ddmFormInstanceRecordVersion.getCreateDate();
-
-		OffsetDateTime offsetDateTime = OffsetDateTime.ofInstant(
-			date.toInstant(), ZoneId.systemDefault());
-
-		properties.put("date", offsetDateTime.toString());
 
 		properties.put(
 			"formId",
@@ -93,7 +108,7 @@ public class DDMFormInstanceRecordVersionModelListener
 		return properties;
 	}
 
-	protected boolean isDDMFormFieldValueNull(
+	protected boolean isEmpty(
 		DDMFormField ddmFormField, DDMFormFieldValue ddmFormFieldValue) {
 
 		Value value = ddmFormFieldValue.getValue();
@@ -117,32 +132,20 @@ public class DDMFormInstanceRecordVersionModelListener
 		return false;
 	}
 
-	protected void sendFormFieldEvent(
-			DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion)
+	protected void sendEmptyFieldEvent(
+			DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion,
+			String fieldName)
 		throws Exception {
 
-		DDMFormValues ddmFormValues =
-			ddmFormInstanceRecordVersion.getDDMFormValues();
+		Map<String, String> eventProperties = createEventProperties(
+			ddmFormInstanceRecordVersion);
 
-		List<DDMFormFieldValue> ddmFormFieldValues =
-			ddmFormValues.getDDMFormFieldValues();
+		eventProperties.put("fieldName", fieldName);
 
-		for (DDMFormFieldValue ddmFormFieldValue : ddmFormFieldValues) {
-			if (isDDMFormFieldValueNull(
-					ddmFormFieldValue.getDDMFormField(), ddmFormFieldValue)) {
-
-				Map<String, String> properties = createProperties(
-					ddmFormInstanceRecordVersion);
-
-				properties.put(
-					"fieldName", String.valueOf(ddmFormFieldValue.getName()));
-
-				sendAnalytics(
-					Event.FIELD_EMPTY.name(),
-					String.valueOf(ddmFormInstanceRecordVersion.getUserId()),
-					properties);
-			}
-		}
+		sendAnalytics(
+			Event.FIELD_EMPTY.name(),
+			String.valueOf(ddmFormInstanceRecordVersion.getUserId()),
+			eventProperties);
 	}
 
 	@Reference

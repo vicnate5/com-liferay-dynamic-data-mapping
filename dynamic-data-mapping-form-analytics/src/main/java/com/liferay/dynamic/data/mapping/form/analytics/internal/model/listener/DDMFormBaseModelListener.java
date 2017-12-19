@@ -51,8 +51,7 @@ public abstract class DDMFormBaseModelListener<T extends BaseModel<T>>
 	private static final String _ANALYTICS_KEY = System.getProperty(
 		"analytics.key");
 
-	private static final String _APPLICATION_ID =
-		"com.liferay.dynamic.data.mapping.form.analytics:1.0.0";
+	private static final String _APPLICATION_ID = "Forms";
 
 	@Reference
 	private AnalyticsClient _analyticsClient;

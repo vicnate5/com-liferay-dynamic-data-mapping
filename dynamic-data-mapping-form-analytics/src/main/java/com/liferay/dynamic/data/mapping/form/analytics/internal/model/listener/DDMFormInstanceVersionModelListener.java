@@ -21,10 +21,6 @@ import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ModelListener;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,30 +38,21 @@ public class DDMFormInstanceVersionModelListener
 		throws ModelListenerException {
 
 		try {
-			Map<String, String> properties = createProperties(
-				ddmFormInstanceVersion);
-
 			sendAnalytics(
 				Event.FORM_STRUCTURE.name(),
-				String.valueOf(ddmFormInstanceVersion.getUserId()), properties);
+				String.valueOf(ddmFormInstanceVersion.getUserId()),
+				createEventProperties(ddmFormInstanceVersion));
 		}
 		catch (Exception e) {
 			throw new ModelListenerException(e);
 		}
 	}
 
-	protected Map<String, String> createProperties(
+	protected Map<String, String> createEventProperties(
 			DDMFormInstanceVersion ddmFormInstanceVersion)
 		throws PortalException {
 
 		Map<String, String> properties = new HashMap<>();
-
-		Date date = ddmFormInstanceVersion.getCreateDate();
-
-		OffsetDateTime offsetDateTime = OffsetDateTime.ofInstant(
-			date.toInstant(), ZoneId.systemDefault());
-
-		properties.put("date", offsetDateTime.toString());
 
 		DDMStructureVersion ddmStructureVersion =
 			ddmFormInstanceVersion.getStructureVersion();
