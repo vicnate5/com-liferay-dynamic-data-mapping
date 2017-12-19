@@ -23,6 +23,7 @@ import com.liferay.dynamic.data.mapping.form.web.configuration.DDMFormWebConfigu
 import com.liferay.dynamic.data.mapping.form.web.internal.constants.DDMFormPortletKeys;
 import com.liferay.dynamic.data.mapping.form.web.internal.constants.DDMFormWebKeys;
 import com.liferay.dynamic.data.mapping.form.web.internal.display.context.util.DDMFormAdminRequestHelper;
+import com.liferay.dynamic.data.mapping.form.web.internal.instance.lifecycle.AddDefaultSharedFormLayoutPortalInstanceLifecycleListener;
 import com.liferay.dynamic.data.mapping.form.web.internal.search.FormInstanceSearch;
 import com.liferay.dynamic.data.mapping.io.DDMFormFieldTypesJSONSerializer;
 import com.liferay.dynamic.data.mapping.model.DDMDataProviderInstance;
@@ -51,7 +52,6 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -94,6 +94,8 @@ public class DDMFormAdminDisplayContext {
 
 	public DDMFormAdminDisplayContext(
 		RenderRequest renderRequest, RenderResponse renderResponse,
+		AddDefaultSharedFormLayoutPortalInstanceLifecycleListener
+			addDefaultSharedFormLayoutPortalInstanceLifecycleListener,
 		DDMFormWebConfiguration formWebConfiguration,
 		DDMFormInstanceRecordLocalService formInstanceRecordLocalService,
 		DDMFormInstanceService formInstanceService,
@@ -108,6 +110,8 @@ public class DDMFormAdminDisplayContext {
 
 		_renderRequest = renderRequest;
 		_renderResponse = renderResponse;
+		_addDefaultSharedFormLayoutPortalInstanceLifecycleListener =
+			addDefaultSharedFormLayoutPortalInstanceLifecycleListener;
 		_ddmFormWebConfiguration = formWebConfiguration;
 		_ddmFormInstanceRecordLocalService = formInstanceRecordLocalService;
 		_ddmFormInstanceService = formInstanceService;
@@ -441,7 +445,8 @@ public class DDMFormAdminDisplayContext {
 	}
 
 	public String getRestrictedFormURL() {
-		return getFormLayoutURL(true);
+		return _addDefaultSharedFormLayoutPortalInstanceLifecycleListener.
+			getFormLayoutURL(formAdminRequestHelper.getThemeDisplay(), true);
 	}
 
 	public long getScopeGroupId() {
@@ -486,7 +491,8 @@ public class DDMFormAdminDisplayContext {
 	}
 
 	public String getSharedFormURL() {
-		return getFormLayoutURL(false);
+		return _addDefaultSharedFormLayoutPortalInstanceLifecycleListener.
+			getFormLayoutURL(formAdminRequestHelper.getThemeDisplay(), false);
 	}
 
 	public DDMStructureService getStructureService() {
@@ -781,21 +787,6 @@ public class DDMFormAdminDisplayContext {
 		}
 	}
 
-	protected String getFormLayoutURL(boolean privateLayout) {
-		StringBundler sb = new StringBundler(3);
-
-		ThemeDisplay themeDisplay = formAdminRequestHelper.getThemeDisplay();
-
-		Group group = themeDisplay.getSiteGroup();
-
-		sb.append(themeDisplay.getPortalURL());
-		sb.append(group.getPathFriendlyURL(privateLayout, themeDisplay));
-
-		sb.append("/forms/shared/-/form/");
-
-		return sb.toString();
-	}
-
 	protected String getJSONObjectLocalizedPropertyFromRequest(
 		String propertyName) {
 
@@ -905,6 +896,8 @@ public class DDMFormAdminDisplayContext {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DDMFormAdminDisplayContext.class);
 
+	private final AddDefaultSharedFormLayoutPortalInstanceLifecycleListener
+		_addDefaultSharedFormLayoutPortalInstanceLifecycleListener;
 	private final DDMFormFieldTypeServicesTracker
 		_ddmFormFieldTypeServicesTracker;
 	private final DDMFormFieldTypesJSONSerializer
