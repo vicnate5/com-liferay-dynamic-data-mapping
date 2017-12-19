@@ -14,7 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.web.internal.layout.type.access.policy;
 
-import com.liferay.dynamic.data.mapping.form.web.internal.layout.type.constants.SharedPortletLayoutTypeControllerConstants;
+import com.liferay.dynamic.data.mapping.form.web.internal.layout.type.constants.DDMFormPortletLayoutTypeConstants;
 import com.liferay.portal.kernel.model.LayoutTypeAccessPolicy;
 import com.liferay.portal.kernel.model.impl.ModificationDeniedLayoutTypeAccessPolicyImpl;
 
@@ -25,9 +25,9 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	property = {"layout.type=" + SharedPortletLayoutTypeControllerConstants.LAYOUT_TYPE_SHARED_PORTLET},
+	property = {"layout.type=" + DDMFormPortletLayoutTypeConstants.LAYOUT_TYPE},
 	service = LayoutTypeAccessPolicy.class
 )
-public class SharedPortletLayoutTypeAccessPolicy
+public class DDMFormPortletLayoutTypeAccessPolicy
 	extends ModificationDeniedLayoutTypeAccessPolicyImpl {
 }
