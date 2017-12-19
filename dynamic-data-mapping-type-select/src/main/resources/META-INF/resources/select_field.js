@@ -46,6 +46,12 @@ AUI.add(
 						value: []
 					},
 
+					predefinedValue: {
+						state: true,
+						validator: Array.isArray,
+						value: []
+					},
+
 					strings: {
 						value: {
 							chooseAnOption: Liferay.Language.get('choose-an-option'),
@@ -147,6 +153,7 @@ AUI.add(
 								badgeCloseIcon: soyIncDom(Liferay.Util.getLexiconIconTpl('times', 'icon-monospaced')),
 								open: instance._open,
 								options: instance.get('options'),
+								predefinedValue: instance.get('readOnly') ? instance.get('predefinedValue') : instance.getValue(),
 								selectCaretDoubleIcon: soyIncDom(Liferay.Util.getLexiconIconTpl('caret-double-l', 'icon-monospaced')),
 								selectSearchIcon: soyIncDom(Liferay.Util.getLexiconIconTpl('search', 'icon-monospaced')),
 								strings: instance.get('strings'),
