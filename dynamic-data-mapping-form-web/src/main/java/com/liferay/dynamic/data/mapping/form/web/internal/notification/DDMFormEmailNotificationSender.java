@@ -524,11 +524,10 @@ public class DDMFormEmailNotificationSender {
 		_userLocalService = userLocalService;
 	}
 
-	private static final String _NAMESPACE = "form.form_instance_record";
+	private static final String _NAMESPACE = "form.form_entry";
 
 	private static final String _TEMPLATE_PATH =
-		"/META-INF/resources/notification" +
-			"/form_instance_record_entry_add_body.soy";
+		"/META-INF/resources/notification/form_entry_add_body.soy";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DDMFormEmailNotificationSender.class);
