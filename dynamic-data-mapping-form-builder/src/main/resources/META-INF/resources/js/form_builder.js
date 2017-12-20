@@ -193,6 +193,10 @@ AUI.add(
 									return instance.updateDragAndDropBySidebar(fieldNodeEnd);
 								}
 
+								if(!fieldColumnStart){
+									return;
+								}
+
 								instance.gridDOM.forEach(
 									function(cols, indexRow) {
 										cols.forEach(
