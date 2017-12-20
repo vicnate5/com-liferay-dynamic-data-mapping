@@ -1,7 +1,10 @@
 @import "bourbon";
-@import "general";
 @import "mixins";
+@import "variables";
+
+@import "general";
+@import "toolbar";
+
 @import "portlet-forms";
 @import "portlet-forms-admin";
-@import "toolbar";
-@import "variables";
+
