@@ -66,6 +66,13 @@ public class TextDDMFormFieldTemplateContextContributor
 		parameters.put(
 			"tooltip", getTooltip(ddmFormField, ddmFormFieldRenderingContext));
 
+		String predefinedValue = getPredefinedValue(
+			ddmFormField, ddmFormFieldRenderingContext);
+
+		if (predefinedValue != null) {
+			parameters.put("predefinedValue", predefinedValue);
+		}
+
 		return parameters;
 	}
 
@@ -112,6 +119,20 @@ public class TextDDMFormFieldTemplateContextContributor
 
 		return getValueString(
 			placeholder, ddmFormFieldRenderingContext.getLocale());
+	}
+
+	protected String getPredefinedValue(
+		DDMFormField ddmFormField,
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext) {
+
+		LocalizedValue predefinedValue = ddmFormField.getPredefinedValue();
+
+		if (predefinedValue == null) {
+			return null;
+		}
+
+		return predefinedValue.getString(
+			ddmFormFieldRenderingContext.getLocale());
 	}
 
 	protected String getTooltip(
