@@ -395,6 +395,15 @@ AUI.add(
 				secondOperandsInput.set('value', '');
 			},
 
+			_hideSecondOperandTypeField: function(index) {
+				var instance = this;
+
+				var secondOperandType = instance._getSecondOperandType(index);
+
+				instance._setVisibleToOperandField(secondOperandType, false);
+				secondOperandType.set('value', '');
+			},
+
 			_isBinaryCondition: function(index) {
 				var instance = this;
 
