@@ -685,6 +685,12 @@ AUI.add(
 			_updateOperatorList: function(dataType, conditionIndex) {
 				var instance = this;
 
+				instance._hideSecondOperandField(conditionIndex);
+
+				instance._hideSecondOperandTypeField(conditionIndex);
+
+				instance._clearOperatorField(conditionIndex);
+
 				var operator = instance._getOperator(conditionIndex);
 
 				var operatorTypes = Liferay.DDM.Settings.functionsMetadata;
