@@ -815,8 +815,8 @@ AUI.add(
 						secondOperandType.set('visible', true);
 					}
 					else {
-						instance._getSecondOperand(index, 'fields').set('value', '');
-						secondOperandType.set('visible', false);
+						instance._hideSecondOperandField(index);
+						instance._hideSecondOperandTypeField(index);
 					}
 				}
 			}
