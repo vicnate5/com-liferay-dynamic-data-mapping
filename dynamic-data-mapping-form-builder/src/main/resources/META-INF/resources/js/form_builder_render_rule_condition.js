@@ -61,6 +61,15 @@ AUI.add(
 				return instance._conditionsIndexes.length > 1;
 			},
 
+			_clearOperatorField: function(index) {
+				var instance = this;
+
+				var operator = instance._getOperator(index);
+
+				operator.cleanSelect();
+				operator.render();
+			},
+
 			_deleteCondition: function(index) {
 				var instance = this;
 
