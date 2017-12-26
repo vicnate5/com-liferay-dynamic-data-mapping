@@ -481,7 +481,7 @@ AUI.add(
 							confirmFn: confirmFn,
 							id: 'deleteFieldDialog',
 							labelHTML: Liferay.Language.get('yes-delete'),
-							title: Liferay.Language.get('delete-field-question'),
+							title: Liferay.Language.get('delete-field-dialog-title'),
 							width: 300
 						};
 
