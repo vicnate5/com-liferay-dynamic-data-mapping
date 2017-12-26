@@ -17,6 +17,7 @@ package com.liferay.dynamic.data.mapping.type.select.internal;
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldOptionsFactory;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
+import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderingContext;
 import com.liferay.dynamic.data.mapping.type.BaseDDMFormFieldTypeSettingsTestCase;
 import com.liferay.portal.json.JSONFactoryImpl;
@@ -142,8 +143,13 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 			new DDMFormFieldRenderingContext();
 
 		ddmFormFieldRenderingContext.setLocale(LocaleUtil.US);
-		ddmFormFieldRenderingContext.setProperty(
-			"predefinedValue", "[\"value 2\",\"value 3\"]");
+
+		LocalizedValue predefinedValue = new LocalizedValue();
+
+		predefinedValue.setDefaultLocale(LocaleUtil.US);
+		predefinedValue.addString(LocaleUtil.US, "[\"value 2\",\"value 3\"]");
+
+		ddmFormField.setPredefinedValue(predefinedValue);
 
 		setUpDDMFormFieldOptionsFactory(
 			ddmFormField, ddmFormFieldRenderingContext);
@@ -180,11 +186,18 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 		Assert.assertEquals("Label 3", optionMap.get("label"));
 		Assert.assertEquals("value 3", optionMap.get("value"));
 
-		List<String> value = (List<String>)parameters.get("value");
+		List<String> predefinedValueParameter = (List<String>)parameters.get(
+			"predefinedValue");
 
-		Assert.assertEquals(value.toString(), 2, value.size());
-		Assert.assertTrue(value.toString(), value.contains("value 2"));
-		Assert.assertTrue(value.toString(), value.contains("value 3"));
+		Assert.assertEquals(
+			predefinedValueParameter.toString(), 2,
+			predefinedValueParameter.size());
+		Assert.assertTrue(
+			predefinedValueParameter.toString(),
+			predefinedValueParameter.contains("value 2"));
+		Assert.assertTrue(
+			predefinedValueParameter.toString(),
+			predefinedValueParameter.contains("value 3"));
 	}
 
 	@Test
