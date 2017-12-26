@@ -651,9 +651,9 @@ AUI.add(
 				}
 			},
 
-			_setVisibleToOperandField: function(field) {
+			_setVisibleToOperandField: function(field, visibility) {
 				if (field) {
-					field.set('visible', false);
+					field.set('visible', visibility);
 				}
 			},
 
