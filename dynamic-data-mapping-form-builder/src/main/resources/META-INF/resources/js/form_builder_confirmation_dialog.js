@@ -57,10 +57,8 @@ AUI.add(
 							},
 							width: config.width
 						},
-
 						id: config.id,
 						title: config.title
-
 					}
 				);
 			}
