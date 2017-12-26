@@ -377,9 +377,13 @@ AUI.add(
 				var secondOperandOptions = instance._getSecondOperand(index, 'options');
 				var secondOperandsInput = instance._getSecondOperand(index, 'input');
 
-				instance._setVisibleToOperandField(secondOperandFields);
-				instance._setVisibleToOperandField(secondOperandOptions);
-				instance._setVisibleToOperandField(secondOperandsInput);
+				instance._setVisibleToOperandField(secondOperandFields, false);
+				instance._setVisibleToOperandField(secondOperandOptions, false);
+				instance._setVisibleToOperandField(secondOperandsInput, false);
+
+				secondOperandFields.set('value', '');
+				secondOperandOptions.set('value', '');
+				secondOperandsInput.set('value', '');
 			},
 
 			_isBinaryCondition: function(index) {
