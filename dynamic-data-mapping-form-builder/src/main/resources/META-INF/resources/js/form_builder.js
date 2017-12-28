@@ -159,6 +159,7 @@ AUI.add(
 							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_FIELD, instance),
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
 							boundingBox.delegate('click', instance._removeFieldCol, '.' + CSS_DELETE_FIELD_BUTTON, instance),
+							boundingBox.delegate('click', instance._onClickRemoveFieldButton, '.' + CSS_DELETE_FIELD_BUTTON, instance),
 							A.one('body').delegate('hover', instance.openSidebarByButton, '.lfr-ddm-add-field', instance),
 							instance.after('editingLanguageIdChange', instance._afterEditingLanguageIdChange),
 							instance.after('liferay-ddm-form-builder-field-list:fieldsChange', instance._afterFieldListChange, instance),
@@ -1297,6 +1298,14 @@ AUI.add(
 						event.halt();
 					},
 
+					_onClickRemoveFieldButton: function(event) {
+						var instance = this;
+
+						var field = event.currentTarget.ancestor('.' + CSS_FIELD).getData('field-instance');
+
+						return instance._removeFieldCol(field);
+					},
+
 					_openNewFieldPanel: function(target) {
 						var instance = this;
 
@@ -1331,30 +1340,31 @@ AUI.add(
 						}
 					},
 
-					_removeFieldCol: function(event) {
-						var col;
-						var field = event.currentTarget.ancestor('.' + CSS_FIELD).getData('field-instance');
-						var fieldNode = event.currentTarget.ancestor('.' + CSS_FIELD);
+					_removeFieldCol: function(field) {
 						var instance = this;
+
+						var fieldNode = field.get('container');
+
+						var col = field.get('content').ancestor('.col').getData('layout-col');
 						var row;
 
-						col = field.get('content').ancestor('.col').getData('layout-col');
 						field._col = col;
 
-						if (field) {
-							instance.openConfirmDeleteFieldDialog(
-								function() {
-									var layout = instance.getActiveLayout();
+						instance.openConfirmDeleteFieldDialog(
+							function() {
+								var layout = instance.getActiveLayout();
 
-									field._col.get('value').removeField(field);
-									row = field.get('content').ancestor('.layout-row');
-									layout.normalizeColsHeight(new A.NodeList(row));
-									fieldNode.remove();
-									instance.getFieldSettingsPanel().close();
-									instance._traverseFormPages();
-									instance._applyDragAndDrop();
-								}
-							);
+								field._col.get('value').removeField(field);
+								row = field.get('content').ancestor('.layout-row');
+								layout.normalizeColsHeight(new A.NodeList(row));
+								fieldNode.remove();
+								instance.getFieldSettingsPanel().close();
+								instance._traverseFormPages();
+								instance._applyDragAndDrop();
+							}
+						);
+					},
+
 						}
 					},
 
