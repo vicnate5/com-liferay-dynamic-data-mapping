@@ -184,6 +184,54 @@ AUI.add(
 						(new A.EventHandle(instance._eventHandlers)).detach();
 					},
 
+					addColumnOnDragAction: function(dragNode, dropNode) {
+						var instance = this;
+
+						instance.addedColumWhileDragging = true;
+
+						if (!instance.isValidNewLayoutColumn(dragNode.getData('layout-col1')) || !instance.isValidNewLayoutColumn(dragNode.getData('layout-col2'))) {
+							return;
+						}
+
+						var newCol = new A.LayoutCol(
+							{
+								size: 1
+							}
+						);
+						var rowNode = dragNode.ancestor(SELECTOR_ROW);
+
+						var draggable = A.Node.create(instance._layoutBuilder.TPL_RESIZE_COL_DRAGGABLE);
+
+						rowNode.append(draggable);
+
+						instance.addNewColumnInLayout(newCol, dropNode, rowNode);
+						instance._syncDragHandles(rowNode);
+					},
+
+					addNewColumnInLayout: function(newCol, dropNode, rowNode) {
+						var instance = this;
+
+						var colNode = newCol.get('node');
+						var cols = rowNode.getData('layout-row').get('cols');
+
+						instance.lastColumnAdd = colNode;
+
+						colNode.addClass('col-empty');
+
+						if (dropNode.getData('layout-position') == 1) {
+							cols.unshift(newCol);
+							rowNode.prepend(colNode);
+							instance.hasColumnLeftCreated = true;
+							instance.startedPosition = true;
+						}
+						else {
+							cols.push(newCol);
+							rowNode.append(colNode);
+							instance.hasColumnRightCreated = true;
+							instance.endedPosition = true;
+						}
+					},
+
 					afterDragEnd: function(sortable) {
 						var instance = this;
 
@@ -663,6 +711,28 @@ AUI.add(
 						var translating = instance.get('defaultLanguageId') !== instance.get('editingLanguageId');
 
 						return instance.get('recordSetId') > 0 || translating;
+					},
+
+
+					onHoverColumn: function(event) {
+						var instance = this;
+
+						var col = event.currentTarget;
+
+						instance._removeLastFieldHoveredClass();
+
+						if (col.one('.' + CSS_FIELD_LIST_CONTAINER)) {
+							instance.lastFieldHovered = col.one('.' + CSS_FIELD_LIST_CONTAINER).addClass('hovered-field');
+							return;
+						}
+
+						delete instance.lastFieldHovered;
+					},
+
+					onLeaveLayoutBuilder: function(event) {
+						var instance = this;
+
+						instance._removeLastFieldHoveredClass();
 					},
 
 					openConfirmCancelFieldChangesDiolog: function(confirmFn) {
@@ -1364,6 +1434,11 @@ AUI.add(
 						);
 					},
 
+					_removeLastFieldHoveredClass: function() {
+						var instance = this;
+
+						if (instance.lastFieldHovered) {
+							instance.lastFieldHovered.removeClass('hovered-field');
 						}
 					},
 
