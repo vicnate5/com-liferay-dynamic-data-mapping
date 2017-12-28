@@ -159,6 +159,7 @@ AUI.add(
 							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_FIELD, instance),
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
 							boundingBox.delegate('click', instance._onClickRemoveFieldButton, '.' + CSS_DELETE_FIELD_BUTTON, instance),
+							boundingBox.delegate('click', instance._onClickDuplicateFieldButton, '.' + CSS_DUPLICATE_FIELD_BUTTON, instance),
 							A.one('body').delegate('hover', instance.openSidebarByButton, '.lfr-ddm-add-field', instance),
 							boundingBox.delegate('mouseleave', instance.onLeaveLayoutBuilder, '.' + CSS_LAYOUT_BUILDER_CONTAINER, instance),
 							instance.after('editingLanguageIdChange', instance._afterEditingLanguageIdChange),
@@ -598,21 +599,41 @@ AUI.add(
 					duplicateField: function(field) {
 						var instance = this;
 
-						var fieldCopy = field.copy();
-
-						fieldCopy.render();
-
-						var fieldList = field.get('container').ancestor('.col').getData('layout-col').get('value');
-
-						fieldList.addField(fieldCopy, fieldList.get('fields').length);
-
-						instance.showFieldSettingsPanel(fieldCopy);
-
 						var activeLayout = instance.getActiveLayout();
+						var layoutColumn = new A.LayoutCol(
+							{
+								size: 12,
+								value: new Liferay.DDM.FormBuilderFieldList(
+									{
+										fields: []
+									}
+								)
+							}
+						);
 
 						var row = instance.getFieldRow(field);
 
-						activeLayout.normalizeColsHeight(new A.NodeList(row));
+						var newRowIndex = activeLayout.get('rows').indexOf(row.getData('layout-row')) + 1;
+
+						instance._duplicateFieldToColumn(field, layoutColumn);
+
+						var newRow = new A.LayoutRow(
+							{
+								cols: [layoutColumn]
+							}
+						);
+
+						activeLayout.addRow(
+							newRowIndex,
+							newRow
+						);
+
+						layoutColumn.get('value').get('fields')[0].get('container').append(instance._getFieldActionsLayout());
+
+						instance._traverseFormPages();
+						instance._applyDragAndDrop();
+
+						activeLayout.normalizeColsHeight(new A.NodeList(newRow));
 					},
 
 					eachFields: function(callback) {
@@ -1360,6 +1381,14 @@ AUI.add(
 
 					_makeEmptyFieldList: function(col) {
 						col.set('value', new Liferay.DDM.FormBuilderFieldList());
+					},
+
+					_onClickDuplicateFieldButton: function(event) {
+						var instance = this;
+
+						var field = event.currentTarget.ancestor('.' + CSS_FIELD).getData('field-instance');
+
+						return instance.duplicateField(field);
 					},
 
 					_onClickPaginationItem: function(event) {
