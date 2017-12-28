@@ -160,6 +160,7 @@ AUI.add(
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
 							boundingBox.delegate('click', instance._onClickRemoveFieldButton, '.' + CSS_DELETE_FIELD_BUTTON, instance),
 							A.one('body').delegate('hover', instance.openSidebarByButton, '.lfr-ddm-add-field', instance),
+							boundingBox.delegate('mouseleave', instance.onLeaveLayoutBuilder, '.' + CSS_LAYOUT_BUILDER_CONTAINER, instance),
 							instance.after('editingLanguageIdChange', instance._afterEditingLanguageIdChange),
 							instance.after('liferay-ddm-form-builder-field-list:fieldsChange', instance._afterFieldListChange, instance),
 							instance.before('render', instance._beforeFormBuilderRender, instance),
