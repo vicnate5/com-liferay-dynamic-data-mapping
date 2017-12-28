@@ -5,17 +5,23 @@ AUI.add(
 
 		var CSS_DELETE_FIELD_BUTTON = A.getClassName('lfr-delete-field');
 
+		var CSS_DUPLICATE_FIELD_BUTTON = A.getClassName('lfr-duplicate-field');
+
 		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
 
+		var CSS_FIELD_LIST_CONTAINER = A.getClassName('form', 'builder', 'field', 'list', 'container');
+
 		var CSS_FORM_BUILDER_TABS = A.getClassName('form', 'builder', 'tabs');
+
+		var CSS_LAYOUT_BUILDER_CONTAINER = A.getClassName('layout', 'builder', 'layout', 'container');
 
 		var CSS_PAGE_HEADER = A.getClassName('form', 'builder', 'pages', 'header');
 
 		var CSS_PAGES = A.getClassName('form', 'builder', 'pages', 'lexicon');
 
-		var CSS_RESIZE_COL_DRAGGABLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable');
+		var CSS_RESIZE_COL_BREAKPOINT = A.getClassName('layout', 'builder', 'resize', 'col', 'breakpoint');
 
-		var CSS_RESIZE_COL_DRAGGABLE_BORDER = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'border');
+		var CSS_RESIZE_COL_DRAGGABLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable');
 
 		var CSS_RESIZE_COL_DRAGGABLE_HANDLE = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'handle');
 
@@ -29,9 +35,9 @@ AUI.add(
 
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 
-		var Lang = A.Lang;
+		var FIELD_ACTIONS = A.getClassName('lfr', 'ddm', 'field', 'actions', 'container');
 
-		var MOVE_COLUMN_CONTAINER = '<div class="' + CSS_RESIZE_COL_DRAGGABLE_BORDER + '"></div><div class="' + CSS_RESIZE_COL_DRAGGABLE_HANDLE + '">' + Liferay.Util.getLexiconIconTpl('horizontal-scroll') + '</div>';
+		var Lang = A.Lang;
 
 		var TPL_CONFIRM_CANCEL_FIELD_EDITION = '<p>' + Liferay.Language.get('are-you-sure-you-want-to-cancel') + '</p>';
 
@@ -46,6 +52,8 @@ AUI.add(
 		var CSS_RESIZE_COL_DRAGGABLE_DRAGGING = A.getClassName('layout', 'builder', 'resize', 'col', 'draggable', 'dragging');
 
 		var SELECTOR_ROW = '.layout-row';
+
+		var MOVE_COLUMN_CONTAINER = '<div class="' + CSS_RESIZE_COL_DRAGGABLE_HANDLE + '">' + Liferay.Util.getLexiconIconTpl('horizontal-scroll') + '</div>';
 
 		var MOVE_COLUMN_TPL = '<div class="' + CSS_RESIZE_COL_DRAGGABLE + ' lfr-tpl">' + MOVE_COLUMN_CONTAINER + '</div>';
 
