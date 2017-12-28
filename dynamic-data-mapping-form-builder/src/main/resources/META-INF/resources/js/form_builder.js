@@ -158,7 +158,6 @@ AUI.add(
 						instance._eventHandlers = [
 							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_FIELD, instance),
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
-							boundingBox.delegate('click', instance._removeFieldCol, '.' + CSS_DELETE_FIELD_BUTTON, instance),
 							boundingBox.delegate('click', instance._onClickRemoveFieldButton, '.' + CSS_DELETE_FIELD_BUTTON, instance),
 							A.one('body').delegate('hover', instance.openSidebarByButton, '.lfr-ddm-add-field', instance),
 							instance.after('editingLanguageIdChange', instance._afterEditingLanguageIdChange),
