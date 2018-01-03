@@ -30,22 +30,22 @@ String href = (String)request.getAttribute(WebKeys.SEARCH_ENTRY_HREF);
 
 <div class="clamp-container">
 	<h4 class="truncate-text">
-		<aui:a cssClass="record-set-name" href="<%= href %>">
+		<aui:a cssClass="form-instance-name" href="<%= href %>">
 			<%= HtmlUtil.escape(ddmStructure.getName(locale)) %>
 		</aui:a>
 	</h4>
 
 	<h5 class="text-default">
-		<div class="record-set-description truncate-text">
+		<div class="form-instance-description truncate-text">
 			<%= HtmlUtil.escape(ddmStructure.getDescription(locale)) %>
 		</div>
 	</h5>
 
 	<h5 class="text-default">
-		<span class="record-set-id">
+		<span class="form-instance-id">
 			<liferay-ui:message key="id" />: <%= ddmStructure.getStructureId() %>
 		</span>
-		<span class="record-set-modified-date">
+		<span class="form-instance-modified-date">
 			<liferay-ui:message key="modified-date" />: <%= dateSearchEntry.getName(request) %>
 		</span>
 	</h5>
