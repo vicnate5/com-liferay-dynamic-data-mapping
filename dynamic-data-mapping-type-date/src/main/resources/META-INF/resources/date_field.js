@@ -79,14 +79,14 @@ AUI.add(
 						var predefinedValue = instance.get('predefinedValue');
 						var value = instance.get('value');
 
-						instance.set('readOnly', true);
+						instance.set('readOnly', false);
 
 						return A.merge(
 							DateField.superclass.getTemplateContext.apply(instance, arguments),
 							{
 								formattedValue: instance.formatDate(value),
 								predefinedValue: instance.formatDate(predefinedValue),
-								readOnly: true,
+								readOnly: false,
 								value: value
 							}
 						);
