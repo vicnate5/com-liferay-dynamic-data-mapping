@@ -8,7 +8,6 @@ AUI.add(
 		var FormBuilderRenderRule = A.Component.create(
 			{
 				ATTRS: {
-
 					builder: {
 						value: {}
 					},
