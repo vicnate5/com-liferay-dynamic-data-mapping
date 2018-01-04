@@ -9,9 +9,9 @@ AUI.add(
 
 		var STR_TRANSLATION_MANAGER = 'translationManager';
 
-		var STR_UNTITLED_FORM = Liferay.Language.get('untitled-form');
-
 		var STR_UNTITLED_ELEMENT_SET = Liferay.Language.get('untitled-element-set');
+
+		var STR_UNTITLED_FORM = Liferay.Language.get('untitled-form');
 
 		var TPL_BUTTON_SPINNER = '<span aria-hidden="true"><span class="icon-spinner icon-spin"></span></span>';
 
@@ -36,6 +36,11 @@ AUI.add(
 						value: {}
 					},
 
+					formInstanceId: {
+						getter: '_getRecordSetId',
+						value: 0
+					},
+
 					localizedDescription: {
 						value: {}
 					},
@@ -48,11 +53,6 @@ AUI.add(
 						lazyAdd: false,
 						setter: '_setPublished',
 						value: false
-					},
-
-					formInstanceId: {
-						getter: '_getRecordSetId',
-						value: 0
 					},
 
 					ruleBuilder: {
@@ -470,10 +470,10 @@ AUI.add(
 													instance.savedState = state;
 
 													instance.fire(
-															'autosave',
-															{
-																modifiedDate: responseData.modifiedDate
-															}
+														'autosave',
+														{
+															modifiedDate: responseData.modifiedDate
+														}
 													);
 
 													callback.call();
@@ -748,8 +748,8 @@ AUI.add(
 
 								var payload = instance.ns(
 									{
-										published: newPublishedValue,
-										formInstanceId: instance.byId('formInstanceId').val()
+										formInstanceId: instance.byId('formInstanceId').val(),
+										published: newPublishedValue
 									}
 								);
 
@@ -937,8 +937,8 @@ AUI.add(
 					_syncDescription: function() {
 						var instance = this;
 
-						var editingLanguageId = instance.get('editingLanguageId');
 						var defaultLanguageId = instance.get('defaultLanguageId');
+						var editingLanguageId = instance.get('editingLanguageId');
 
 						var localizedDescription = instance.get('localizedDescription');
 
@@ -952,8 +952,8 @@ AUI.add(
 					_syncName: function() {
 						var instance = this;
 
-						var editingLanguageId = instance.get('editingLanguageId');
 						var defaultLanguageId = instance.get('defaultLanguageId');
+						var editingLanguageId = instance.get('editingLanguageId');
 
 						var localizedName = instance.get('localizedName');
 
