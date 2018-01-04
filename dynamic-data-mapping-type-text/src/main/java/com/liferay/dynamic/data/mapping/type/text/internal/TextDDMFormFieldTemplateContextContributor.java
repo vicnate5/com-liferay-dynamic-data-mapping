@@ -63,8 +63,6 @@ public class TextDDMFormFieldTemplateContextContributor
 		parameters.put(
 			"placeholder",
 			getPlaceholder(ddmFormField, ddmFormFieldRenderingContext));
-		parameters.put(
-			"tooltip", getTooltip(ddmFormField, ddmFormFieldRenderingContext));
 
 		String predefinedValue = getPredefinedValue(
 			ddmFormField, ddmFormFieldRenderingContext);
@@ -72,6 +70,9 @@ public class TextDDMFormFieldTemplateContextContributor
 		if (predefinedValue != null) {
 			parameters.put("predefinedValue", predefinedValue);
 		}
+
+		parameters.put(
+			"tooltip", getTooltip(ddmFormField, ddmFormFieldRenderingContext));
 
 		return parameters;
 	}
