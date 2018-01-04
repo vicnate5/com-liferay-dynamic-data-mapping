@@ -344,6 +344,9 @@ AUI.add(
 						var field = instance.createField(fieldType);
 
 						instance._insertField(field);
+
+						field.newField = true;
+
 						instance.showFieldSettingsPanel(field);
 					},
 

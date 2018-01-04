@@ -47,6 +47,7 @@ AUI.add(
 						return A.merge(
 							FormBuilderSettingsForm.superclass.getEvaluationPayload.apply(instance, arguments),
 							{
+								newField: field.newField,
 								type: field.get('type')
 							}
 						);
