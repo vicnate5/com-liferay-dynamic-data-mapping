@@ -39,6 +39,14 @@ AUI.add(
 						instance._fieldEventHandlers = [];
 					},
 
+					destructor: function() {
+						var instance = this;
+
+						(new A.EventHandle(instance._eventHandlers)).detach();
+
+						(new A.EventHandle(instance._fieldEventHandlers)).detach();
+					},
+
 					getEvaluationPayload: function() {
 						var instance = this;
 
