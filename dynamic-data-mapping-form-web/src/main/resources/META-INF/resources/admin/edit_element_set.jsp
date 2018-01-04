@@ -37,13 +37,13 @@ Locale[] availableLocales = ddmFormAdminDisplayContext.getAvailableLocales();
 portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(redirect);
 
-renderResponse.setTitle((structure == null) ? LanguageUtil.get(request, "new-field-set") : LanguageUtil.get(request, "edit-field-set"));
+renderResponse.setTitle((structure == null) ? LanguageUtil.get(request, "new-element-set") : LanguageUtil.get(request, "edit-element-set"));
 %>
 
 <div class="loading-animation" id="<portlet:namespace />loader"></div>
 
 <portlet:actionURL name="saveStructure" var="saveStructureURL">
-	<portlet:param name="mvcPath" value="/admin/edit_field_set.jsp" />
+	<portlet:param name="mvcPath" value="/admin/edit_element_set.jsp" />
 </portlet:actionURL>
 
 <div class="hide portlet-forms" id="<portlet:namespace />formContainer">
@@ -73,7 +73,7 @@ renderResponse.setTitle((structure == null) ? LanguageUtil.get(request, "new-fie
 						cssClass="ddm-form-name"
 						editorName="alloyeditor"
 						name="nameEditor"
-						placeholder="untitled-field-set"
+						placeholder="untitled-element-set"
 						showSource="<%= false %>"
 					/>
 				</h1>
@@ -87,7 +87,7 @@ renderResponse.setTitle((structure == null) ? LanguageUtil.get(request, "new-fie
 						cssClass="ddm-form-description h5"
 						editorName="alloyeditor"
 						name="descriptionEditor"
-						placeholder="add-a-short-description-for-this-field-set"
+						placeholder="add-a-short-description-for-this-element-set"
 						showSource="<%= false %>"
 					/>
 				</h5>

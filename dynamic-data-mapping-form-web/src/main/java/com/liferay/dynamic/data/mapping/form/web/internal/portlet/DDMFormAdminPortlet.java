@@ -197,7 +197,7 @@ public class DDMFormAdminPortlet extends MVCPortlet {
 
 		portletSession.setAttribute("currentTab", currentTab);
 
-		if (currentTab.equals("field-set")) {
+		if (currentTab.equals("element-set")) {
 			renderRequest.setAttribute(
 				WebKeys.PORTLET_DISPLAY_CONTEXT,
 				new DDMFormAdminFieldSetDisplayContext(

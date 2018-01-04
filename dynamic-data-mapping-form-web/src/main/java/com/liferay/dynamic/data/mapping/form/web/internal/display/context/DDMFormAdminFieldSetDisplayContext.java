@@ -192,7 +192,7 @@ public class DDMFormAdminFieldSetDisplayContext
 
 		portletURL.setParameter("mvcPath", "/admin/view.jsp");
 		portletURL.setParameter("groupId", String.valueOf(getScopeGroupId()));
-		portletURL.setParameter("currentTab", "field-set");
+		portletURL.setParameter("currentTab", "element-set");
 
 		return portletURL;
 	}
@@ -217,10 +217,11 @@ public class DDMFormAdminFieldSetDisplayContext
 		fieldSetsSearch.setOrderByType(orderByType);
 
 		if (fieldSetsSearch.isSearch()) {
-			fieldSetsSearch.setEmptyResultsMessage("no-field-sets-were-found");
+			fieldSetsSearch.setEmptyResultsMessage(
+				"no-element-sets-were-found");
 		}
 		else {
-			fieldSetsSearch.setEmptyResultsMessage("there-are-no-field-sets");
+			fieldSetsSearch.setEmptyResultsMessage("there-are-no-element-sets");
 		}
 
 		setFieldSetsSearchResults(fieldSetsSearch);

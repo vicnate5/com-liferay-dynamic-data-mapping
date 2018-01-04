@@ -41,7 +41,7 @@ portletURL.setParameter("displayStyle", displayStyle);
 				modelVar="structure"
 			>
 				<portlet:renderURL var="rowURL">
-					<portlet:param name="mvcPath" value="/admin/edit_field_set.jsp" />
+					<portlet:param name="mvcPath" value="/admin/edit_element_set.jsp" />
 					<portlet:param name="redirect" value="<%= currentURL %>" />
 					<portlet:param name="structureId" value="<%= String.valueOf(structure.getStructureId()) %>" />
 					<portlet:param name="displayStyle" value="<%= displayStyle %>" />
@@ -57,11 +57,11 @@ portletURL.setParameter("displayStyle", displayStyle);
 						<liferay-ui:search-container-column-jsp
 							colspan="<%= 2 %>"
 							href="<%= rowURL %>"
-							path="/admin/view_field_set_descriptive.jsp"
+							path="/admin/view_element_set_descriptive.jsp"
 						/>
 
 						<liferay-ui:search-container-column-jsp
-							path="/admin/field_set_action.jsp"
+							path="/admin/element_set_action.jsp"
 						/>
 					</c:when>
 					<c:otherwise>
@@ -84,7 +84,7 @@ portletURL.setParameter("displayStyle", displayStyle);
 						/>
 
 						<liferay-ui:search-container-column-jsp
-							path="/admin/field_set_action.jsp"
+							path="/admin/element_set_action.jsp"
 						/>
 					</c:otherwise>
 				</c:choose>
@@ -97,13 +97,13 @@ portletURL.setParameter("displayStyle", displayStyle);
 
 <c:if test="<%= ddmFormAdminDisplayContext.isShowAddButton() %>">
 	<portlet:renderURL var="addFieldSetURL">
-		<portlet:param name="mvcPath" value="/admin/edit_field_set.jsp" />
+		<portlet:param name="mvcPath" value="/admin/edit_element_set.jsp" />
 		<portlet:param name="redirect" value="<%= currentURL %>" />
 		<portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />
 	</portlet:renderURL>
 
 	<liferay-frontend:add-menu>
-		<liferay-frontend:add-menu-item title='<%= LanguageUtil.get(request, "new-field-set") %>' url="<%= addFieldSetURL.toString() %>" />
+		<liferay-frontend:add-menu-item title='<%= LanguageUtil.get(request, "new-element-set") %>' url="<%= addFieldSetURL.toString() %>" />
 	</liferay-frontend:add-menu>
 </c:if>
 
