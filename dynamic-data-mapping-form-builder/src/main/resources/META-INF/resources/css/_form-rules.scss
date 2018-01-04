@@ -282,15 +282,12 @@
 		position: relative;
 
 		.dropdown {
-			display: block;
-			margin-right: 20px;
-			margin-top: 8px;
 			position: absolute;
-			right: 0;
-			top: 0;
+			right: 4px;
+			top: 8px;
 		}
 
-		button {
+		.btn {
 			padding: 4px 12px;
 		}
 	}
