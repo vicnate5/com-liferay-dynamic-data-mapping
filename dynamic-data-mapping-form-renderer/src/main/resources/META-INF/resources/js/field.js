@@ -281,7 +281,7 @@ AUI.add(
 							container.appendTo(target);
 						}
 
-						container.html(instance.getTemplate());
+						container.setContent(instance.getTemplate());
 
 						instance.eachField(
 							function(field) {
