@@ -37,7 +37,7 @@
 		padding: 10px;
 		position: absolute;
 		right: 0;
-		top: 0;
+		top: 4px;
 
 		&:hover {
 			color: #65B6F0;
@@ -302,7 +302,7 @@
 			}
 
 			&:first-child:before {
-				top: 35px;
+				top: 31px;
 			}
 
 			&:last-child > .operator {
@@ -348,11 +348,11 @@
 	position: relative;
 
 	&:before {
-		background-color: #869CAD;
+		background-color: #272834;
 		bottom: 0;
 		content: '';
 		display: block;
-		left: 20px;
+		left: 25px;
 		position: absolute;
 		top: -10px;
 		width: 2px;
@@ -364,6 +364,10 @@
 		margin-left: 3px;
 		padding: 0;
 	}
+}
+
+.add-condition.timeline-increment-icon {
+	padding-left: 7px;
 }
 
 .form-builder-rule-builder-rule-description {
