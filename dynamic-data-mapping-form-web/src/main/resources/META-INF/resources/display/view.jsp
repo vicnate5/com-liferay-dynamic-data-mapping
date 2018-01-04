@@ -153,6 +153,7 @@ Liferay.on('analyticsClientCreated', <portlet:namespace />analyticsClientCreated
 
 							<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="addFormInstanceRecord" var="autoSaveFormInstanceRecordURL">
 								<portlet:param name="autoSave" value="<%= Boolean.TRUE.toString() %>" />
+								<portlet:param name="preview" value="<%= String.valueOf(ddmFormDisplayContext.isPreview()) %>" />
 							</liferay-portlet:resourceURL>
 
 							function <portlet:namespace />autoSave() {

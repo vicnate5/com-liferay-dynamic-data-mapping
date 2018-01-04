@@ -247,6 +247,10 @@ public class DDMFormDisplayContext {
 		return false;
 	}
 
+	public boolean isPreview() {
+		return ParamUtil.getBoolean(_renderRequest, "preview");
+	}
+
 	public boolean isShowConfigurationIcon() throws PortalException {
 		if (_showConfigurationIcon != null) {
 			return _showConfigurationIcon;
@@ -503,10 +507,6 @@ public class DDMFormDisplayContext {
 
 	protected boolean isFormShared() {
 		return SessionParamUtil.getBoolean(_renderRequest, "shared");
-	}
-
-	protected boolean isPreview() {
-		return ParamUtil.getBoolean(_renderRequest, "preview");
 	}
 
 	protected boolean isSharedURL() {
