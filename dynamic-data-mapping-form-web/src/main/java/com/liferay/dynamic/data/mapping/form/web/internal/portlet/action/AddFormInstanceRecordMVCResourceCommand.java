@@ -95,6 +95,12 @@ public class AddFormInstanceRecordMVCResourceCommand
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
+		boolean preview = ParamUtil.getBoolean(resourceRequest, "preview");
+
+		if (preview) {
+			return;
+		}
+
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
