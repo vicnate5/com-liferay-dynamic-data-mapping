@@ -20,4 +20,5 @@ package com.liferay.dynamic.data.mapping.form.analytics.internal;
 public enum Event {
 
 	FIELD_EMPTY, FORM_STRUCTURE, FORM_SUBMIT
+
 }
