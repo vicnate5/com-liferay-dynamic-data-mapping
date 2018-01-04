@@ -51,7 +51,7 @@ AUI.add(
 
 						var inputNode = instance.getInputNode();
 
-						return !inputNode.val() || hasErrors;
+						return inputNode && !inputNode.val() || hasErrors;
 					},
 
 					showErrorMessage: Lang.emptyFn,
