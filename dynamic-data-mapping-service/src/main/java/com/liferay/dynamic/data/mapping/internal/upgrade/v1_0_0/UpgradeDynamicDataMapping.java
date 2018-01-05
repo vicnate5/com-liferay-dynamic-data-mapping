@@ -2501,7 +2501,7 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 			int pos = fileName.lastIndexOf(CharPool.PERIOD);
 
 			if (pos > 0) {
-				extension = fileName.substring(pos + 1, fileName.length());
+				extension = fileName.substring(pos + 1);
 			}
 
 			return StringUtil.toLowerCase(extension);
