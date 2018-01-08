@@ -50,7 +50,6 @@ import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -1627,6 +1626,17 @@ public class DDMTemplateLocalServiceImpl
 	}
 
 	protected void validate(
+			long groupId, Map<Locale, String> nameMap, String script)
+		throws PortalException {
+
+		validateName(groupId, nameMap);
+
+		if (Validator.isNull(script)) {
+			throw new TemplateScriptException("Script is null");
+		}
+	}
+
+	protected void validate(
 			long groupId, Map<Locale, String> nameMap, String script,
 			boolean smallImage, String smallImageURL, File smallImageFile,
 			byte[] smallImageBytes)
@@ -1675,17 +1685,6 @@ public class DDMTemplateLocalServiceImpl
 					String.valueOf(smallImageBytes.length),
 					" bytes and exceeds the maximum size of ",
 					String.valueOf(smallImageMaxSize)));
-		}
-	}
-
-	protected void validate(
-			long groupId, Map<Locale, String> nameMap, String script)
-		throws PortalException {
-
-		validateName(groupId, nameMap);
-
-		if (Validator.isNull(script)) {
-			throw new TemplateScriptException("Script is null");
 		}
 	}
 
