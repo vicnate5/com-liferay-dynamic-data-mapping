@@ -202,8 +202,7 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		for (DDMFormInstanceRecord ddmFormInstanceRecord :
 				ddmFormInstanceRecords) {
 
-			ddmFormInstanceRecordLocalService.deleteDDMFormInstanceRecord(
-				ddmFormInstanceRecord);
+			deleteFormInstanceRecord(ddmFormInstanceRecord);
 		}
 	}
 
