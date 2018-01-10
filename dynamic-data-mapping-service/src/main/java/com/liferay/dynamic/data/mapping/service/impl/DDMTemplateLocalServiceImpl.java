@@ -1692,14 +1692,10 @@ public class DDMTemplateLocalServiceImpl
 	protected void validateName(long groupId, Map<Locale, String> nameMap)
 		throws PortalException {
 
-		String name = nameMap.get(PortalUtil.getSiteDefaultLocale(groupId));
+		if (!nameMap.containsKey(PortalUtil.getSiteDefaultLocale(groupId)) &&
+			!nameMap.containsKey(LocaleUtil.getSiteDefault())) {
 
-		if (Validator.isNull(name)) {
-			name = nameMap.get(LocaleUtil.getSiteDefault());
-		}
-
-		if (Validator.isNull(name)) {
-			throw new TemplateNameException("Name is null");
+			throw new TemplateNameException("Template name is required.");
 		}
 	}
 
