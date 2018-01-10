@@ -473,14 +473,15 @@ public class DDMFormEmailNotificationSender {
 
 		Locale locale = getLocale(ddmFormInstance);
 
-		ThemeDisplay themeDisplay = getThemeDisplay(portletRequest);
-
 		template.put("authorName", ddmFormInstance.getUserName());
 		template.put("formName", ddmFormInstance.getName(locale));
 		template.put("pages", getPages(ddmFormInstance, ddmFormInstanceRecord));
 		template.put(
 			"siteName", getSiteName(ddmFormInstance.getGroupId(), locale));
 		template.put("userName", getUserName(ddmFormInstanceRecord, locale));
+
+		ThemeDisplay themeDisplay = getThemeDisplay(portletRequest);
+
 		template.put(
 			"viewFormEntriesURL",
 			getViewFormEntriesURL(ddmFormInstance, themeDisplay));
