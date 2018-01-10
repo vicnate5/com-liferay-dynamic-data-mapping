@@ -91,6 +91,11 @@ public class DDMFormAssetRenderer
 	}
 
 	@Override
+	public String[] getAvailableLanguageIds() {
+		return _formInstance.getAvailableLanguageIds();
+	}
+
+	@Override
 	public String getClassName() {
 		return DDMFormInstanceRecord.class.getName();
 	}
