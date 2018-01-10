@@ -525,10 +525,6 @@ public class DDMFormInstanceRecordLocalServiceImpl
 		workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
 			companyId, groupId, DDMFormInstanceRecord.class.getName(),
 			ddmFormInstanceRecordVersionId);
-
-		workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
-			companyId, groupId, DDMFormInstanceRecord.class.getName(),
-			ddmFormInstanceRecordVersionId);
 	}
 
 	protected Indexer<DDMFormInstanceRecord> getDDMFormInstanceRecordIndexer() {
