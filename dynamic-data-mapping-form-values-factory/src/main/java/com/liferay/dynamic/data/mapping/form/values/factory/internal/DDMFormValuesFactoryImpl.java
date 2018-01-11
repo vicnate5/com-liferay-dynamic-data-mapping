@@ -634,11 +634,19 @@ public class DDMFormValuesFactoryImpl implements DDMFormValuesFactory {
 		DDMFormFieldValue ddmFormFieldValue, Set<Locale> availableLocales,
 		Locale defaultLocale) {
 
+		Locale ddmFormFieldParameterValueLocale = defaultLocale;
+		String languageId = LanguageUtil.getLanguageId(httpServletRequest);
 
+		Locale locale = LocaleUtil.fromLanguageId(languageId);
+
+		if (availableLocales.contains(locale)) {
+			ddmFormFieldParameterValueLocale = locale;
+		}
 
 		String ddmFormFieldParameterValue = getDDMFormFieldParameterValue(
 			httpServletRequest, fieldType, ddmFormFieldParameterName,
-			predefinedValue.getString(defaultLocale), defaultLocale);
+			predefinedValue.getString(defaultLocale),
+			ddmFormFieldParameterValueLocale);
 
 		Value value = new UnlocalizedValue(ddmFormFieldParameterValue);
 
