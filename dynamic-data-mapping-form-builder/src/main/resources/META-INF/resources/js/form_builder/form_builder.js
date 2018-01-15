@@ -177,7 +177,7 @@ AUI.add(
 
 						instance._sidebar.destroy();
 
-						if(instance.sidebarSortable){
+						if (instance.sidebarSortable) {
 							instance.sidebarSortable.delegate.destroy();
 							instance.sidebarSortable.destroy();
 						}
