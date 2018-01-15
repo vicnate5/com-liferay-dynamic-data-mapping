@@ -49,6 +49,8 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 		</aui:nav>
 	</aui:nav-bar>
 
+	<button class="btn btn-primary lfr-ddm-add-field">+</button>
+
 	<div class="autosave-bar management-bar management-bar-default">
 		<div class="container-fluid-1280">
 			<div class="toolbar">
