@@ -468,7 +468,10 @@ public class DDMFormInstanceRecordLocalServiceImpl
 						WorkflowConstants.STATUS_APPROVED);
 
 				if (!approvedRecordVersions.isEmpty()) {
-					newVersion = approvedRecordVersions.get(0).getVersion();
+					DDMFormInstanceRecordVersion firstApprovedVersion =
+						approvedRecordVersions.get(0);
+
+					newVersion = firstApprovedVersion.getVersion();
 				}
 
 				formInstanceRecord.setVersion(newVersion);
