@@ -587,14 +587,11 @@ public class DDMFormFieldTemplateContextFactory {
 		Map<String, Object> localizedValue = new HashMap<>();
 
 		for (Locale availableLocale : value.getAvailableLocales()) {
-			String type = MapUtil.getString(
-				ddmFormFieldTemplateContext, "type");
-
-			String languageId = LanguageUtil.getLanguageId(availableLocale);
-
 			DDMFormFieldValueAccessor<?> ddmFormFieldValueAccessor =
 				_ddmFormFieldTypeServicesTracker.getDDMFormFieldValueAccessor(
-					type);
+					MapUtil.getString(ddmFormFieldTemplateContext, "type"));
+
+			String languageId = LanguageUtil.getLanguageId(availableLocale);
 
 			if (ddmFormFieldValueAccessor == null) {
 				localizedValue.put(

@@ -94,10 +94,8 @@ public class DDMFormViewFormInstanceRecordDisplayContext {
 		formValues = _ddmFormValuesMerger.merge(
 			formInstanceRecord.getDDMFormValues(), formValues);
 
-		DDMForm ddmForm = formInstance.getStructure().getDDMForm();
-
 		DDMFormRenderingContext formRenderingContext =
-			createDDMFormRenderingContext(ddmForm);
+			createDDMFormRenderingContext(structure.getDDMForm());
 
 		formRenderingContext.setDDMFormValues(formValues);
 
@@ -120,6 +118,7 @@ public class DDMFormViewFormInstanceRecordDisplayContext {
 		formRenderingContext.setHttpServletResponse(_httpServletResponse);
 
 		Set<Locale> availableLocales = ddmForm.getAvailableLocales();
+
 		Locale locale = ddmForm.getDefaultLocale();
 
 		if (availableLocales.contains(_ddmFormAdminRequestHelper.getLocale())) {
