@@ -574,9 +574,13 @@ public class DDMFormFieldTemplateContextFactory {
 		Map<String, Object> ddmFormFieldTemplateContext,
 		DDMFormFieldValue ddmFormFieldValue) {
 
+		if (ddmFormFieldValue == null) {
+			return;
+		}
+
 		Value value = ddmFormFieldValue.getValue();
 
-		if ((ddmFormFieldValue == null) || !(value instanceof LocalizedValue)) {
+		if (!(value instanceof LocalizedValue)) {
 			return;
 		}
 
